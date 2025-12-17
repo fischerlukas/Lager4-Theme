@@ -13,7 +13,7 @@
   color: var(--color-foreground-cards);
 }
 .slider-vertical__text .button--solid .button__icon svg path {
-  fill: #fff;
+  fill: #fff !important;
 }
 .no-touchevents .slider-vertical__text .button.button--solid:hover, .no-touchevents .slider-vertical__text .button.button--outline-hover-solid:hover {
   background-color: var(--color-text-cards);
@@ -24,7 +24,7 @@
   color: var(--color-foreground-cards);
 }
 .no-touchevents .slider-vertical__text .button.button--solid:hover path, .no-touchevents .slider-vertical__text .button.button--outline-hover-solid:hover path {
-  fill: var(--color-foreground-cards);
+  fill: #fff !important;
 }
 .no-touchevents .slider-vertical__text .button.button--outline:not(.button--outline-hover-solid):hover {
   border-color: var(--color-text-cards);
