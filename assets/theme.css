@@ -828,6 +828,10 @@ div.mount-css-slider > div > div.slider-vertical__text.align-content--horizontal
   fill: #fff !important;
 }
 
+.slider-vertical .button--solid .button__icon svg path {
+  fill: #fff;
+}
+
 div.mount-css-slider > div > css-slider > div.css-slider-viewport > div > div > div > div.js-collection-item {
   -webkit-box-shadow: 0px 0px 30px -10px rgba(0, 0, 0, .75);
   -moz-box-shadow: 0px 0px 30px -10px rgba(0, 0, 0, .75);
