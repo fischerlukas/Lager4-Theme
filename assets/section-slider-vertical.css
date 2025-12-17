@@ -13,7 +13,7 @@
   color: var(--color-foreground-cards);
 }
 .slider-vertical__text .button--solid .button__icon svg path {
-  fill: var(--color-foreground-cards);
+  fill: #fff;
 }
 .no-touchevents .slider-vertical__text .button.button--solid:hover, .no-touchevents .slider-vertical__text .button.button--outline-hover-solid:hover {
   background-color: var(--color-text-cards);
