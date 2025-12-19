@@ -622,8 +622,6 @@ div.sidebar__footer > #AjaxCartSubtotal > div > div.uid-toggle-wrapper {
   }
 
   .custom-tab {
-  padding-bottom: 40px;
-  position: relative;
     min-height: 800px;
     padding-bottom: 40px;
   }
@@ -647,9 +645,8 @@ div.sidebar__footer > #AjaxCartSubtotal > div > div.uid-toggle-wrapper {
 }
 
 .custom-tab {
-  padding-bottom: 40px;
+  padding: 0 0 40px 0;
   position: relative;
-  padding: 0px;
   background-color: #fff;
   display: inline-block;
   border-radius: 50px;
