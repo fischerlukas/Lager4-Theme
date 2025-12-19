@@ -389,6 +389,16 @@ div.sidebar__footer > #AjaxCartSubtotal > div > div.uid-toggle-wrapper {
     width: 100%;
   }
 
+  .custom-lg-6,
+  .custom-md-6 {
+    width: 100% !important;
+    display: block !important;
+  }
+
+  .custom-tab-container {
+    flex-direction: column;
+  }
+
   .custom-icon {
     font-size: 50px;
     width: 50px;
