@@ -445,19 +445,19 @@ div.sidebar__footer > #AjaxCartSubtotal > div > div.uid-toggle-wrapper {
 
   .custom-tab-wide {
     height: 350px;
-    width: calc(100% - 10vw);
+    width: 100% !important;
     margin-bottom: 5vw;
-    margin-left: 5vw;
-    margin-right: 5vw;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
   }
 
   .custom-tab {
   padding-bottom: 40px;
   position: relative;
-    width: calc(100% - 10vw);
+    width: 100% !important;
     margin-bottom: 5vw;
-    margin-left: 5vw;
-    margin-right: 5vw;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
   }
 
   .custom-tab-height-a {
