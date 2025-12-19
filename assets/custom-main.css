@@ -355,6 +355,9 @@ div.sidebar__footer > #AjaxCartSubtotal > div > div.uid-toggle-wrapper {
 * Custom Product Description Start
 */
 .custom-tab-container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
   width: 100%;
   font-size: 0;
   -webkit-box-sizing: border-box;
@@ -421,6 +424,8 @@ div.sidebar__footer > #AjaxCartSubtotal > div > div.uid-toggle-wrapper {
   }
 
   .custom-tab {
+  padding-bottom: 40px;
+  position: relative;
     width: calc(100% - 10vw);
     margin-bottom: 5vw;
     margin-left: 5vw;
@@ -428,11 +433,13 @@ div.sidebar__footer > #AjaxCartSubtotal > div > div.uid-toggle-wrapper {
   }
 
   .custom-tab-height-a {
-    height: 930px;
+    min-height: 930px;
+    padding-bottom: 40px;
   }
 
   .custom-tab-height-b {
-    height: 800px;
+    min-height: 800px;
+    padding-bottom: 40px;
   }
 
 }
@@ -505,6 +512,8 @@ div.sidebar__footer > #AjaxCartSubtotal > div > div.uid-toggle-wrapper {
   }
 
   .custom-tab {
+  padding-bottom: 40px;
+  position: relative;
     width: calc(100% - 6vw);
     margin-bottom: 3vw;
     margin-left: 3vw;
@@ -512,11 +521,13 @@ div.sidebar__footer > #AjaxCartSubtotal > div > div.uid-toggle-wrapper {
   }
 
   .custom-tab-height-a {
-    height: 520px;
+    min-height: 520px;
+    padding-bottom: 40px;
   }
 
   .custom-tab-height-b {
-    height: 800px;
+    min-height: 800px;
+    padding-bottom: 40px;
   }
 
 }
@@ -584,11 +595,13 @@ div.sidebar__footer > #AjaxCartSubtotal > div > div.uid-toggle-wrapper {
   }
 
   .custom-tab-height-a {
-    height: 380px;
+    min-height: 380px;
+    padding-bottom: 40px;
   }
 
   .custom-tab-height-b {
-    height: 800px;
+    min-height: 800px;
+    padding-bottom: 40px;
   }
 
   .custom-tab-body th {
@@ -609,7 +622,8 @@ div.sidebar__footer > #AjaxCartSubtotal > div > div.uid-toggle-wrapper {
   }
 
   .custom-tab {
-    height: 800px;
+    min-height: 800px;
+    padding-bottom: 40px;
   }
 
   .custom-tab-body th {
@@ -631,7 +645,8 @@ div.sidebar__footer > #AjaxCartSubtotal > div > div.uid-toggle-wrapper {
 }
 
 .custom-tab {
-  padding: 0px;
+  padding: 0 0 40px 0;
+  position: relative;
   background-color: #fff;
   display: inline-block;
   border-radius: 50px;
@@ -668,6 +683,7 @@ div.sidebar__footer > #AjaxCartSubtotal > div > div.uid-toggle-wrapper {
 }
 
 .custom-tab-body {
+  padding-bottom: 40px;
   position: absolute;
   top: 80px;
   width: 100%;
