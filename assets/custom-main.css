@@ -355,24 +355,24 @@ div.sidebar__footer > #AjaxCartSubtotal > div > div.uid-toggle-wrapper {
 * Custom Product Description Start
 */
 .custom-tab-container {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: stretch;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 0;
   width: 100%;
   font-size: 0;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
+
 @media only screen and (max-width: 750px) {
   .custom-lg-6,
   .custom-md-6 {
-    width: 100% !important;
-    display: block !important;
+    grid-column: 1 / -1 !important;
   }
   
   .custom-tab-container {
-    flex-direction: column;
+    grid-template-columns: 1fr;
   }
   
   .custom-tab {
@@ -385,18 +385,16 @@ div.sidebar__footer > #AjaxCartSubtotal > div > div.uid-toggle-wrapper {
 
 @media only screen and (max-width: 450px) {
   .custom-vs-12 {
-    display: inline-block;
-    width: 100%;
+    grid-column: 1 / -1;
   }
 
   .custom-lg-6,
   .custom-md-6 {
-    width: 100% !important;
-    display: block !important;
+    grid-column: 1 / -1 !important;
   }
 
   .custom-tab-container {
-    flex-direction: column;
+    grid-template-columns: 1fr;
   }
 
   .custom-icon {
@@ -474,8 +472,7 @@ div.sidebar__footer > #AjaxCartSubtotal > div > div.uid-toggle-wrapper {
 
 @media only screen and (min-width: 451px) {
   .custom-vs-6 {
-    display: inline-block;
-    width: 50%;
+    grid-column: span 6;
   }
 
   .custom-icon {
@@ -522,13 +519,11 @@ div.sidebar__footer > #AjaxCartSubtotal > div > div.uid-toggle-wrapper {
   }
 
   .custom-sm-6 {
-    display: inline-block;
-    width: 50%;
+    grid-column: span 6;
   }
 
   .custom-sm-12 {
-    display: inline-block;
-    width: 100%;
+    grid-column: 1 / -1;
   }
 
   .custom-tab-wide {
@@ -608,14 +603,16 @@ div.sidebar__footer > #AjaxCartSubtotal > div > div.uid-toggle-wrapper {
 
 
 @media only screen and (min-width: 751px) {
+  .custom-tab-container {
+    grid-template-columns: repeat(12, 1fr);
+  }
+
   .custom-md-4 {
-    display: inline-block;
-    width: 33.3%;
+    grid-column: span 4;
   }
 
   .custom-md-6 {
-    display: inline-block;
-    width: 50%;
+    grid-column: span 6;
   }
 
   .custom-tab-wide {
@@ -645,8 +642,7 @@ div.sidebar__footer > #AjaxCartSubtotal > div > div.uid-toggle-wrapper {
 
 @media only screen and (min-width: 1051px) {
   .custom-lg-6 {
-    display: inline-block;
-    width: 50%;
+    grid-column: span 6;
   }
 
   .custom-tab {
@@ -668,15 +664,13 @@ div.sidebar__footer > #AjaxCartSubtotal > div > div.uid-toggle-wrapper {
 }
 
 .custom-lg-12 {
-  display: inline-block;
-  width: 100%;
+  grid-column: 1 / -1;
 }
 
 .custom-tab {
   padding: 0 0 40px 0;
   position: relative;
   background-color: #fff;
-  display: inline-block;
   border-radius: 50px;
   -webkit-box-shadow: 0px 0px 25px -3px rgba(0, 0, 0, 0.75);
   -moz-box-shadow: 0px 0px 25px -3px rgba(0, 0, 0, 0.75);
@@ -686,7 +680,6 @@ div.sidebar__footer > #AjaxCartSubtotal > div > div.uid-toggle-wrapper {
 .custom-tab-wide {
   padding: 0px;
   background-color: #fff;
-  display: inline-block;
   border-radius: 50px;
   -webkit-box-shadow: 0px 0px 25px -3px rgba(0, 0, 0, 0.75);
   -moz-box-shadow: 0px 0px 25px -3px rgba(0, 0, 0, 0.75);
