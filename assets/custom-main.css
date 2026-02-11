@@ -386,7 +386,7 @@ div.sidebar__footer > #AjaxCartSubtotal > div > div.uid-toggle-wrapper {
 
 @media only screen and (max-width: 750px) {
   .custom-tab-container {
-    padding: 10px 40px 10px 40px;
+    padding: 40px 10px 40px 10px;
   }
 
   .custom-parts-container th {
@@ -409,7 +409,7 @@ div.sidebar__footer > #AjaxCartSubtotal > div > div.uid-toggle-wrapper {
 
 @media only screen and (max-width: 450px) {
   .custom-tab-container {
-    padding: 10px 40px 10px 40px;
+    padding: 40px 10px 40px 10px;
   }
 
   .custom-tab-container {
