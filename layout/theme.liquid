@@ -242,6 +242,7 @@
     {%- render 'head-preloader' -%}
   
     {{ 'theme.css' | asset_url | stylesheet_tag }}
+    {%- comment -%} custom-main.css: muss auch im DEV-Theme auf Shopify existieren, sonst entfernt "Update from Shopify for theme DEV" die Datei im Repo. Einmalig: shopify theme push --theme <DEV_THEME_ID> (oder Datei im Theme-Editor anlegen). {%- endcomment -%}
     {{ 'custom-main.css' | asset_url | stylesheet_tag }}
   
     {{ content_for_header }}
