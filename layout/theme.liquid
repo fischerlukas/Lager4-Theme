@@ -242,6 +242,7 @@
     {%- render 'head-preloader' -%}
   
     {{ 'theme.css' | asset_url | stylesheet_tag }}
+    {{ 'custom-main.css' | asset_url | stylesheet_tag }}
   
     {{ content_for_header }}
   
