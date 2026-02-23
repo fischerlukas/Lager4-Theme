@@ -87,6 +87,9 @@
         "complementary_KhfH39",
         "sku_barcode_dtixND"
       ],
+      "custom_css": [
+        "model-viewer {}"
+      ],
       "settings": {
         "gallery_layout": "one-col slider",
         "gallery_desktop_width": "one-half",
