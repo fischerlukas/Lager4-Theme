@@ -15,7 +15,7 @@
         "1662457455b8401316-0": {
           "type": "image",
           "settings": {
-            "image": "shopify://shop_images/550_110_4.jpg",
+            "image": "shopify://shop_images/9000_10370_110_5000_4Ebenen_c4dbadc8-9c95-4162-b85d-cb7e365cc275.png",
             "link": "",
             "offset_width": 35,
             "offset_x": 60,
@@ -30,7 +30,7 @@
         "1662457455b8401316-3": {
           "type": "image",
           "settings": {
-            "image": "shopify://shop_images/Staenderbaugruppen.jpg",
+            "image": "shopify://shop_images/Kategorie_Staender.png",
             "link": "",
             "offset_width": 30,
             "offset_x": 75,
@@ -45,7 +45,7 @@
         "1662457455b8401316-1": {
           "type": "image",
           "settings": {
-            "image": "shopify://shop_images/Staenderprofile_ac8be2fd-1f3c-4a4e-bb73-62ad30045cff.jpg",
+            "image": "shopify://shop_images/Kategorie_Staenderprofil.png",
             "link": "",
             "offset_width": 35,
             "offset_x": 15,
@@ -60,7 +60,7 @@
         "image_4HcyhR": {
           "type": "image",
           "settings": {
-            "image": "shopify://shop_images/6000_9900_110_3000_2Ebenen_0d167f0d-a8a1-4166-913f-c79e13f7a85d.jpg",
+            "image": "shopify://shop_images/4500_7550_110_2500_2Ebenen_ceefa3e6-0096-437f-bf92-607f81928f40.png",
             "link": "",
             "offset_width": 40,
             "offset_x": 10,
@@ -103,7 +103,7 @@
         "16643493964f1b2d77-0": {
           "type": "collection",
           "settings": {
-            "collection": "palettenregale",
+            "collection": "palettenregale-1",
             "image": "shopify://shop_images/Bild_ueberblick_dabe4af7-ef8f-4a5b-a0fb-fffae4e6f167.jpg"
           }
         },
