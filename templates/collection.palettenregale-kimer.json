@@ -1,0 +1,98 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "banner": {
+      "type": "main-collection-banner",
+      "disabled": true,
+      "settings": {
+        "show_collection_description": false,
+        "show_collection_image": false,
+        "color_background_main": "rgba(0,0,0,0)",
+        "color_text_main": "rgba(0,0,0,0)",
+        "height": "small"
+      }
+    },
+    "image_with_hotspots_ntReJ3": {
+      "type": "image-with-hotspots",
+      "settings": {
+        "heading": "Palettenregale von Lager4",
+        "subheading": "finde deine perfekte <strong>Konfiguration</strong>",
+        "section_heading_size": "text-size--large",
+        "section_heading_layout": "section-heading--left section-heading--one-row",
+        "cta_label": "",
+        "cta_url": "",
+        "image": "shopify://shop_images/Titelbild_Regal_6ffc3bce-e77a-42da-bcc9-ad52eb6059ba.jpg",
+        "border_radius": 0,
+        "color_text": "#000000",
+        "color_background": "#ffffff",
+        "gutter_decrease": false,
+        "seo_h_tag": "h2"
+      }
+    },
+    "product-grid": {
+      "type": "main-collection-product-grid",
+      "blocks": {
+        "title": {
+          "type": "title",
+          "settings": {}
+        },
+        "d6305cc7-f6f4-4906-86f2-4118286c1e68": {
+          "type": "text",
+          "settings": {
+            "metafield": "custom.belastung_pro_ebene_text",
+            "text_color": "text-color--opacity",
+            "text_transform": false
+          }
+        },
+        "price": {
+          "type": "price",
+          "settings": {}
+        },
+        "quick_buy": {
+          "type": "quick_buy",
+          "settings": {
+            "show_only_available": false,
+            "variant_default": false,
+            "show_price": false,
+            "unavailable_variants": "hide"
+          }
+        }
+      },
+      "block_order": [
+        "title",
+        "d6305cc7-f6f4-4906-86f2-4118286c1e68",
+        "price",
+        "quick_buy"
+      ],
+      "custom_css": [],
+      "settings": {
+        "products_number": 12,
+        "enable_filtering": true,
+        "enable_sorting": true,
+        "filters_position": "top"
+      }
+    },
+    "custom_liquid_6Tgj9e": {
+      "type": "custom-liquid",
+      "settings": {
+        "custom_liquid": "<div class=\"shape-divider-bg-wrap\">\n  <div class=\"shape-divider-wrap \" style=\" height: 80px;\" data-height=\"80\" data-front=\"\" data-style=\"curve\" data-position=\"top\">\n    <svg class=\"shape-divider\" aria-hidden=\"true\" fill=\"#ffffff\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 1000 100\" preserveAspectRatio=\"none\"> \n      <path d=\"M 0 0 c 0 0 200 50 500 50 s 500 -50 500 -50 v 101 h -1000 v -100 z\">\n      </path> \n    </svg>\n  </div>\n  <div class=\"shape-divider-box\">\n    <div class=\"shape-divider-headline-container\">\n      <h3 class=\"shape-divider-headline text-font--primary text-size--xlarge\">Du benötigst indviduellere Regale oder größere Mengen?</h3>\n    </div>\n    \n    <div class=\"shape-divider-button-container\">\n      <a href=\"../pages/contact\" class=\"shape-divider-button button button--outline button--icon\">\n        <span aria-hidden=\"true\" class=\"button__icon\">\n          <svg width=\"21\" height=\"9\" viewBox=\"0 0 21 9\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M20.354 4.854a.5.5 0 0 0 0-.708L17.172.964a.5.5 0 1 0-.707.708L19.293 4.5l-2.828 2.828a.5.5 0 1 0 .707.708l3.182-3.182ZM0 5h20V4H0v1Z\" fill=\"#000\"></path>\n          </svg>\n        </span>\n        <span>Schreib uns!</span>                \n      </a>\n    </div>\n  </div>\n</div>",
+        "full_width": true,
+        "remove_margin": false
+      }
+    }
+  },
+  "order": [
+    "banner",
+    "image_with_hotspots_ntReJ3",
+    "product-grid",
+    "custom_liquid_6Tgj9e"
+  ]
+}
