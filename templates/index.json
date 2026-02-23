@@ -109,43 +109,37 @@
         "collection_jWNNXj": {
           "type": "collection",
           "settings": {
-            "collection": "stander",
-            "image": "shopify://shop_images/Staender_9788cc54-d667-43d5-bb4e-6f5a443f2695.jpg"
+            "collection": "stander"
           }
         },
         "collection_QVMexA": {
           "type": "collection",
           "settings": {
-            "collection": "traversen",
-            "image": "shopify://shop_images/Traversen_ueberblendet_3f5ccb30-2b33-46f0-98af-c951cb7bbf84.jpg"
+            "collection": "traversen"
           }
         },
         "collection_pBfAKt": {
           "type": "collection",
           "settings": {
-            "collection": "standerprofile",
-            "image": "shopify://shop_images/Staenderprofile_982f8f81-97a0-4dd7-b838-ee834e14b8d4.jpg"
+            "collection": "standerprofile"
           }
         },
         "collection_nfKqpy": {
           "type": "collection",
           "settings": {
-            "collection": "anfahrschutz",
-            "image": "shopify://shop_images/Anfahrschutz_2_b647326b-a9c4-404b-abe6-0cda165ae2b8.jpg"
+            "collection": "anfahrschutz"
           }
         },
         "collection_3yGpMk": {
           "type": "collection",
           "settings": {
-            "collection": "standerstreben",
-            "image": "shopify://shop_images/Staenderstreben.jpg"
+            "collection": "standerstreben"
           }
         },
         "95ee35d2-e228-4c6d-9d34-fc485f6ad890": {
           "type": "collection",
           "settings": {
-            "collection": "ersatzteile",
-            "image": "shopify://shop_images/a_Fach_mit_Paletten_2700mm.jpg"
+            "collection": "ersatzteile"
           }
         }
       },
