@@ -8,6 +8,44 @@
  * ------------------------------------------------------------
  */
 {
-  "sections": {},
-  "order": []
+  "sections": {
+    "collection_list_3cwifb": {
+      "type": "collection-list",
+      "blocks": {
+        "collection_a47YFd": {
+          "type": "collection",
+          "settings": {
+            "collection": ""
+          }
+        },
+        "collection_DcYB7q": {
+          "type": "collection",
+          "settings": {
+            "collection": ""
+          }
+        }
+      },
+      "block_order": [
+        "collection_a47YFd",
+        "collection_DcYB7q"
+      ],
+      "name": "t:sections.collection-list.presets.name",
+      "settings": {
+        "heading": "Featured collections",
+        "subheading": "Share your <strong>best</strong> offers",
+        "section_heading_size": "text-size--regular",
+        "section_heading_layout": "section-heading--left section-heading--one-row",
+        "show_view_all": true,
+        "style": "grid",
+        "layout": "grid-6 grid-portable-4 grid-lap-3 grid-palm-2",
+        "image_aspect_ratio": "1",
+        "image_border_radius": 0,
+        "gutter_decrease": false,
+        "seo_h_tag": "h2"
+      }
+    }
+  },
+  "order": [
+    "collection_list_3cwifb"
+  ]
 }
