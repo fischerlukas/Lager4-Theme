@@ -8,12 +8,84 @@
   gap: 0.75rem;
 }
 
+/* -------------------------------------------------------------------------- */
+/* Lovable "pixel-perfect" scoped base (preflight + tokens)                   */
+/* Everything is scoped to .cpr-shell to avoid impacting the theme globally.  */
+/* -------------------------------------------------------------------------- */
+.cpr-shell,
+.cpr-shell * ,
+.cpr-shell *::before,
+.cpr-shell *::after {
+  box-sizing: border-box;
+  border-width: 0;
+  border-style: solid;
+  border-color: hsl(var(--cpr-border));
+}
+
+.cpr-shell {
+  /* Tokens from Lovable index.css (:root) */
+  --cpr-background: 0 0% 97%;
+  --cpr-foreground: 0 0% 15%;
+  --cpr-card: 0 0% 100%;
+  --cpr-card-foreground: 0 0% 15%;
+  --cpr-popover: 0 0% 100%;
+  --cpr-popover-foreground: 0 0% 15%;
+  --cpr-primary: 24 100% 50%;
+  --cpr-primary-foreground: 0 0% 100%;
+  --cpr-secondary: 0 0% 96%;
+  --cpr-secondary-foreground: 0 0% 15%;
+  --cpr-muted: 0 0% 96%;
+  --cpr-muted-foreground: 0 0% 45%;
+  --cpr-accent: 24 100% 50%;
+  --cpr-accent-foreground: 0 0% 100%;
+  --cpr-border: 0 0% 90%;
+  --cpr-input: 0 0% 90%;
+  --cpr-ring: 24 100% 50%;
+  --cpr-radius: 0.5rem;
+
+  color: hsl(var(--cpr-foreground));
+  font-family: Avenir, "Avenir Next", system-ui, -apple-system, sans-serif;
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.cpr-shell img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.cpr-shell button,
+.cpr-shell input,
+.cpr-shell select,
+.cpr-shell textarea {
+  font: inherit;
+  color: inherit;
+  letter-spacing: inherit;
+}
+
+.cpr-shell button {
+  background: transparent;
+}
+
+.cpr-shell a {
+  color: inherit;
+  text-decoration: inherit;
+}
+
+.cpr-shell :focus-visible {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 2px hsl(var(--cpr-ring));
+}
+
 /* Lovable-style card layout ("cpr" = custom pallet racks) */
 .cpr-shell {
   position: relative;
   overflow: hidden;
   padding: 0;
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.04) 0%, rgba(255, 255, 255, 1) 50%);
+  background: linear-gradient(to bottom, hsl(0 0% 96%) 0%, hsl(0 0% 100%) 50%);
 }
 .cpr-shell__bg {
   display: none;
@@ -34,7 +106,7 @@
 .cpr-card {
   position: relative;
   z-index: 1;
-  background: var(--color-background-main);
+  background: hsl(var(--cpr-card));
   border-radius: 50px;
   box-shadow: 0 0 45px 5px rgba(0, 0, 0, 0.08);
   overflow: hidden;
@@ -53,7 +125,7 @@
 .cpr-card__header-icon {
   width: 20px;
   height: 20px;
-  color: var(--color-accent-main);
+  color: hsl(var(--cpr-primary));
   display: inline-flex;
 }
 .cpr-card__title {
@@ -90,11 +162,11 @@
 }
 .cpr-meta__label {
   font-size: 0.9rem;
-  opacity: 0.75;
+  color: hsl(var(--cpr-muted-foreground));
 }
 .cpr-meta__count {
   font-size: 0.9rem;
-  opacity: 0.75;
+  color: hsl(var(--cpr-muted-foreground));
 }
 
 .cpr-grid {
@@ -106,9 +178,9 @@
 .cpr-selectlabel {
   display: block;
   font-size: 0.72rem;
-  letter-spacing: 0.09em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  opacity: 0.75;
+  color: hsl(var(--cpr-muted-foreground));
   margin-bottom: 8px;
 }
 
@@ -118,7 +190,7 @@
   gap: 12px;
 }
 .cpr-loadbtn {
-  border: 2px solid var(--color-border-main);
+  border: 2px solid hsl(var(--cpr-border));
   border-radius: 999px;
   padding: 12px 14px;
   display: inline-flex;
@@ -126,17 +198,18 @@
   justify-content: center;
   gap: 8px;
   cursor: pointer;
-  background: rgba(0, 0, 0, 0.035);
-  color: rgba(0, 0, 0, 0.55);
+  background: hsl(var(--cpr-secondary));
+  color: hsl(var(--cpr-muted-foreground));
   text-decoration: none;
   font-weight: 700;
+  transition: border-color 150ms ease, background-color 150ms ease, color 150ms ease;
 }
 .cpr-loadbtn__dot {
   width: 18px;
   height: 18px;
   border-radius: 999px;
-  background: rgba(0, 0, 0, 0.06);
-  border: 1px solid var(--color-border-main);
+  background: hsl(var(--cpr-muted));
+  border: 1px solid hsl(var(--cpr-border));
   position: relative;
 }
 .cpr-loadbtn__dot::after {
@@ -147,19 +220,20 @@
   height: 7px;
   border-radius: 999px;
   transform: translate(-50%, -50%);
-  background: rgba(0, 0, 0, 0.18);
+  background: hsl(var(--cpr-muted-foreground) / 0.3);
 }
 .cpr-loadbtn.is-active {
-  background: var(--color-accent-main);
-  border-color: var(--color-accent-main);
+  background: hsl(var(--cpr-primary));
+  border-color: hsl(var(--cpr-primary));
   color: #fff;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.08);
 }
 .cpr-loadbtn.is-active .cpr-loadbtn__dot {
   background: #fff;
   border-color: #fff;
 }
 .cpr-loadbtn.is-active .cpr-loadbtn__dot::after {
-  background: var(--color-accent-main);
+  background: hsl(var(--cpr-primary));
 }
 .cpr-input {
   position: absolute;
@@ -182,14 +256,14 @@
   width: 100%;
   height: 44px;
   border-radius: 999px;
-  border: 1px solid var(--color-border-main);
-  background: var(--color-background-main);
+  border: 1px solid hsl(var(--cpr-input));
+  background: hsl(var(--cpr-card));
   padding: 0 18px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  box-shadow: 0 1px 1px rgba(0,0,0,0.03);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
 }
 .cpr-dropdown__value {
   overflow: hidden;
@@ -220,8 +294,8 @@
   right: 0;
   top: calc(100% + 6px);
   z-index: 30;
-  background: var(--color-background-main);
-  border: 1px solid var(--color-border-main);
+  background: hsl(var(--cpr-card));
+  border: 1px solid hsl(var(--cpr-border));
   border-radius: 18px;
   box-shadow: 0 12px 30px rgba(0,0,0,0.12);
   overflow: hidden;
@@ -249,7 +323,7 @@
   color: rgba(0,0,0,0.85);
 }
 .cpr-option.is-active {
-  background: rgba(255, 120, 0, 0.12);
+  background: hsl(var(--cpr-primary) / 0.1);
   color: rgba(0,0,0,0.9);
   font-weight: 600;
 }
@@ -266,7 +340,7 @@
 .cpr-surface {
   border-radius: 16px;
   border: 2px solid transparent;
-  background: rgba(0, 0, 0, 0.035);
+  background: hsl(var(--cpr-secondary));
   padding: 14px 14px;
   cursor: pointer;
   display: flex;
@@ -274,8 +348,8 @@
   gap: 2px;
 }
 .cpr-surface.is-active {
-  border-color: var(--color-accent-main);
-  background: rgba(255, 120, 0, 0.06);
+  border-color: hsl(var(--cpr-primary));
+  background: hsl(var(--cpr-primary) / 0.05);
 }
 .cpr-surface__title {
   font-weight: 600;
