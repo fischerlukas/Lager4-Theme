@@ -202,7 +202,17 @@
   color: hsl(var(--cpr-muted-foreground));
   text-decoration: none;
   font-weight: 700;
-  transition: border-color 150ms ease, background-color 150ms ease, color 150ms ease;
+  transition: border-color 150ms ease, background-color 150ms ease, color 150ms ease, transform 150ms ease, box-shadow 150ms ease;
+}
+.cpr-loadbtn:hover {
+  border-color: hsl(var(--cpr-primary) / 0.35);
+  color: hsl(var(--cpr-foreground));
+  box-shadow: 0 8px 16px rgba(0,0,0,0.06);
+  transform: translateY(-1px);
+}
+.cpr-loadbtn:active {
+  transform: translateY(0);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.05);
 }
 .cpr-loadbtn__dot {
   width: 18px;
@@ -264,6 +274,17 @@
   justify-content: space-between;
   gap: 12px;
   box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  cursor: pointer;
+  transition: border-color 150ms ease, box-shadow 150ms ease, transform 150ms ease;
+}
+.cpr-dropdown__button:hover {
+  border-color: hsl(var(--cpr-primary) / 0.35);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.06);
+  transform: translateY(-1px);
+}
+.cpr-dropdown__button:active {
+  transform: translateY(0);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.05);
 }
 .cpr-dropdown__value {
   overflow: hidden;
@@ -317,6 +338,7 @@
   border-radius: 14px;
   color: rgba(0,0,0,0.55);
   cursor: pointer;
+  transition: background-color 150ms ease, color 150ms ease;
 }
 .cpr-option:hover {
   background: rgba(0,0,0,0.05);
@@ -346,6 +368,16 @@
   display: flex;
   flex-direction: column;
   gap: 2px;
+  transition: border-color 150ms ease, background-color 150ms ease, transform 150ms ease, box-shadow 150ms ease;
+}
+.cpr-surface:hover {
+  border-color: hsl(var(--cpr-primary) / 0.25);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.06);
+  transform: translateY(-1px);
+}
+.cpr-surface:active {
+  transform: translateY(0);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.05);
 }
 .cpr-surface.is-active {
   border-color: hsl(var(--cpr-primary));
