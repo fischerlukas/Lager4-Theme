@@ -30,8 +30,10 @@
           <div id="CollectionProductGridCustomFilterPalletRacks" class="grid grid--layout grid-3 grid-portable-2 grid-tiny-1 grid-offset-3 grid-offset-portable-2 grid-offset-tiny-1">
             <div id="main-collection-product-grid-custom-filter-pallet-racks" data-id="{{ section.id }}" class="collection grid grid--layout grid-3 grid-portable-2 grid-tiny-1 grid-offset-3 grid-offset-portable-2 grid-offset-tiny-1">
       {%- else -%}
-        {%- if section.settings.enable_filtering or section.settings.enable_sorting -%}
-          {%- render 'facets-custom-filter-pallet-racks', results: collection, enable_filtering: section.settings.enable_filtering, enable_sorting: section.settings.enable_sorting, location: 'desktop' -%}
+        {%- if section.settings.filters_position != "top" -%}
+          {%- if section.settings.enable_filtering or section.settings.enable_sorting -%}
+            {%- render 'facets-custom-filter-pallet-racks', results: collection, enable_filtering: section.settings.enable_filtering, enable_sorting: section.settings.enable_sorting, location: 'desktop' -%}
+          {%- endif -%}
         {%- endif -%}
 
         <div id="CollectionProductGridCustomFilterPalletRacks">
