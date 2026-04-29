@@ -1,24 +1,31 @@
 {{ 'section-main-collection-product-grid.css' | asset_url | stylesheet_tag }}
 {{ 'component-facets-custom-filter-pallet-racks.css' | asset_url | stylesheet_tag }}
 
+{%- liquid
+  assign target_collection = section.settings.collection
+  if target_collection == blank
+    assign target_collection = collection
+  endif
+-%}
+
 {% if section.settings.filters_position == "top" %}
   <div class="container--large" data-js-inert>
     {%- if section.settings.enable_filtering or section.settings.enable_sorting -%}
-      {%- render 'facets-custom-filter-pallet-racks', results: collection, enable_filtering: section.settings.enable_filtering, enable_sorting: section.settings.enable_sorting, location: 'desktop', ui: 'card', heading: section.settings.heading, illustration: section.settings.illustration -%}
+      {%- render 'facets-custom-filter-pallet-racks', results: target_collection, enable_filtering: section.settings.enable_filtering, enable_sorting: section.settings.enable_sorting, location: 'desktop', ui: 'card', heading: section.settings.heading, illustration: section.settings.illustration -%}
     {%- endif -%}
   </div>
 {% endif %}
 
-{%- paginate collection.products by section.settings.products_number -%}
+{%- paginate target_collection.products by section.settings.products_number -%}
   <div data-js-inert>
     <div class="container--large">
 
       {%- if section.settings.filters_position == "sidebar" -%}
         <div class="grid grid-4 grid-portable-3 grid-lap-2 grid-tiny-1 grid--layout">
-          {%- unless collection.products.size == 0 -%}
+          {%- unless target_collection.products.size == 0 -%}
             <aside class="facets-sidebar element--is-sticky">
               {%- if section.settings.enable_filtering or section.settings.enable_sorting -%}
-                {%- render 'facets-custom-filter-pallet-racks', results: collection, enable_filtering: section.settings.enable_filtering, enable_sorting: section.settings.enable_sorting, location: 'desktop', ui: 'simple', heading: section.settings.heading, illustration: section.settings.illustration -%}
+                {%- render 'facets-custom-filter-pallet-racks', results: target_collection, enable_filtering: section.settings.enable_filtering, enable_sorting: section.settings.enable_sorting, location: 'desktop', ui: 'simple', heading: section.settings.heading, illustration: section.settings.illustration -%}
               {%- endif -%}
             </aside>
           {%- endunless -%}
@@ -28,7 +35,7 @@
       {%- else -%}
         {%- if section.settings.filters_position != "top" -%}
           {%- if section.settings.enable_filtering or section.settings.enable_sorting -%}
-            {%- render 'facets-custom-filter-pallet-racks', results: collection, enable_filtering: section.settings.enable_filtering, enable_sorting: section.settings.enable_sorting, location: 'desktop', ui: 'simple', heading: section.settings.heading, illustration: section.settings.illustration -%}
+            {%- render 'facets-custom-filter-pallet-racks', results: target_collection, enable_filtering: section.settings.enable_filtering, enable_sorting: section.settings.enable_sorting, location: 'desktop', ui: 'simple', heading: section.settings.heading, illustration: section.settings.illustration -%}
           {%- endif -%}
         {%- endif -%}
 
@@ -36,22 +43,22 @@
           <div id="main-collection-product-grid-custom-filter-pallet-racks" data-id="{{ section.id }}" class="collection grid grid--layout grid-1 grid-portable-1 grid-lap-1 grid-tiny-1">
       {%- endif -%}
 
-        {%- for product in collection.products -%}
+        {%- for product in target_collection.products -%}
           {%- liquid
             if forloop.index < 3
               assign preload = true
             else
               assign preload = false
             endif
-            render 'product-item', product: product, section_blocks: section.blocks, index: forloop.index, layout: 'grid-4', preload: preload, show_badges: settings.show_badges, section_id: section.id, product_collection: collection
+            render 'product-item', product: product, section_blocks: section.blocks, index: forloop.index, layout: 'grid-4', preload: preload, show_badges: settings.show_badges, section_id: section.id, product_collection: target_collection
           -%}
         {%- else -%}
-          {%- if collection.filters != empty -%}
+          {%- if target_collection.filters != empty -%}
             {%- liquid
-              assign sort_by = collection.sort_by | default: collection.default_sort_by
-              assign terms = collection.terms | escape
-              if collection.current_vendor
-                assign terms = collection.current_vendor | escape
+              assign sort_by = target_collection.sort_by | default: target_collection.default_sort_by
+              assign terms = target_collection.terms | escape
+              if target_collection.current_vendor
+                assign terms = target_collection.current_vendor | escape
               endif
               assign results_url = '?q=' | append: terms | append: '&options%5Bprefix%5D=last&sort_by=' | append: sort_by
             -%}
@@ -95,7 +102,7 @@
       </button>
     </div>
     <div class="sidebar__body">
-      {%- render 'facets-custom-filter-pallet-racks', results: collection, enable_filtering: section.settings.enable_filtering, enable_sorting: section.settings.enable_sorting, location: 'mobile' -%}
+      {%- render 'facets-custom-filter-pallet-racks', results: target_collection, enable_filtering: section.settings.enable_filtering, enable_sorting: section.settings.enable_sorting, location: 'mobile' -%}
     </div>
   </sidebar-drawer>
   <script src="{{ 'component-facets-custom-filter-pallet-racks.js' | asset_url }}" defer></script>
@@ -186,6 +193,7 @@
     ],
     "settings": [
       { "type": "range", "id": "products_number", "label": "t:sections.main-collection-product-grid.settings.products_per_page.label", "min": 12, "max": 64, "step": 4, "default": 24 },
+      { "type": "collection", "id": "collection", "label": "Collection (optional)", "info": "Wenn diese Section nicht auf einer Collection-Seite genutzt wird, wähle hier die Collection aus." },
       { "type": "text", "id": "heading", "label": "Überschrift", "default": "Wähle dein Palettenregal" },
       { "type": "image_picker", "id": "illustration", "label": "Illustration" },
       { "type": "header", "content": "t:sections.main-collection-product-grid.settings.header__1.content" },
