@@ -258,24 +258,35 @@ document.addEventListener(
 
     const pick = event.target?.closest?.('[data-cpr-pick]');
     if (pick) {
-      const name = pick.getAttribute('data-name');
-      const value = pick.getAttribute('data-value');
-      if (!name) return;
+      try {
+        const name = pick.getAttribute('data-name');
+        const value = pick.getAttribute('data-value');
+        if (!name) return;
 
-      // Find matching hidden radio and check it
-      const wrap = pick.closest('[data-cpr-dropdown]') || pick.closest('form');
-      const input = wrap?.querySelector?.(`input[type="radio"][name="${CSS.escape(name)}"][value="${CSS.escape(value || '')}"]`);
-      if (input) {
-        input.checked = true;
-        // Trigger the facets handler (listens on input event)
-        input.dispatchEvent(new Event('input', { bubbles: true }));
+        // Find matching hidden radio input without CSS.escape dependency
+        const wrap = pick.closest('[data-cpr-dropdown]') || pick.closest('form');
+        const candidates = wrap ? wrap.querySelectorAll(`input[type="radio"][name="${name.replace(/"/g, '\\"')}"]`) : [];
+        let input = null;
+        candidates.forEach((el) => {
+          if (input) return;
+          if (el.value === (value || '')) input = el;
+        });
+
+        if (input) {
+          input.checked = true;
+          input.dispatchEvent(new Event('input', { bubbles: true }));
+          input.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+
+        // Close dropdown
+        const dd = pick.closest('[data-cpr-dropdown]');
+        const btn = dd?.querySelector?.('[data-cpr-dropdown-toggle]');
+        if (dd) dd.classList.remove('is-open');
+        if (btn) btn.setAttribute('aria-expanded', 'false');
+      } catch (e) {
+        // Fail closed: do not break all filter JS if dropdown code errors
+        console.error('[custom-filter-pallet-racks] dropdown pick failed', e);
       }
-
-      // Close dropdown
-      const dd = pick.closest('[data-cpr-dropdown]');
-      const btn = dd?.querySelector?.('[data-cpr-dropdown-toggle]');
-      if (dd) dd.classList.remove('is-open');
-      if (btn) btn.setAttribute('aria-expanded', 'false');
       return;
     }
 
