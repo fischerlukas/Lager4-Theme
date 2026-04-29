@@ -102,26 +102,15 @@ class FacetFiltersFormCustomFilterPalletRacks extends HTMLElement {
     const facetDetailsElements = parsedHTML.querySelectorAll(
       '#FacetFiltersFormCustomFilterPalletRacks .js-filter, #FacetFiltersFormCustomFilterPalletRacksMobile .js-filter'
     );
-
-    const matchesIndex = (element) => {
-      if (event && event.target?.closest?.('.js-filter')) {
-        return element.dataset.index === event.target.closest('.js-filter').dataset.index;
-      }
-    };
-
-    const facetsToRender = Array.from(facetDetailsElements).filter((element) => !matchesIndex(element));
-    const countsToRender = Array.from(facetDetailsElements).find(matchesIndex);
-
-    facetsToRender.forEach((element) => {
+    // Always re-render all facets, including the one that triggered the event.
+    // Otherwise the "active" styling inside the interacted filter can lag behind
+    // until another filter change triggers a full refresh.
+    Array.from(facetDetailsElements).forEach((element) => {
       const target = document.querySelector(`.js-filter[data-index="${element.dataset.index}"]`);
       if (target) target.innerHTML = element.innerHTML;
     });
 
     FacetFiltersFormCustomFilterPalletRacks.renderActiveFacets(parsedHTML);
-
-    if (countsToRender && event?.target?.closest?.('.js-filter')) {
-      FacetFiltersFormCustomFilterPalletRacks.renderCounts(countsToRender, event.target.closest('.js-filter'));
-    }
   }
 
   static renderActiveFacets(html) {
