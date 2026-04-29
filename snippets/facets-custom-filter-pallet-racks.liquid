@@ -20,34 +20,44 @@
       <input type="hidden" name="q" value="{{ results.current_vendor }}{{ results.current_type }}">
     {%- endif -%}
 
-    {%- if location != 'mobile' -%}
-      <div class="facets-custom-filter-pallet-racks__head">
-        <div class="facets-custom-filter-pallet-racks__head-left">
-          <span class="facets-custom-filter-pallet-racks__title">
-            {{ 'collections.filter_by_label' | t }}
-          </span>
-          <span id="CollectionProductCountCustomFilterPalletRacks" class="facets-custom-filter-pallet-racks__count" role="status">
-            {%- if results.products_count == results.all_products_count -%}
-              {{ 'collections.product_count_simple' | t: count: results.products_count }}
-            {%- else -%}
-              {{ 'collections.product_count' | t: product_count: results.products_count, count: results.all_products_count }}
-            {%- endif -%}
-          </span>
-        </div>
+    {%- assign ui_mode = ui | default: 'simple' -%}
 
-        <div class="facets-custom-filter-pallet-racks__head-right">
-          {%- if enable_sorting and results.products.size != 0 -%}
-            <label class="facets-custom-filter-pallet-racks__sort-label" for="CustomFilterPalletRacksSortBy">{{ 'collections.sort_by_label' | t }}</label>
-            <div class="select">
-              <select name="sort_by" class="select__select collection-filters__sort" id="CustomFilterPalletRacksSortBy" aria-describedby="a11y-refresh-page-message">
-                {%- for option in results.sort_options -%}
-                  <option value="{{ option.value | escape }}"{% if option.value == sort_by %} selected="selected"{% endif %}>{{ option.name | escape }}</option>
-                {%- endfor -%}
-              </select>
-            </div>
-          {%- endif -%}
+    {%- if location != 'mobile' -%}
+      {%- if ui_mode == 'card' -%}
+        <div class="cpr-card">
+          <div class="cpr-card__header">
+            <span class="cpr-card__title">
+              {{ heading | default: 'Wähle dein Palettenregal' | escape }}
+            </span>
+          </div>
+          <div class="cpr-card__body">
+            <div class="cpr-card__left">
+              <div class="cpr-meta">
+                <span class="cpr-meta__label">Filter:</span>
+                <span id="CollectionProductCountCustomFilterPalletRacks" class="cpr-meta__count" role="status">
+                  {%- if results.products_count == results.all_products_count -%}
+                    {{ 'collections.product_count_simple' | t: count: results.products_count }}
+                  {%- else -%}
+                    {{ 'collections.product_count' | t: product_count: results.products_count, count: results.all_products_count }}
+                  {%- endif -%}
+                </span>
+              </div>
+      {%- else -%}
+        <div class="facets-custom-filter-pallet-racks__head">
+          <div class="facets-custom-filter-pallet-racks__head-left">
+            <span class="facets-custom-filter-pallet-racks__title">
+              {{ 'collections.filter_by_label' | t }}
+            </span>
+            <span id="CollectionProductCountCustomFilterPalletRacks" class="facets-custom-filter-pallet-racks__count" role="status">
+              {%- if results.products_count == results.all_products_count -%}
+                {{ 'collections.product_count_simple' | t: count: results.products_count }}
+              {%- else -%}
+                {{ 'collections.product_count' | t: product_count: results.products_count, count: results.all_products_count }}
+              {%- endif -%}
+            </span>
+          </div>
         </div>
-      </div>
+      {%- endif -%}
     {%- endif -%}
 
     {%- if location == 'mobile' -%}
@@ -68,14 +78,60 @@
       {%- assign preferred_labels = "belastung pro palette,breite,höhe,tiefe,ebenen,auflage" | split: "," -%}
       {%- assign used_labels = "" -%}
 
-      <div class="facets-custom-filter-pallet-racks__grid">
+      <div class="{% if ui_mode == 'card' %}cpr-grid{% else %}facets-custom-filter-pallet-racks__grid{% endif %}">
         {%- for wanted in preferred_labels -%}
           {%- assign wanted_norm = wanted | downcase | strip -%}
           {%- for filter in results.filters -%}
             {%- assign label_norm = filter.label | downcase | strip -%}
             {%- if label_norm == wanted_norm -%}
               {%- capture used_labels -%}{{ used_labels }}||{{ label_norm }}{%- endcapture -%}
-              {%- render 'facets-custom-filter-pallet-racks-filter', filter: filter, index: forloop.index, location: location, variant: 'primary' -%}
+              {%- comment -%}Custom UI for the preferred filters (Lovable-style){%- endcomment -%}
+              <div class="js-filter cpr-field" data-index="{{ forloop.index }}-{{ location }}">
+                {%- if label_norm == 'belastung pro palette' -%}
+                  <div class="cpr-group">
+                    <div class="cpr-group__label">{{ filter.label | escape }}</div>
+                    <div class="cpr-pillrow" data-cpr-single-select>
+                      <a class="cpr-pill cpr-pill--ghost js-facet-remove" href="{{ filter.url_to_remove }}">Alle</a>
+                      {%- for value in filter.values -%}
+                        <label class="cpr-pill {% if value.active %}is-active{% endif %}">
+                          <input class="cpr-input" type="radio" name="{{ value.param_name }}" value="{{ value.value }}" {% if value.active %}checked{% endif %}>
+                          <span class="cpr-pill__text">{{ value.label | escape }}</span>
+                        </label>
+                      {%- endfor -%}
+                    </div>
+                  </div>
+                {%- elsif label_norm == 'auflage' -%}
+                  <div class="cpr-group">
+                    <div class="cpr-group__label">{{ filter.label | escape }}</div>
+                    <div class="cpr-cards" data-cpr-single-select>
+                      <a class="cpr-cardopt cpr-cardopt--ghost js-facet-remove" href="{{ filter.url_to_remove }}">
+                        <div class="cpr-cardopt__title">Ohne Auflage</div>
+                        <div class="cpr-cardopt__sub">Zurücksetzen</div>
+                      </a>
+                      {%- for value in filter.values -%}
+                        <label class="cpr-cardopt {% if value.active %}is-active{% endif %}">
+                          <input class="cpr-input" type="radio" name="{{ value.param_name }}" value="{{ value.value }}" {% if value.active %}checked{% endif %}>
+                          <div class="cpr-cardopt__title">{{ value.label | escape }}</div>
+                          <div class="cpr-cardopt__sub">{{ value.count }} Produkte</div>
+                        </label>
+                      {%- endfor -%}
+                    </div>
+                  </div>
+                {%- else -%}
+                  {%- assign param_name = filter.values.first.param_name -%}
+                  <label class="cpr-selectlabel">{{ filter.label | escape }}</label>
+                  <div class="cpr-selectwrap">
+                    <select class="cpr-select" name="{{ param_name }}">
+                      <option value="">auswählen</option>
+                      {%- for value in filter.values -%}
+                        <option value="{{ value.value | escape }}"{% if value.active %} selected{% endif %}>
+                          {{ value.label | escape }}
+                        </option>
+                      {%- endfor -%}
+                    </select>
+                  </div>
+                {%- endif -%}
+              </div>
             {%- endif -%}
           {%- endfor -%}
         {%- endfor -%}
@@ -90,9 +146,9 @@
         {%- endfor -%}
       </div>
 
-      <div class="facets-custom-filter-pallet-racks__active">
+      <div class="{% if ui_mode == 'card' %}cpr-active{% else %}facets-custom-filter-pallet-racks__active{% endif %}">
         {%- assign has_active_filter = false -%}
-        <div class="active-facets-custom-filter-pallet-racks">
+        <div class="active-facets-custom-filter-pallet-racks {% if ui_mode == 'card' %}cpr-chips{% endif %}">
           {%- for filter in results.filters -%}
             {%- for value in filter.active_values -%}
               {%- assign has_active_filter = true -%}
@@ -118,10 +174,39 @@
           {%- endfor -%}
         </div>
         {%- if has_active_filter -%}
-          <a href="{{ results_url }}" class="facets-custom-filter-pallet-racks__clear js-facet-remove">{{ 'collections.clear_all' | t }}</a>
+          <a href="{{ results_url }}" class="{% if ui_mode == 'card' %}cpr-clear{% else %}facets-custom-filter-pallet-racks__clear{% endif %} js-facet-remove">{{ 'collections.clear_all' | t }}</a>
         {%- endif -%}
       </div>
     {%- endif -%}
+
+    {%- if location != 'mobile' and ui_mode == 'card' -%}
+            </div>
+            <div class="cpr-card__right">
+              {%- if illustration != blank -%}
+                <img
+                  class="cpr-illustration"
+                  src="{{ illustration | image_url: width: 900 }}"
+                  alt=""
+                  loading="lazy"
+                >
+              {%- endif -%}
+            </div>
+          </div>
+
+          {%- if enable_sorting and results.products.size != 0 -%}
+            <div class="cpr-sortbar">
+              <label class="cpr-sortbar__label" for="CustomFilterPalletRacksSortBy">Sortieren nach:</label>
+              <div class="cpr-selectwrap cpr-selectwrap--sort">
+                <select name="sort_by" class="cpr-select" id="CustomFilterPalletRacksSortBy" aria-describedby="a11y-refresh-page-message">
+                  {%- for option in results.sort_options -%}
+                    <option value="{{ option.value | escape }}"{% if option.value == sort_by %} selected="selected"{% endif %}>{{ option.name | escape }}</option>
+                  {%- endfor -%}
+                </select>
+              </div>
+            </div>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
   </form>
 </facet-filters-form-custom-filter-pallet-racks>
 
