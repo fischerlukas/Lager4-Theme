@@ -1,8 +1,5 @@
 {%- liquid
-  assign filter_index = forloop.index
-  if filter_index == blank
-    assign filter_index = 1
-  endif
+  assign filter_index = index | default: 1
 -%}
 
 {%- case filter.type -%}

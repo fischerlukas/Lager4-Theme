@@ -76,7 +76,7 @@
             {%- assign label_norm = filter.label | downcase | strip -%}
             {%- if label_norm == wanted_norm -%}
               {%- capture used_labels -%}{{ used_labels }}||{{ label_norm }}{%- endcapture -%}
-              {%- render 'facets-lovable-filter', filter: filter, location: location, variant: 'primary' -%}
+              {%- render 'facets-lovable-filter', filter: filter, index: forloop.index, location: location, variant: 'primary' -%}
             {%- endif -%}
           {%- endfor -%}
         {%- endfor -%}
@@ -86,7 +86,7 @@
         {%- for filter in results.filters -%}
           {%- assign label_norm = filter.label | downcase | strip -%}
           {%- unless used_labels contains label_norm -%}
-            {%- render 'facets-lovable-filter', filter: filter, location: location, variant: 'secondary' -%}
+            {%- render 'facets-lovable-filter', filter: filter, index: forloop.index, location: location, variant: 'secondary' -%}
           {%- endunless -%}
         {%- endfor -%}
       </div>
