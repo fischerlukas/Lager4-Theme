@@ -9,22 +9,56 @@
 }
 
 /* Lovable-style card layout ("cpr" = custom pallet racks) */
+.cpr-shell {
+  position: relative;
+  overflow: hidden;
+  padding: 0;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.04) 0%, rgba(255, 255, 255, 1) 50%);
+}
+.cpr-shell__bg {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 500px;
+  pointer-events: none;
+  z-index: 0;
+}
+@media screen and (min-width: 640px) {
+  .cpr-shell__bg {
+    display: block;
+  }
+}
+
 .cpr-card {
+  position: relative;
+  z-index: 1;
   background: var(--color-background-main);
-  border-radius: 40px;
-  border: 1px solid var(--color-border-main);
+  border-radius: 50px;
   box-shadow: 0 0 45px 5px rgba(0, 0, 0, 0.08);
   overflow: hidden;
 }
 .cpr-card__header {
   display: flex;
   justify-content: center;
-  padding: 22px 28px;
+  padding: 28px 28px 18px;
   border-bottom: 1px dashed var(--color-border-main);
 }
+.cpr-card__header-inner {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+.cpr-card__header-icon {
+  width: 20px;
+  height: 20px;
+  color: var(--color-accent-main);
+  display: inline-flex;
+}
 .cpr-card__title {
+  font-size: 1.05rem;
   font-weight: 600;
-  letter-spacing: 0.04em;
 }
 .cpr-card__body {
   display: grid;
@@ -78,33 +112,54 @@
   margin-bottom: 8px;
 }
 
-.cpr-pillrow {
+.cpr-loadrow {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 10px;
+  gap: 12px;
 }
-.cpr-pill {
+.cpr-loadbtn {
   border: 2px solid var(--color-border-main);
   border-radius: 999px;
-  padding: 10px 14px;
+  padding: 12px 14px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
+  gap: 8px;
   cursor: pointer;
-  background: rgba(0, 0, 0, 0.03);
-  color: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.035);
+  color: rgba(0, 0, 0, 0.55);
   text-decoration: none;
-  font-weight: 600;
+  font-weight: 700;
 }
-.cpr-pill.is-active {
+.cpr-loadbtn__dot {
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.06);
+  border: 1px solid var(--color-border-main);
+  position: relative;
+}
+.cpr-loadbtn__dot::after {
+  content: "";
+  position: absolute;
+  inset: 50% auto auto 50%;
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.18);
+}
+.cpr-loadbtn.is-active {
   background: var(--color-accent-main);
   border-color: var(--color-accent-main);
   color: #fff;
 }
-.cpr-pill--ghost {
-  background: transparent;
-  font-weight: 500;
+.cpr-loadbtn.is-active .cpr-loadbtn__dot {
+  background: #fff;
+  border-color: #fff;
+}
+.cpr-loadbtn.is-active .cpr-loadbtn__dot::after {
+  background: var(--color-accent-main);
 }
 .cpr-input {
   position: absolute;
@@ -112,53 +167,127 @@
   pointer-events: none;
 }
 
-.cpr-selectwrap {
-  border: 1px solid var(--color-border-main);
-  border-radius: 999px;
-  padding: 4px 10px;
-  background: var(--color-background-main);
+.cpr-dropdown {
+  position: relative;
 }
-.cpr-select {
+.cpr-dropdown__label {
+  display: block;
+  font-size: 0.72rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  opacity: 0.75;
+  margin-bottom: 8px;
+}
+.cpr-dropdown__button {
   width: 100%;
-  border: none;
-  background: transparent;
-  padding: 10px 10px;
-  outline: none;
+  height: 44px;
+  border-radius: 999px;
+  border: 1px solid var(--color-border-main);
+  background: var(--color-background-main);
+  padding: 0 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  box-shadow: 0 1px 1px rgba(0,0,0,0.03);
 }
-.cpr-selectwrap--sort {
-  min-width: 240px;
+.cpr-dropdown__value {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: rgba(0,0,0,0.45);
+}
+.cpr-dropdown__value.has-value {
+  color: rgba(0,0,0,0.85);
+}
+.cpr-dropdown__chev {
+  width: 14px;
+  height: 14px;
+  border-right: 2px solid rgba(0,0,0,0.35);
+  border-bottom: 2px solid rgba(0,0,0,0.35);
+  transform: rotate(45deg);
+  margin-top: -2px;
+  transition: transform 150ms ease;
+}
+.cpr-dropdown.is-open .cpr-dropdown__chev {
+  transform: rotate(225deg);
+  margin-top: 2px;
+}
+.cpr-dropdown__panel {
+  display: none;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(100% + 6px);
+  z-index: 30;
+  background: var(--color-background-main);
+  border: 1px solid var(--color-border-main);
+  border-radius: 18px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+  overflow: hidden;
+}
+.cpr-dropdown.is-open .cpr-dropdown__panel {
+  display: block;
+}
+.cpr-dropdown__scroll {
+  max-height: 192px;
+  overflow: auto;
+  padding: 6px;
+}
+.cpr-option {
+  width: 100%;
+  text-align: left;
+  border: 0;
+  background: transparent;
+  padding: 10px 12px;
+  border-radius: 14px;
+  color: rgba(0,0,0,0.55);
+  cursor: pointer;
+}
+.cpr-option:hover {
+  background: rgba(0,0,0,0.05);
+  color: rgba(0,0,0,0.85);
+}
+.cpr-option.is-active {
+  background: rgba(255, 120, 0, 0.12);
+  color: rgba(0,0,0,0.9);
+  font-weight: 600;
+}
+.cpr-option--reset {
+  opacity: 0.8;
+  text-decoration: none;
 }
 
-.cpr-cards {
+.cpr-surfacegrid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 10px;
+  grid-template-columns: 1fr;
+  gap: 12px;
 }
-.cpr-cardopt {
+.cpr-surface {
   border-radius: 16px;
   border: 2px solid transparent;
-  background: rgba(0, 0, 0, 0.03);
-  padding: 12px 12px;
+  background: rgba(0, 0, 0, 0.035);
+  padding: 14px 14px;
   cursor: pointer;
-  text-decoration: none;
-  color: inherit;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
-.cpr-cardopt.is-active {
+.cpr-surface.is-active {
   border-color: var(--color-accent-main);
   background: rgba(255, 120, 0, 0.06);
 }
-.cpr-cardopt--ghost {
-  border-color: var(--color-border-main);
-  background: transparent;
-}
-.cpr-cardopt__title {
+.cpr-surface__title {
   font-weight: 600;
-  font-size: 0.95rem;
 }
-.cpr-cardopt__sub {
-  opacity: 0.7;
-  font-size: 0.8rem;
-  margin-top: 2px;
+.cpr-surface__sub {
+  opacity: 0.65;
+  font-size: 0.85rem;
+}
+.cpr-surface__price {
+  margin-top: 6px;
+  font-weight: 700;
+  color: rgba(0,0,0,0.85);
 }
 
 .cpr-active {
@@ -176,18 +305,41 @@
   text-decoration: underline;
 }
 
-.cpr-sortbar {
+.cpr-below {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-top: 18px;
+  padding-bottom: 40px;
+}
+.cpr-below__count {
+  opacity: 0.65;
+}
+.cpr-sort {
   display: flex;
   align-items: center;
-  justify-content: center;
   gap: 10px;
-  padding: 16px 20px 22px;
 }
-.cpr-sortbar__label {
+.cpr-sort__label {
   font-size: 0.72rem;
-  letter-spacing: 0.09em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  opacity: 0.75;
+  opacity: 0.65;
+}
+.cpr-sort__select {
+  border: 1px solid var(--color-border-main);
+  border-radius: 999px;
+  background: var(--color-background-main);
+  padding: 4px 12px;
+}
+.cpr-sort__native {
+  border: 0;
+  background: transparent;
+  outline: none;
+  font-family: inherit;
+  font-size: 0.95rem;
+  padding: 8px 6px;
 }
 
 @media screen and (max-width: 1023px) {
@@ -198,9 +350,7 @@
     order: -1;
     background: transparent;
   }
-  .cpr-pillrow {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
+  .cpr-loadrow { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 
 @media screen and (max-width: 767px) {
