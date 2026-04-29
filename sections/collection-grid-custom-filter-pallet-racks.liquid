@@ -16,8 +16,8 @@
   </div>
 {% endif %}
 
-{%- paginate target_collection.products by section.settings.products_number -%}
-  <div data-js-inert>
+<div data-js-inert>
+  {%- paginate target_collection.products by section.settings.products_number -%}
     <div class="container--large">
 
       {%- if section.settings.filters_position == "sidebar" -%}
@@ -87,8 +87,8 @@
       {%- endif -%}
 
     </div>
-  </div>
-{%- endpaginate -%}
+  {%- endpaginate -%}
+</div>
 
 {%- if section.settings.enable_filtering or section.settings.enable_sorting -%}
   <sidebar-drawer id="site-filters-sidebar-custom-filter-pallet-racks" class="sidebar sidebar--right" tabindex="-1" role="dialog" aria-modal="true" style="display:none">
