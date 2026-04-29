@@ -243,3 +243,62 @@ document.addEventListener(
   { capture: true }
 );
 
+// Lovable-style dropdown interactions + picking options
+document.addEventListener(
+  'click',
+  (event) => {
+    const toggle = event.target?.closest?.('[data-cpr-dropdown-toggle]');
+    if (toggle) {
+      const wrap = toggle.closest('[data-cpr-dropdown]');
+      if (!wrap) return;
+      const isOpen = wrap.classList.toggle('is-open');
+      toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      return;
+    }
+
+    const pick = event.target?.closest?.('[data-cpr-pick]');
+    if (pick) {
+      try {
+        const name = pick.getAttribute('data-name');
+        const value = pick.getAttribute('data-value');
+        if (!name) return;
+
+        // Find matching hidden radio input without CSS.escape dependency
+        const wrap = pick.closest('[data-cpr-dropdown]') || pick.closest('form');
+        const candidates = wrap ? wrap.querySelectorAll(`input[type="radio"][name="${name.replace(/"/g, '\\"')}"]`) : [];
+        let input = null;
+        candidates.forEach((el) => {
+          if (input) return;
+          if (el.value === (value || '')) input = el;
+        });
+
+        if (input) {
+          input.checked = true;
+          input.dispatchEvent(new Event('input', { bubbles: true }));
+          input.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+
+        // Close dropdown
+        const dd = pick.closest('[data-cpr-dropdown]');
+        const btn = dd?.querySelector?.('[data-cpr-dropdown-toggle]');
+        if (dd) dd.classList.remove('is-open');
+        if (btn) btn.setAttribute('aria-expanded', 'false');
+      } catch (e) {
+        // Fail closed: do not break all filter JS if dropdown code errors
+        console.error('[custom-filter-pallet-racks] dropdown pick failed', e);
+      }
+      return;
+    }
+
+    // Outside click closes any open custom dropdowns
+    const openDropdowns = document.querySelectorAll('[data-cpr-dropdown].is-open');
+    openDropdowns.forEach((dd) => {
+      if (!dd.contains(event.target)) {
+        dd.classList.remove('is-open');
+        dd.querySelector?.('[data-cpr-dropdown-toggle]')?.setAttribute('aria-expanded', 'false');
+      }
+    });
+  },
+  { capture: true }
+);
+

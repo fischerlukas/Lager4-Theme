@@ -3,11 +3,9 @@
 
 {% if section.settings.filters_position == "top" %}
   <div class="container--large" data-js-inert>
-    {%- liquid
-      if section.settings.enable_filtering or section.settings.enable_sorting
-        render 'facets-custom-filter-pallet-racks', results: collection, enable_filtering: section.settings.enable_filtering, enable_sorting: section.settings.enable_sorting, location: 'desktop'
-      endif
-    -%}
+    {%- if section.settings.enable_filtering or section.settings.enable_sorting -%}
+      {%- render 'facets-custom-filter-pallet-racks', results: collection, enable_filtering: section.settings.enable_filtering, enable_sorting: section.settings.enable_sorting, location: 'desktop', ui: 'card', heading: section.settings.heading, illustration: section.settings.illustration -%}
+    {%- endif -%}
   </div>
 {% endif %}
 
@@ -19,11 +17,9 @@
         <div class="grid grid-4 grid-portable-3 grid-lap-2 grid-tiny-1 grid--layout">
           {%- unless collection.products.size == 0 -%}
             <aside class="facets-sidebar element--is-sticky">
-              {%- liquid
-                if section.settings.enable_filtering or section.settings.enable_sorting
-                  render 'facets-custom-filter-pallet-racks', results: collection, enable_filtering: section.settings.enable_filtering, enable_sorting: section.settings.enable_sorting, location: 'desktop'
-                endif
-              -%}
+              {%- if section.settings.enable_filtering or section.settings.enable_sorting -%}
+                {%- render 'facets-custom-filter-pallet-racks', results: collection, enable_filtering: section.settings.enable_filtering, enable_sorting: section.settings.enable_sorting, location: 'desktop', ui: 'simple', heading: section.settings.heading, illustration: section.settings.illustration -%}
+              {%- endif -%}
             </aside>
           {%- endunless -%}
 
@@ -32,7 +28,7 @@
       {%- else -%}
         {%- if section.settings.filters_position != "top" -%}
           {%- if section.settings.enable_filtering or section.settings.enable_sorting -%}
-            {%- render 'facets-custom-filter-pallet-racks', results: collection, enable_filtering: section.settings.enable_filtering, enable_sorting: section.settings.enable_sorting, location: 'desktop' -%}
+            {%- render 'facets-custom-filter-pallet-racks', results: collection, enable_filtering: section.settings.enable_filtering, enable_sorting: section.settings.enable_sorting, location: 'desktop', ui: 'simple', heading: section.settings.heading, illustration: section.settings.illustration -%}
           {%- endif -%}
         {%- endif -%}
 
@@ -190,6 +186,8 @@
     ],
     "settings": [
       { "type": "range", "id": "products_number", "label": "t:sections.main-collection-product-grid.settings.products_per_page.label", "min": 12, "max": 64, "step": 4, "default": 24 },
+      { "type": "text", "id": "heading", "label": "Überschrift", "default": "Wähle dein Palettenregal" },
+      { "type": "image_picker", "id": "illustration", "label": "Illustration" },
       { "type": "header", "content": "t:sections.main-collection-product-grid.settings.header__1.content" },
       { "id": "enable_filtering", "type": "checkbox", "label": "t:sections.main-collection-product-grid.settings.enable_filtering.label", "default": true },
       { "id": "enable_sorting", "type": "checkbox", "label": "t:sections.main-collection-product-grid.settings.enable_sorting.label", "default": true },

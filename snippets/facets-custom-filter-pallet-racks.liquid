@@ -20,34 +20,63 @@
       <input type="hidden" name="q" value="{{ results.current_vendor }}{{ results.current_type }}">
     {%- endif -%}
 
-    {%- if location != 'mobile' -%}
-      <div class="facets-custom-filter-pallet-racks__head">
-        <div class="facets-custom-filter-pallet-racks__head-left">
-          <span class="facets-custom-filter-pallet-racks__title">
-            {{ 'collections.filter_by_label' | t }}
-          </span>
-          <span id="CollectionProductCountCustomFilterPalletRacks" class="facets-custom-filter-pallet-racks__count" role="status">
-            {%- if results.products_count == results.all_products_count -%}
-              {{ 'collections.product_count_simple' | t: count: results.products_count }}
-            {%- else -%}
-              {{ 'collections.product_count' | t: product_count: results.products_count, count: results.all_products_count }}
-            {%- endif -%}
-          </span>
-        </div>
+    {%- assign ui_mode = ui | default: 'simple' -%}
 
-        <div class="facets-custom-filter-pallet-racks__head-right">
-          {%- if enable_sorting and results.products.size != 0 -%}
-            <label class="facets-custom-filter-pallet-racks__sort-label" for="CustomFilterPalletRacksSortBy">{{ 'collections.sort_by_label' | t }}</label>
-            <div class="select">
-              <select name="sort_by" class="select__select collection-filters__sort" id="CustomFilterPalletRacksSortBy" aria-describedby="a11y-refresh-page-message">
-                {%- for option in results.sort_options -%}
-                  <option value="{{ option.value | escape }}"{% if option.value == sort_by %} selected="selected"{% endif %}>{{ option.name | escape }}</option>
-                {%- endfor -%}
-              </select>
+    {%- if location != 'mobile' -%}
+      {%- if ui_mode == 'card' -%}
+        <div class="cpr-shell">
+          <svg class="cpr-shell__bg" viewBox="0 0 1440 500" preserveAspectRatio="none" aria-hidden="true">
+            <defs>
+              <filter id="cpr-innerShadow">
+                <feGaussianBlur in="SourceAlpha" stdDeviation="28" result="blur" />
+                <feOffset in="blur" dx="0" dy="12" result="offsetBlur" />
+                <feComposite in="offsetBlur" in2="SourceGraphic" operator="arithmetic" k2="-1" k3="1" result="innerShadow" />
+                <feFlood floodColor="rgba(0,0,0,0.25)" result="color" />
+                <feComposite in="color" in2="innerShadow" operator="in" result="shadow" />
+                <feComposite in="shadow" in2="SourceGraphic" operator="over" />
+              </filter>
+            </defs>
+            <path d="M0,0 L1440,0 L1440,380 Q720,500 0,380 Z" fill="rgba(0,0,0,0.04)" filter="url(#cpr-innerShadow)" />
+          </svg>
+
+          <div class="cpr-card">
+            <div class="cpr-card__header">
+              <div class="cpr-card__header-inner">
+                <span class="cpr-card__header-icon" aria-hidden="true">
+                  {%- render 'theme-symbols', icon: 'adjust' -%}
+                </span>
+                <h2 class="cpr-card__title">{{ heading | default: 'Wähle dein Palettenregal' | escape }}</h2>
+              </div>
             </div>
-          {%- endif -%}
+
+            <div class="cpr-card__body">
+              <div class="cpr-card__left">
+                <div class="cpr-meta">
+                  <span class="cpr-meta__label">Filter:</span>
+                  <span id="CollectionProductCountCustomFilterPalletRacks" class="cpr-meta__count" role="status">
+                    {%- if results.products_count == results.all_products_count -%}
+                      {{ 'collections.product_count_simple' | t: count: results.products_count }}
+                    {%- else -%}
+                      {{ 'collections.product_count' | t: product_count: results.products_count, count: results.all_products_count }}
+                    {%- endif -%}
+                  </span>
+                </div>
+      {%- else -%}
+        <div class="facets-custom-filter-pallet-racks__head">
+          <div class="facets-custom-filter-pallet-racks__head-left">
+            <span class="facets-custom-filter-pallet-racks__title">
+              {{ 'collections.filter_by_label' | t }}
+            </span>
+            <span id="CollectionProductCountCustomFilterPalletRacks" class="facets-custom-filter-pallet-racks__count" role="status">
+              {%- if results.products_count == results.all_products_count -%}
+                {{ 'collections.product_count_simple' | t: count: results.products_count }}
+              {%- else -%}
+                {{ 'collections.product_count' | t: product_count: results.products_count, count: results.all_products_count }}
+              {%- endif -%}
+            </span>
+          </div>
         </div>
-      </div>
+      {%- endif -%}
     {%- endif -%}
 
     {%- if location == 'mobile' -%}
@@ -68,14 +97,71 @@
       {%- assign preferred_labels = "belastung pro palette,breite,höhe,tiefe,ebenen,auflage" | split: "," -%}
       {%- assign used_labels = "" -%}
 
-      <div class="facets-custom-filter-pallet-racks__grid">
+      <div class="{% if ui_mode == 'card' %}cpr-grid{% else %}facets-custom-filter-pallet-racks__grid{% endif %}">
         {%- for wanted in preferred_labels -%}
           {%- assign wanted_norm = wanted | downcase | strip -%}
           {%- for filter in results.filters -%}
             {%- assign label_norm = filter.label | downcase | strip -%}
             {%- if label_norm == wanted_norm -%}
               {%- capture used_labels -%}{{ used_labels }}||{{ label_norm }}{%- endcapture -%}
-              {%- render 'facets-custom-filter-pallet-racks-filter', filter: filter, index: forloop.index, location: location, variant: 'primary' -%}
+              {%- assign active_label = '' -%}
+              {%- if filter.active_values.size > 0 -%}
+                {%- assign active_label = filter.active_values.first.label -%}
+              {%- endif -%}
+
+              <div class="js-filter cpr-field" data-index="{{ forloop.index }}-{{ location }}">
+                {%- if label_norm == 'belastung pro palette' -%}
+                  <div class="cpr-group">
+                    <div class="cpr-group__label">{{ filter.label | escape }}</div>
+                    <div class="cpr-loadrow" data-cpr-single-select>
+                      {%- for value in filter.values -%}
+                        <label class="cpr-loadbtn {% if value.active %}is-active{% endif %}">
+                          <input class="cpr-input" type="radio" name="{{ value.param_name }}" value="{{ value.value }}" {% if value.active %}checked{% endif %}>
+                          <span class="cpr-loadbtn__dot" aria-hidden="true"></span>
+                          <span class="cpr-loadbtn__text">{{ value.label | escape }}</span>
+                        </label>
+                      {%- endfor -%}
+                    </div>
+                  </div>
+
+                {%- elsif label_norm == 'auflage' -%}
+                  <div class="cpr-group">
+                    <div class="cpr-group__label">{{ filter.label | escape }}</div>
+                    <div class="cpr-surfacegrid" data-cpr-single-select>
+                      {%- for value in filter.values -%}
+                        <label class="cpr-surface {% if value.active %}is-active{% endif %}">
+                          <input class="cpr-input" type="radio" name="{{ value.param_name }}" value="{{ value.value }}" {% if value.active %}checked{% endif %}>
+                          <div class="cpr-surface__title">{{ value.label | escape }}</div>
+                          <div class="cpr-surface__sub">{{ value.count }} Produkte</div>
+                          <div class="cpr-surface__price">{% if value.active %}✓{% else %}&nbsp;{% endif %}</div>
+                        </label>
+                      {%- endfor -%}
+                    </div>
+                  </div>
+
+                {%- else -%}
+                  <div class="cpr-dropdown" data-cpr-dropdown>
+                    <label class="cpr-dropdown__label">{{ filter.label | escape }}</label>
+                    <button type="button" class="cpr-dropdown__button" data-cpr-dropdown-toggle aria-expanded="false">
+                      <span class="cpr-dropdown__value {% if active_label != blank %}has-value{% endif %}">
+                        {{ active_label | default: 'auswählen' | escape }}
+                      </span>
+                      <span class="cpr-dropdown__chev" aria-hidden="true"></span>
+                    </button>
+                    <div class="cpr-dropdown__panel" data-cpr-dropdown-panel>
+                      <div class="cpr-dropdown__scroll">
+                        <a class="cpr-option cpr-option--reset js-facet-remove" href="{{ filter.url_to_remove }}">zurücksetzen</a>
+                        {%- for value in filter.values -%}
+                          <button type="button" class="cpr-option {% if value.active %}is-active{% endif %}" data-cpr-pick data-name="{{ value.param_name }}" data-value="{{ value.value | escape }}">
+                            {{ value.label | escape }}
+                          </button>
+                          <input class="cpr-input" type="radio" name="{{ value.param_name }}" value="{{ value.value }}" {% if value.active %}checked{% endif %}>
+                        {%- endfor -%}
+                      </div>
+                    </div>
+                  </div>
+                {%- endif -%}
+              </div>
             {%- endif -%}
           {%- endfor -%}
         {%- endfor -%}
@@ -90,9 +176,9 @@
         {%- endfor -%}
       </div>
 
-      <div class="facets-custom-filter-pallet-racks__active">
+      <div class="{% if ui_mode == 'card' %}cpr-active{% else %}facets-custom-filter-pallet-racks__active{% endif %}">
         {%- assign has_active_filter = false -%}
-        <div class="active-facets-custom-filter-pallet-racks">
+        <div class="active-facets-custom-filter-pallet-racks {% if ui_mode == 'card' %}cpr-chips{% endif %}">
           {%- for filter in results.filters -%}
             {%- for value in filter.active_values -%}
               {%- assign has_active_filter = true -%}
@@ -118,8 +204,51 @@
           {%- endfor -%}
         </div>
         {%- if has_active_filter -%}
-          <a href="{{ results_url }}" class="facets-custom-filter-pallet-racks__clear js-facet-remove">{{ 'collections.clear_all' | t }}</a>
+          <a href="{{ results_url }}" class="{% if ui_mode == 'card' %}cpr-clear{% else %}facets-custom-filter-pallet-racks__clear{% endif %} js-facet-remove">{{ 'collections.clear_all' | t }}</a>
         {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- if location != 'mobile' and ui_mode == 'card' -%}
+              </div>
+              <div class="cpr-card__right">
+                {%- if illustration != blank -%}
+                  <img
+                    class="cpr-illustration"
+                    src="{{ illustration | image_url: width: 900 }}"
+                    alt="Regal-Illustration"
+                    loading="lazy"
+                  >
+                {%- endif -%}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="cpr-below">
+          {%- if has_active_filter -%}
+            <p class="cpr-below__count">
+              {%- if results.products_count == results.all_products_count -%}
+                {{ 'collections.product_count_simple' | t: count: results.products_count }}
+              {%- else -%}
+                {{ 'collections.product_count' | t: product_count: results.products_count, count: results.all_products_count }}
+              {%- endif -%}
+            </p>
+          {%- endif -%}
+
+          {%- if enable_sorting and results.products.size != 0 -%}
+            <div class="cpr-sort">
+              <span class="cpr-sort__label">SORTIEREN NACH:</span>
+              <div class="cpr-sort__select">
+                <select name="sort_by" class="cpr-sort__native" id="CustomFilterPalletRacksSortBy" aria-describedby="a11y-refresh-page-message">
+                  {%- for option in results.sort_options -%}
+                    <option value="{{ option.value | escape }}"{% if option.value == sort_by %} selected="selected"{% endif %}>{{ option.name | escape }}</option>
+                  {%- endfor -%}
+                </select>
+              </div>
+            </div>
+          {%- endif -%}
+        </div>
       </div>
     {%- endif -%}
   </form>
