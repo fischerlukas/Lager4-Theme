@@ -17,7 +17,9 @@
 {% endif %}
 
 <div data-js-inert>
+  
   {%- paginate target_collection.products by section.settings.products_number -%}
+    
     <div class="container--large">
 
       {%- if section.settings.filters_position == "sidebar" -%}
@@ -87,6 +89,7 @@
       {%- endif -%}
 
     </div>
+    
   {%- endpaginate -%}
 </div>
 
