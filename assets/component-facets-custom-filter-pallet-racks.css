@@ -8,6 +8,212 @@
   gap: 0.75rem;
 }
 
+/* Lovable-style card layout ("cpr" = custom pallet racks) */
+.cpr-card {
+  background: var(--color-background-main);
+  border-radius: 40px;
+  border: 1px solid var(--color-border-main);
+  box-shadow: 0 0 45px 5px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+.cpr-card__header {
+  display: flex;
+  justify-content: center;
+  padding: 22px 28px;
+  border-bottom: 1px dashed var(--color-border-main);
+}
+.cpr-card__title {
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+.cpr-card__body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+.cpr-card__left {
+  padding: 26px 28px;
+}
+.cpr-card__right {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 26px 28px;
+  background: rgba(0, 0, 0, 0.02);
+}
+.cpr-illustration {
+  width: 100%;
+  max-width: 520px;
+  height: auto;
+  object-fit: contain;
+}
+
+.cpr-meta {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.cpr-meta__label {
+  font-size: 0.9rem;
+  opacity: 0.75;
+}
+.cpr-meta__count {
+  font-size: 0.9rem;
+  opacity: 0.75;
+}
+
+.cpr-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+.cpr-group__label,
+.cpr-selectlabel {
+  display: block;
+  font-size: 0.72rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  opacity: 0.75;
+  margin-bottom: 8px;
+}
+
+.cpr-pillrow {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+.cpr-pill {
+  border: 2px solid var(--color-border-main);
+  border-radius: 999px;
+  padding: 10px 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+  background: rgba(0, 0, 0, 0.03);
+  color: rgba(0, 0, 0, 0.6);
+  text-decoration: none;
+  font-weight: 600;
+}
+.cpr-pill.is-active {
+  background: var(--color-accent-main);
+  border-color: var(--color-accent-main);
+  color: #fff;
+}
+.cpr-pill--ghost {
+  background: transparent;
+  font-weight: 500;
+}
+.cpr-input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.cpr-selectwrap {
+  border: 1px solid var(--color-border-main);
+  border-radius: 999px;
+  padding: 4px 10px;
+  background: var(--color-background-main);
+}
+.cpr-select {
+  width: 100%;
+  border: none;
+  background: transparent;
+  padding: 10px 10px;
+  outline: none;
+}
+.cpr-selectwrap--sort {
+  min-width: 240px;
+}
+
+.cpr-cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+.cpr-cardopt {
+  border-radius: 16px;
+  border: 2px solid transparent;
+  background: rgba(0, 0, 0, 0.03);
+  padding: 12px 12px;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+}
+.cpr-cardopt.is-active {
+  border-color: var(--color-accent-main);
+  background: rgba(255, 120, 0, 0.06);
+}
+.cpr-cardopt--ghost {
+  border-color: var(--color-border-main);
+  background: transparent;
+}
+.cpr-cardopt__title {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+.cpr-cardopt__sub {
+  opacity: 0.7;
+  font-size: 0.8rem;
+  margin-top: 2px;
+}
+
+.cpr-active {
+  margin-top: 14px;
+}
+.cpr-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.cpr-clear {
+  display: inline-block;
+  margin-top: 6px;
+  opacity: 0.75;
+  text-decoration: underline;
+}
+
+.cpr-sortbar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 16px 20px 22px;
+}
+.cpr-sortbar__label {
+  font-size: 0.72rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  opacity: 0.75;
+}
+
+@media screen and (max-width: 1023px) {
+  .cpr-card__body {
+    grid-template-columns: 1fr;
+  }
+  .cpr-card__right {
+    order: -1;
+    background: transparent;
+  }
+  .cpr-pillrow {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .cpr-card {
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+  }
+  .cpr-cards {
+    grid-template-columns: 1fr;
+  }
+}
+
 .facets-custom-filter-pallet-racks__head {
   display: flex;
   align-items: flex-end;
