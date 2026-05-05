@@ -34,7 +34,7 @@
         "text_N7CLfD"
       ],
       "custom_css": [
-        ".container--negative-margin {margin-bottom: -90px;}"
+        "@media (min-width: 800px) {.container--negative-margin {margin-bottom: -90px;}}"
       ],
       "name": "t:sections.local-extra-words.sections.marquee.name",
       "settings": {
@@ -102,7 +102,7 @@
         "quick_buy"
       ],
       "custom_css": [
-        ".product-item__badge {background-color: rgba(0, 0, 0, 0.04) ; color: #000000 ;}"
+        ".product-item__badge {background-color: rgba(0, 0, 0, 0.04); color: #000000;}"
       ],
       "settings": {
         "products_number": 12,
