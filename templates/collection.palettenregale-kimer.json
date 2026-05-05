@@ -34,7 +34,7 @@
         "text_N7CLfD"
       ],
       "custom_css": [
-        "@media (min-width: 800px) {.container--negative-margin {margin-bottom: -90px;}}"
+        "@media (max-width: 450px) {.container--negative-margin {margin-bottom: -20px; }}"
       ],
       "name": "t:sections.local-extra-words.sections.marquee.name",
       "settings": {
