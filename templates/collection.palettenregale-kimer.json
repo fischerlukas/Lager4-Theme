@@ -35,7 +35,7 @@
       ],
       "custom_css": [
         "@media (max-width: 450px) {.container--negative-margin {margin-bottom: -60px; }}",
-        "@media (min-width: 451px) {.container--negative-margin {margin-bottom: -90px; }}"
+        "@media (min-width: 451px) {.container--negative-margin {margin-bottom: -100px; }}"
       ],
       "name": "t:sections.local-extra-words.sections.marquee.name",
       "settings": {
@@ -103,7 +103,7 @@
         "quick_buy"
       ],
       "custom_css": [
-        ".product-item__badge {background-color: rgba(0, 0, 0, 0.04); color: #000000;}"
+        ".product-item__badge {background-color: rgba(0, 0, 0, 0.04) ; color: #000000 ;}"
       ],
       "settings": {
         "products_number": 12,
