@@ -33,7 +33,9 @@
       "block_order": [
         "text_N7CLfD"
       ],
-      "custom_css": [],
+      "custom_css": [
+        ".container--negative-margin {margin-bottom: -90px;}"
+      ],
       "name": "t:sections.local-extra-words.sections.marquee.name",
       "settings": {
         "scroll_direction": "ltr",
@@ -44,7 +46,7 @@
         "color_background_main": "#e9e9e9",
         "color_text_main": "rgba(0,0,0,0)",
         "remove_top_margin": true,
-        "remove_bottom_margin": false
+        "remove_bottom_margin": true
       }
     },
     "image_with_hotspots_ntReJ3": {
