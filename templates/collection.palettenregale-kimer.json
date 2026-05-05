@@ -126,7 +126,9 @@
       "name": "Produktraster Filter",
       "settings": {
         "products_number": 24,
+        "collection": "palettenregale-1",
         "heading": "Wähle dein Palettenregal",
+        "illustration": "shopify://shop_images/LxBxH_851d58df-c8a1-4c7e-8bbc-3973d063b02a.png",
         "enable_filtering": true,
         "enable_sorting": true,
         "filters_position": "top"
