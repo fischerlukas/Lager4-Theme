@@ -72,7 +72,9 @@
         "price",
         "quick_buy"
       ],
-      "custom_css": [],
+      "custom_css": [
+        ".product-item__badge {background-color: rgba(0, 0, 0, 0.04);color: #000000;}"
+      ],
       "settings": {
         "products_number": 12,
         "enable_filtering": true,
