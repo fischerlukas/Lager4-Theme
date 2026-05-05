@@ -20,6 +20,33 @@
         "height": "small"
       }
     },
+    "marquee_3g8T84": {
+      "type": "marquee",
+      "blocks": {
+        "text_N7CLfD": {
+          "type": "text",
+          "settings": {
+            "marquee_text": "Jetzt <strong>-10% Frühlingsrabatt</strong> auf alle Palettenregale. <strong>Den ganzen Mai!</strong>"
+          }
+        }
+      },
+      "block_order": [
+        "text_N7CLfD"
+      ],
+      "custom_css": [],
+      "name": "t:sections.local-extra-words.sections.marquee.name",
+      "settings": {
+        "scroll_direction": "ltr",
+        "speed": 50,
+        "pause_on_hover": false,
+        "horizontal_space": "large-x-2",
+        "text_size": "text-size--xlarge",
+        "color_background_main": "#e9e9e9",
+        "color_text_main": "rgba(0,0,0,0)",
+        "remove_top_margin": true,
+        "remove_bottom_margin": false
+      }
+    },
     "image_with_hotspots_ntReJ3": {
       "type": "image-with-hotspots",
       "settings": {
@@ -73,7 +100,7 @@
         "quick_buy"
       ],
       "custom_css": [
-        ".product-item__badge {background-color: rgba(0, 0, 0, 0.04);color: #000000;}"
+        ".product-item__badge {background-color: rgba(0, 0, 0, 0.04); color: #000000;}"
       ],
       "settings": {
         "products_number": 12,
@@ -93,6 +120,7 @@
   },
   "order": [
     "banner",
+    "marquee_3g8T84",
     "image_with_hotspots_ntReJ3",
     "product-grid",
     "custom_liquid_6Tgj9e"
