@@ -84,8 +84,9 @@
 .cpr-shell {
   position: relative;
   overflow: hidden;
-  padding: 0;
-  background: linear-gradient(to bottom, hsl(0 0% 96%) 0%, hsl(0 0% 100%) 50%);
+  /* Match Lovable build: stage padding + flat light background */
+  padding: 44px 0;
+  background: hsl(var(--cpr-background));
 }
 .cpr-shell__bg {
   display: none;
@@ -110,6 +111,9 @@
   border-radius: 50px;
   box-shadow: 0 0 45px 5px rgba(0, 0, 0, 0.08);
   overflow: hidden;
+  width: min(1120px, calc(100% - 56px));
+  margin-left: auto;
+  margin-right: auto;
 }
 .cpr-card__header {
   display: flex;
@@ -134,8 +138,8 @@
 }
 .cpr-card__body {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 24px;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 28px;
 }
 .cpr-card__left {
   padding: 26px 28px;
@@ -145,7 +149,7 @@
   align-items: center;
   justify-content: center;
   padding: 26px 28px;
-  background: rgba(0, 0, 0, 0.02);
+  background: transparent;
 }
 .cpr-illustration {
   width: 100%;
@@ -171,8 +175,12 @@
 
 .cpr-grid {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 14px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px 18px;
+}
+.cpr-field--load,
+.cpr-field--surface {
+  grid-column: 1 / -1;
 }
 .cpr-group__label,
 .cpr-selectlabel {
@@ -356,8 +364,8 @@
 
 .cpr-surfacegrid {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 12px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
 }
 .cpr-surface {
   border-radius: 16px;
@@ -457,6 +465,12 @@
     background: transparent;
   }
   .cpr-loadrow { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .cpr-grid {
+    grid-template-columns: 1fr;
+  }
+  .cpr-surfacegrid {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media screen and (max-width: 767px) {
