@@ -102,7 +102,8 @@
           {%- assign wanted_norm = wanted | downcase | strip -%}
           {%- for filter in results.filters -%}
             {%- assign label_norm = filter.label | downcase | strip -%}
-            {%- if label_norm == wanted_norm or label_norm contains wanted_norm -%}
+            {%- assign param_norm = filter.param_name | downcase -%}
+            {%- if label_norm == wanted_norm or label_norm contains wanted_norm or param_norm contains wanted_norm -%}
               {%- capture used_labels -%}{{ used_labels }}||{{ label_norm }}{%- endcapture -%}
               {%- assign active_label = '' -%}
               {%- if filter.active_values.size > 0 -%}

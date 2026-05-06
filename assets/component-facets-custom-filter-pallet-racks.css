@@ -86,13 +86,8 @@
   overflow: hidden;
   /* Match Lovable build: stage padding + flat light background */
   padding: 44px 0;
-  background: linear-gradient(
-    to bottom,
-    hsl(var(--cpr-background)) 0%,
-    hsl(var(--cpr-background)) 62%,
-    #fff 62%,
-    #fff 100%
-  );
+  /* Background behind the rounded card must be white (no grey bleeding in corners) */
+  background: #fff;
 }
 .cpr-shell__bg {
   display: none;
