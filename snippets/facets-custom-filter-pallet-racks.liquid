@@ -109,7 +109,14 @@
                 {%- assign active_label = filter.active_values.first.label -%}
               {%- endif -%}
 
-              <div class="js-filter cpr-field" data-index="{{ forloop.index }}-{{ location }}">
+              <div
+                class="js-filter cpr-field
+                  {%- if label_norm == 'belastung pro palette' -%} cpr-field--load
+                  {%- elsif label_norm == 'auflage' -%} cpr-field--surface
+                  {%- else -%} cpr-field--dropdown
+                  {%- endif -%}"
+                data-index="{{ forloop.index }}-{{ location }}"
+              >
                 {%- if label_norm == 'belastung pro palette' -%}
                   <div class="cpr-group">
                     <div class="cpr-group__label">{{ filter.label | escape }}</div>
