@@ -8,7 +8,7 @@
 -%}
 
 {% if section.settings.filters_position == "top" %}
-  <div class="container--large" data-js-inert>
+  <div class="custom-filter-pallet-racks__fullbleed" data-js-inert>
     {%- if section.settings.enable_filtering or section.settings.enable_sorting -%}
       {%- render 'facets-custom-filter-pallet-racks', results: collection, enable_filtering: section.settings.enable_filtering, enable_sorting: section.settings.enable_sorting, location: 'desktop', ui: 'card', heading: section.settings.heading, illustration: section.settings.illustration -%}
     {%- endif -%}
