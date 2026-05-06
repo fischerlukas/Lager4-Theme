@@ -72,7 +72,6 @@
         "price",
         "quick_buy"
       ],
-      "disabled": true,
       "custom_css": [],
       "settings": {
         "products_number": 12,
