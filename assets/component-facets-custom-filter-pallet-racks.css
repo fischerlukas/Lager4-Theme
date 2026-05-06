@@ -86,7 +86,13 @@
   overflow: hidden;
   /* Match Lovable build: stage padding + flat light background */
   padding: 44px 0;
-  background: hsl(var(--cpr-background));
+  background: linear-gradient(
+    to bottom,
+    hsl(var(--cpr-background)) 0%,
+    hsl(var(--cpr-background)) 62%,
+    #fff 62%,
+    #fff 100%
+  );
 }
 .cpr-shell__bg {
   display: none;
@@ -114,6 +120,13 @@
   width: min(1120px, calc(100% - 56px));
   margin-left: auto;
   margin-right: auto;
+}
+
+/* Make the section truly full-width even when rendered inside theme containers */
+.custom-filter-pallet-racks__fullbleed {
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
 }
 .cpr-card__header {
   display: flex;
