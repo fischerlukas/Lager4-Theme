@@ -120,6 +120,52 @@
         "full_width": true,
         "remove_margin": false
       }
+    },
+    "collection_grid_custom_filter_pallet_racks_wKtULn": {
+      "type": "collection-grid-custom-filter-pallet-racks",
+      "blocks": {
+        "title_wnaaeC": {
+          "type": "title",
+          "settings": {}
+        },
+        "text_rxFPM3": {
+          "type": "text",
+          "settings": {
+            "metafield": "custom.belastung_pro_ebene_text",
+            "text_color": "text-color--opacity",
+            "text_transform": false
+          }
+        },
+        "price_QzHaKk": {
+          "type": "price",
+          "settings": {}
+        },
+        "quick_buy_EdqBpF": {
+          "type": "quick_buy",
+          "settings": {
+            "show_only_available": false,
+            "variant_default": false,
+            "show_price": true,
+            "unavailable_variants": "hide"
+          }
+        }
+      },
+      "block_order": [
+        "title_wnaaeC",
+        "text_rxFPM3",
+        "price_QzHaKk",
+        "quick_buy_EdqBpF"
+      ],
+      "name": "Produktraster Filter",
+      "settings": {
+        "products_number": 24,
+        "collection": "palettenregale-1",
+        "heading": "Wähle dein Palettenregal",
+        "illustration": "shopify://shop_images/LxBxH_851d58df-c8a1-4c7e-8bbc-3973d063b02a.png",
+        "enable_filtering": true,
+        "enable_sorting": true,
+        "filters_position": "top"
+      }
     }
   },
   "order": [
@@ -127,6 +173,7 @@
     "marquee_3g8T84",
     "image_with_hotspots_ntReJ3",
     "product-grid",
-    "custom_liquid_6Tgj9e"
+    "custom_liquid_6Tgj9e",
+    "collection_grid_custom_filter_pallet_racks_wKtULn"
   ]
 }
