@@ -193,6 +193,59 @@
     }
   },
   "sections": {
+    "shelf_filter": {
+      "name": "Regal-Filter",
+      "settings": {
+        "header_general": {
+          "content": "Allgemein"
+        },
+        "heading": {
+          "label": "Überschrift"
+        },
+        "illustration": {
+          "label": "Illustration",
+          "info": "Wenn leer, wird das mitgelieferte shelf-illustration.png verwendet."
+        },
+        "show_badge": {
+          "label": "„Made in Europe“-Badge anzeigen"
+        },
+        "badge_text": {
+          "label": "Badge-Text"
+        },
+        "header_filter_display": {
+          "content": "Filter-Darstellung",
+          "info": "Komma-getrennte Filter-Labels (exakt wie im Shop-Filter benannt). Alle übrigen Listen-Filter werden als Dropdown dargestellt."
+        },
+        "pills_filters": {
+          "label": "Pillen-Filter"
+        },
+        "cards_filters": {
+          "label": "Karten-Filter"
+        },
+        "header_secondary_links": {
+          "content": "Sekundäre Links"
+        },
+        "show_secondary_links": {
+          "label": "Zubehör- & FAQ-Buttons anzeigen"
+        },
+        "accessories_link": {
+          "label": "Zubehör-Link"
+        },
+        "faq_link": {
+          "label": "FAQ-Link"
+        },
+        "header_style": {
+          "content": "Stil"
+        },
+        "primary_hsl": {
+          "label": "Akzentfarbe (HSL-Kanäle)",
+          "info": "Als HSL-Kanäle ohne hsl(), z. B. „24 100% 50%“."
+        }
+      },
+      "presets": {
+        "name": "Regal-Filter"
+      }
+    },
     "main-404": {
       "name": "Haupt 404"
     },

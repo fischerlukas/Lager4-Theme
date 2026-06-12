@@ -1,4 +1,19 @@
 {
+  "sections": {
+    "shelf_filter": {
+      "placeholder": "Select",
+      "sort_by": "Sort by:",
+      "filter_and_sort": "Filter and sort",
+      "active_filters": "Active filters:",
+      "clear_all": "Clear all",
+      "remove_filter": "Remove filter",
+      "close": "Close",
+      "accessories": "Accessories",
+      "faq": "FAQ",
+      "count_filtered": "{{ count }} of {{ total }} products shown",
+      "count_all": "{{ count }} products shown"
+    }
+  },
   "general": {
     "404": {
       "title": "Page not found",
