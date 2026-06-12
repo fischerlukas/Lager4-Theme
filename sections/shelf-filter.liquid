@@ -133,10 +133,16 @@
               <svg class="sf-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{{ i_sliders }}</svg>
               {{ section.settings.heading | escape }}
             </button>
-            <div class="sf-mobilebar__links">
-              <a href="{{ section.settings.accessories_link | default: '#' }}" class="sf-chip-link">{{ 'sections.shelf_filter.accessories' | t }}</a>
-              <a href="{{ section.settings.faq_link | default: '#' }}" class="sf-chip-link">{{ 'sections.shelf_filter.faq' | t }}</a>
-            </div>
+            {%- if section.settings.show_link_1 or section.settings.show_link_2 -%}
+              <div class="sf-mobilebar__links">
+                {%- if section.settings.show_link_1 -%}
+                  <a href="{{ section.settings.link_1_url | default: '#' }}" class="sf-chip-link">{{ section.settings.link_1_label | escape }}</a>
+                {%- endif -%}
+                {%- if section.settings.show_link_2 -%}
+                  <a href="{{ section.settings.link_2_url | default: '#' }}" class="sf-chip-link">{{ section.settings.link_2_label | escape }}</a>
+                {%- endif -%}
+              </div>
+            {%- endif -%}
             <span class="sf-mobilebar__count" data-sf-count>
               {%- if active_count > 0 -%}
                 {{ 'sections.shelf_filter.count_filtered' | t: count: collection.products_count, total: collection.all_products_count }}
@@ -235,16 +241,20 @@
             {%- endfor -%}
 
             {%- comment -%} Secondary actions {%- endcomment -%}
-            {%- if section.settings.show_secondary_links -%}
+            {%- if section.settings.show_link_1 or section.settings.show_link_2 -%}
               <div class="sf-actions">
-                <a href="{{ section.settings.accessories_link | default: '#' }}" class="sf-action">
-                  {{ 'sections.shelf_filter.accessories' | t }}
-                  <span class="sf-action__arrow"><svg class="sf-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{{ i_arrow }}</svg></span>
-                </a>
-                <a href="{{ section.settings.faq_link | default: '#' }}" class="sf-action">
-                  {{ 'sections.shelf_filter.faq' | t }}
-                  <span class="sf-action__arrow"><svg class="sf-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{{ i_arrow }}</svg></span>
-                </a>
+                {%- if section.settings.show_link_1 -%}
+                  <a href="{{ section.settings.link_1_url | default: '#' }}" class="sf-action">
+                    {{ section.settings.link_1_label | escape }}
+                    <span class="sf-action__arrow"><svg class="sf-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{{ i_arrow }}</svg></span>
+                  </a>
+                {%- endif -%}
+                {%- if section.settings.show_link_2 -%}
+                  <a href="{{ section.settings.link_2_url | default: '#' }}" class="sf-action">
+                    {{ section.settings.link_2_label | escape }}
+                    <span class="sf-action__arrow"><svg class="sf-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{{ i_arrow }}</svg></span>
+                  </a>
+                {%- endif -%}
               </div>
             {%- endif -%}
           </div>
@@ -436,27 +446,6 @@
               </div>
             </div>
           {%- endfor -%}
-
-          {%- comment -%} Active filters (mobile) {%- endcomment -%}
-          <div class="sf-sheet__active" data-sf-sheet-active{% if active_count == 0 %} hidden{% endif %}>
-            <div class="sf-sheet__active-head">
-              <span class="sf-sheet__active-title">{{ 'sections.shelf_filter.active_filters' | t }}</span>
-              <div class="sf-active active-facets-mobile" data-sf-active-list>
-                {%- for filter in collection.filters -%}
-                  {%- assign group_key = filter.param_name | default: filter.values.first.param_name -%}
-                  {%- for value in filter.active_values -%}
-                    <span class="sf-active-chip">
-                      {{ value.label | escape }}
-                      <a href="{{ value.url_to_remove }}" class="sf-active-chip__remove js-facet-remove" data-sf-remove="{{ group_key }}" aria-label="{{ 'sections.shelf_filter.remove_filter' | t }}">
-                        <svg class="sf-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{{ i_x }}</svg>
-                      </a>
-                    </span>
-                  {%- endfor -%}
-                {%- endfor -%}
-              </div>
-            </div>
-            <a href="{{ collection.url }}" class="sf-clear" data-sf-clear>{{ 'sections.shelf_filter.clear_all' | t }}</a>
-          </div>
         </form>
       </facet-filters-form>
     </div>
@@ -520,19 +509,37 @@
     },
     {
       "type": "checkbox",
-      "id": "show_secondary_links",
-      "label": "t:sections.shelf_filter.settings.show_secondary_links.label",
+      "id": "show_link_1",
+      "label": "t:sections.shelf_filter.settings.show_link_1.label",
       "default": true
     },
     {
-      "type": "url",
-      "id": "accessories_link",
-      "label": "t:sections.shelf_filter.settings.accessories_link.label"
+      "type": "text",
+      "id": "link_1_label",
+      "label": "t:sections.shelf_filter.settings.link_1_label.label",
+      "default": "Zubehör"
     },
     {
       "type": "url",
-      "id": "faq_link",
-      "label": "t:sections.shelf_filter.settings.faq_link.label"
+      "id": "link_1_url",
+      "label": "t:sections.shelf_filter.settings.link_1_url.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_link_2",
+      "label": "t:sections.shelf_filter.settings.show_link_2.label",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "link_2_label",
+      "label": "t:sections.shelf_filter.settings.link_2_label.label",
+      "default": "FAQ"
+    },
+    {
+      "type": "url",
+      "id": "link_2_url",
+      "label": "t:sections.shelf_filter.settings.link_2_url.label"
     },
     {
       "type": "header",

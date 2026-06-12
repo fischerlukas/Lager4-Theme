@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin language editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "local-220": {
     "preorder": "Zeige \"Vorbestellen\" Schaltflächenbeschriftung"
@@ -225,14 +234,23 @@
         "header_secondary_links": {
           "content": "Sekundäre Links"
         },
-        "show_secondary_links": {
-          "label": "Zubehör- & FAQ-Buttons anzeigen"
+        "show_link_1": {
+          "label": "Link 1 anzeigen"
         },
-        "accessories_link": {
-          "label": "Zubehör-Link"
+        "link_1_label": {
+          "label": "Link 1 Text"
         },
-        "faq_link": {
-          "label": "FAQ-Link"
+        "link_1_url": {
+          "label": "Link 1 URL"
+        },
+        "show_link_2": {
+          "label": "Link 2 anzeigen"
+        },
+        "link_2_label": {
+          "label": "Link 2 Text"
+        },
+        "link_2_url": {
+          "label": "Link 2 URL"
         },
         "header_style": {
           "content": "Stil"

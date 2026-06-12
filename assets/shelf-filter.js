@@ -127,7 +127,13 @@
         const group = removeBtn.getAttribute("data-sf-remove");
         this.state[group] = null;
         this.render();
-        this._emit(removeBtn.closest("form"));
+        // Desktop chips live in the below-card summary, outside any <form>, so
+        // fall back to the main filter form to make sure the grid re-renders.
+        const form =
+          removeBtn.closest("form") ||
+          this.querySelector("#FacetFiltersForm") ||
+          this.querySelector("form");
+        this._emit(form);
         return;
       }
 
@@ -421,8 +427,6 @@
       const hasFilters = count > 0;
       this.querySelectorAll("[data-sf-count-full]").forEach((el) => (el.hidden = !hasFilters));
       this.querySelectorAll(".sf-summary [data-sf-clear]").forEach((el) => (el.hidden = !hasFilters));
-      const sheetActive = this.querySelector("[data-sf-sheet-active]");
-      if (sheetActive) sheetActive.hidden = !hasFilters;
     }
 
     /* ----------------------------------------------------------------- */
