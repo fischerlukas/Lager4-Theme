@@ -36,11 +36,44 @@
         "full_width": true,
         "remove_margin": false
       }
+    },
+    "17817033190c64c358": {
+      "type": "apps",
+      "blocks": {
+        "eu_widerruf_button_form_inline_DUEeET": {
+          "type": "shopify://apps/eu-widerruf-button/blocks/form-inline/019b2ca9-9838-7858-9694-3a8051afa76e",
+          "settings": {
+            "show_heading": true,
+            "heading": "-",
+            "description": "-",
+            "iframe_height": 500,
+            "primary_color": "#000000",
+            "background_color": "#ffffff",
+            "text_color": "#212529",
+            "border_radius": "8px",
+            "max_width": "700px",
+            "show_order_lookup": true,
+            "require_order_number": true,
+            "hide_order_notes": false,
+            "require_items": false,
+            "confirm_step": false,
+            "hide_outside_eu": false
+          }
+        }
+      },
+      "block_order": [
+        "eu_widerruf_button_form_inline_DUEeET"
+      ],
+      "settings": {
+        "full_width": false,
+        "remove_margin": false
+      }
     }
   },
   "order": [
     "main",
     "custom_liquid_RF98GF",
+    "17817033190c64c358",
     "custom_liquid_PxtXAV"
   ]
 }
