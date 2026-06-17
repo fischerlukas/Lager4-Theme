@@ -214,6 +214,24 @@
       const menu = wrap.querySelector("[data-sf-dropdown-menu]");
       trigger.setAttribute("aria-expanded", open ? "true" : "false");
       menu.hidden = !open;
+      if (open) this._initDropdownFade(menu);
+    }
+
+    /** Toggle the bottom fade hint based on whether the option list can still
+        scroll down. Bound once per list; recomputed each time it opens. */
+    _initDropdownFade(menu) {
+      const list = menu.querySelector(".sf-select__list");
+      if (!list) return;
+      const update = () => {
+        const overflow = list.scrollHeight - list.clientHeight > 1;
+        const atBottom = list.scrollTop + list.clientHeight >= list.scrollHeight - 1;
+        menu.classList.toggle("is-scrollable", overflow && !atBottom);
+      };
+      if (!list._sfFadeBound) {
+        list.addEventListener("scroll", update);
+        list._sfFadeBound = true;
+      }
+      update();
     }
 
     _toggleSort(wrap) {
