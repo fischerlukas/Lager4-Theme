@@ -1,0 +1,565 @@
+{%- comment -%}
+  ==========================================================================
+  Shelf Filter — Online Store 2.0 section (Liquid)
+  --------------------------------------------------------------------------
+  A bespoke collection filter UI ("Wähle dein Palettenregal") rendered from
+  the live `collection.filters` data. Pure HTML/CSS + one vanilla custom
+  element (`<shelf-filter>`); no framework, no build step.
+
+  PLACEMENT
+  - Put this file in `sections/shelf-filter.liquid`.
+  - Copy `assets/shelf-filter.css`, `assets/shelf-filter.js` and
+    `assets/shelf-illustration.png` into the theme's `assets/` folder.
+  - Add the keys from `locales/*.json` (this folder) into the theme's locale
+    files, or merge them.
+  - Render it on the collection template, e.g. add the section to
+    `templates/collection.json`. It is intended to sit *in place of* the
+    theme's default `facet-filters-form` block.
+
+  SHOPIFY FILTER INTEGRATION
+  - Each filter group is a real radio group named with the Shopify filter
+    param (`value.param_name`); selecting a value mirrors it onto the input and
+    dispatches a bubbling `input` event. Each `<form>` is wrapped in the
+    theme's `<facet-filters-form>` custom element (assets/facet.js), whose
+    debounced submit handler turns the form data into a query string and
+    re-renders the results.
+  - The design is single-select per group (radios with deselect), matching the
+    reference UI. For native multi-select list filters, swap the radios for
+    checkboxes and remove the deselect behaviour in shelf-filter.js.
+  - Product grid + live count wiring depends on the host collection template
+    (the `#CollectionProductGrid` / `#CollectionProductCount` nodes the theme
+    swaps). Initial counts below are rendered server-side and are correct on
+    load; wire those IDs in for AJAX updates. See README.md.
+
+  Filter → display-style mapping is controlled from the theme editor
+  (section settings): list filters whose label matches "Pills filters" render
+  as the load-style pills, those matching "Card filters" render as the
+  surface-style cards, everything else renders as a dropdown.
+  ==========================================================================
+{%- endcomment -%}
+
+{{ 'shelf-filter.css' | asset_url | stylesheet_tag }}
+{%- comment -%}
+  Loads the theme's facet plumbing (defines <facet-filters-form>) so the filter
+  works even when the product-grid section has filtering/sorting disabled.
+  component-facets.js is idempotent, so a second load (when the grid also
+  enables filtering) is a safe no-op.
+{%- endcomment -%}
+<script src="{{ 'component-facets.js' | asset_url }}" defer></script>
+<script src="{{ 'shelf-filter.js' | asset_url }}" defer></script>
+
+{%- liquid
+  assign placeholder = 'sections.shelf_filter.placeholder' | t
+
+  # Normalised, comma-wrapped lookup strings for the display-style mapping.
+  assign pills_norm = section.settings.pills_filters | downcase | replace: ', ', ',' | replace: ' ,', ',' | prepend: ',' | append: ','
+  assign cards_norm = section.settings.cards_filters | downcase | replace: ', ', ',' | replace: ' ,', ',' | prepend: ',' | append: ','
+
+  # Total active filter values (for visibility of the summary + clear button).
+  assign active_count = 0
+  for filter in collection.filters
+    assign active_count = active_count | plus: filter.active_values.size
+  endfor
+
+  # Human name of the current sort option for the dropdown trigger.
+  assign current_sort_name = ''
+  for option in collection.sort_options
+    if option.value == collection.sort_by
+      assign current_sort_name = option.name
+    endif
+  endfor
+  if current_sort_name == ''
+    assign current_sort_name = collection.sort_options.first.name
+  endif
+-%}
+
+{%- comment -%} ---- Reusable inline SVG icon paths ---- {%- endcomment -%}
+{%- capture i_sliders -%}<line x1="21" x2="14" y1="4" y2="4"/><line x1="10" x2="3" y1="4" y2="4"/><line x1="21" x2="12" y1="12" y2="12"/><line x1="8" x2="3" y1="12" y2="12"/><line x1="21" x2="16" y1="20" y2="20"/><line x1="12" x2="3" y1="20" y2="20"/><line x1="14" x2="14" y1="2" y2="6"/><line x1="8" x2="8" y1="10" y2="14"/><line x1="16" x2="16" y1="18" y2="22"/>{%- endcapture -%}
+{%- capture i_chevron -%}<path d="m6 9 6 6 6-6"/>{%- endcapture -%}
+{%- capture i_check -%}<path d="M20 6 9 17l-5-5"/>{%- endcapture -%}
+{%- capture i_arrow -%}<path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>{%- endcapture -%}
+{%- capture i_x -%}<path d="M18 6 6 18"/><path d="m6 6 12 12"/>{%- endcapture -%}
+
+<style>
+  #shopify-section-{{ section.id }} .sf {
+    --sf-primary: {{ section.settings.primary_hsl }};
+    --sf-ring: {{ section.settings.primary_hsl }};
+  }
+</style>
+
+<shelf-filter
+  class="sf"
+  data-section-id="{{ section.id }}"
+  data-total-products="{{ collection.all_products_count }}"
+  data-count-mode="server"
+>
+  <div class="sf-stage">
+    {%- comment -%} Decorative curved backdrop (desktop only) {%- endcomment -%}
+    <svg class="sf-stage__backdrop" viewBox="0 0 1440 500" preserveAspectRatio="none" aria-hidden="true">
+      <defs>
+        <filter id="sf-inner-shadow-{{ section.id }}">
+          <feGaussianBlur in="SourceAlpha" stdDeviation="28" result="blur" />
+          <feOffset in="blur" dx="0" dy="12" result="offsetBlur" />
+          <feComposite in="offsetBlur" in2="SourceGraphic" operator="arithmetic" k2="-1" k3="1" result="innerShadow" />
+          <feFlood flood-color="rgba(0,0,0,0.25)" result="color" />
+          <feComposite in="color" in2="innerShadow" operator="in" result="shadow" />
+          <feComposite in="shadow" in2="SourceGraphic" operator="over" />
+        </filter>
+      </defs>
+      <path d="M0,0 L1440,0 L1440,380 Q720,500 0,380 Z" fill="hsl(0 0% 93%)" filter="url(#sf-inner-shadow-{{ section.id }})" />
+    </svg>
+
+    {%- comment -%} ============ DESKTOP / TABLET FILTER FORM ============ {%- endcomment -%}
+    <facet-filters-form>
+      <form class="sf-card" id="FacetFiltersForm" novalidate>
+        <div class="sf-card__header">
+          <svg class="sf-card__header-icon sf-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{{ i_sliders }}</svg>
+          <h2 class="sf-card__title">{{ section.settings.heading | escape }}</h2>
+        </div>
+
+        <div class="sf-card__body">
+          {%- comment -%} Illustration (below 1024px) {%- endcomment -%}
+          <div class="sf-illustration--mobile sf-hide-lg">
+            {%- if section.settings.illustration != blank -%}
+              {{ section.settings.illustration | image_url: width: 640 | image_tag: alt: section.settings.heading, loading: 'lazy' }}
+            {%- else -%}
+              <img src="{{ 'shelf-illustration.png' | asset_url }}" alt="{{ section.settings.heading | escape }}" loading="lazy" />
+            {%- endif -%}
+          </div>
+
+          {%- comment -%} Mobile trigger bar (below 640px) {%- endcomment -%}
+          <div class="sf-mobilebar sf-show-mobile">
+            <button type="button" class="sf-mobilebar__main" data-sf-sheet-open>
+              <svg class="sf-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{{ i_sliders }}</svg>
+              {{ section.settings.heading | escape }}
+            </button>
+            {%- if section.settings.show_link_1 or section.settings.show_link_2 -%}
+              <div class="sf-mobilebar__links">
+                {%- if section.settings.show_link_1 -%}
+                  <a href="{{ section.settings.link_1_url | default: '#' }}" class="sf-chip-link">{{ section.settings.link_1_label | escape }}</a>
+                {%- endif -%}
+                {%- if section.settings.show_link_2 -%}
+                  <a href="{{ section.settings.link_2_url | default: '#' }}" class="sf-chip-link">{{ section.settings.link_2_label | escape }}</a>
+                {%- endif -%}
+              </div>
+            {%- endif -%}
+            <span class="sf-mobilebar__count" data-sf-count>
+              {%- if active_count > 0 -%}
+                {{ 'sections.shelf_filter.count_filtered' | t: count: collection.products_count, total: collection.all_products_count }}
+              {%- else -%}
+                {{ 'sections.shelf_filter.count_all' | t: count: collection.all_products_count }}
+              {%- endif -%}
+            </span>
+          </div>
+
+          {%- comment -%} Inline config (640px and up) {%- endcomment -%}
+          <div class="sf-config sf-show-desktop">
+            {%- comment -%} 1) Pill-style filters {%- endcomment -%}
+            {%- for filter in collection.filters -%}
+              {%- if filter.type != 'list' -%}{%- continue -%}{%- endif -%}
+              {%- assign fkey = filter.label | downcase | strip | prepend: ',' | append: ',' -%}
+              {%- unless pills_norm contains fkey -%}{%- continue -%}{%- endunless -%}
+              {%- assign group_key = filter.param_name | default: filter.values.first.param_name -%}
+              <div>
+                <span class="sf-group__label">{{ filter.label | escape }}</span>
+                <div class="sf-loads" role="group" aria-label="{{ filter.label | escape }}">
+                  {%- for value in filter.values -%}
+                    <label class="sf-load{% if value.active %} is-active{% endif %}">
+                      <input type="radio" class="sf-sr-only" name="{{ value.param_name }}" value="{{ value.value }}" data-sf-input data-sf-group="{{ group_key }}"{% if value.active %} checked{% endif %} />
+                      <span class="sf-load__dot">
+                        <svg class="sf-load__check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{{ i_check }}</svg>
+                        <span class="sf-load__dot-inner"></span>
+                      </span>
+                      <span class="sf-load__text">{{ value.label | escape }}</span>
+                    </label>
+                  {%- endfor -%}
+                </div>
+              </div>
+            {%- endfor -%}
+
+            {%- comment -%} 2) Dropdown-style filters (everything not pills/cards) {%- endcomment -%}
+            <div class="sf-grid-2">
+              {%- for filter in collection.filters -%}
+                {%- if filter.type != 'list' -%}{%- continue -%}{%- endif -%}
+                {%- assign fkey = filter.label | downcase | strip | prepend: ',' | append: ',' -%}
+                {%- if pills_norm contains fkey -%}{%- continue -%}{%- endif -%}
+                {%- if cards_norm contains fkey -%}{%- continue -%}{%- endif -%}
+                {%- assign group_key = filter.param_name | default: filter.values.first.param_name -%}
+                {%- assign active_label = '' -%}
+                {%- for value in filter.values -%}{%- if value.active -%}{%- assign active_label = value.label -%}{%- endif -%}{%- endfor -%}
+                <div class="sf-field" data-sf-dropdown>
+                  <span class="sf-field__label">{{ filter.label | escape }}</span>
+                  <button type="button" class="sf-select{% if active_label != '' %} is-filled{% endif %}" data-sf-dropdown-trigger aria-expanded="false" aria-haspopup="listbox">
+                    <span class="sf-select__value" data-sf-value data-placeholder="{{ placeholder | escape }}">{{ active_label | default: placeholder | escape }}</span>
+                    <svg class="sf-select__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{{ i_chevron }}</svg>
+                  </button>
+                  <div class="sf-select__menu" data-sf-dropdown-menu hidden role="listbox">
+                    <div class="sf-select__list">
+                      {%- for value in filter.values -%}
+                        <label class="sf-option{% if value.active %} is-selected{% endif %}">
+                          <input type="radio" class="sf-sr-only" name="{{ value.param_name }}" value="{{ value.value }}" data-sf-input data-sf-group="{{ group_key }}"{% if value.active %} checked{% endif %} />
+                          <svg class="sf-option__check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{{ i_check }}</svg>
+                          <span>{{ value.label | escape }}</span>
+                        </label>
+                      {%- endfor -%}
+                    </div>
+                  </div>
+                </div>
+              {%- endfor -%}
+            </div>
+
+            {%- comment -%} 3) Card-style filters {%- endcomment -%}
+            {%- for filter in collection.filters -%}
+              {%- if filter.type != 'list' -%}{%- continue -%}{%- endif -%}
+              {%- assign fkey = filter.label | downcase | strip | prepend: ',' | append: ',' -%}
+              {%- unless cards_norm contains fkey -%}{%- continue -%}{%- endunless -%}
+              {%- assign group_key = filter.param_name | default: filter.values.first.param_name -%}
+              <div>
+                <span class="sf-group__label">{{ filter.label | escape }}</span>
+                <div class="sf-surfaces sf-surfaces--inline">
+                  {%- for value in filter.values -%}
+                    {%- assign opt = shop.metaobjects.auflage_options.values | where: 'option_label', value.label | first -%}
+                    {%- assign opt_name = opt.option_display_name | default: value.label -%}
+                    <label class="sf-surface sf-surface--inline{% if value.active %} is-active{% endif %}">
+                      <input type="radio" class="sf-sr-only" name="{{ value.param_name }}" value="{{ value.value }}" data-sf-input data-sf-group="{{ group_key }}"{% if value.active %} checked{% endif %} />
+                      <span class="sf-surface__thumb">
+                        {%- if opt.image != blank -%}{{ opt.image | image_url: width: 96 | image_tag: loading: 'lazy', alt: opt_name | escape }}{%- endif -%}
+                      </span>
+                      <span class="sf-surface__body">
+                        <span class="sf-surface__label">{{ opt_name | escape }}</span>
+                        {%- if opt != blank -%}
+                          {%- if opt.subtitle != blank -%}<span class="sf-surface__sub">{{ opt.subtitle }}</span>{%- endif -%}
+                          {%- if opt.note != blank -%}<span class="sf-surface__price">{{ opt.note }}</span>{%- endif -%}
+                        {%- elsif value.count -%}
+                          <span class="sf-surface__sub">{{ value.count }}</span>
+                        {%- endif -%}
+                      </span>
+                    </label>
+                  {%- endfor -%}
+                </div>
+              </div>
+            {%- endfor -%}
+
+            {%- comment -%} Secondary actions {%- endcomment -%}
+            {%- if section.settings.show_link_1 or section.settings.show_link_2 -%}
+              <div class="sf-actions">
+                {%- if section.settings.show_link_1 -%}
+                  <a href="{{ section.settings.link_1_url | default: '#' }}" class="sf-action">
+                    {{ section.settings.link_1_label | escape }}
+                    <span class="sf-action__arrow"><svg class="sf-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{{ i_arrow }}</svg></span>
+                  </a>
+                {%- endif -%}
+                {%- if section.settings.show_link_2 -%}
+                  <a href="{{ section.settings.link_2_url | default: '#' }}" class="sf-action">
+                    {{ section.settings.link_2_label | escape }}
+                    <span class="sf-action__arrow"><svg class="sf-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{{ i_arrow }}</svg></span>
+                  </a>
+                {%- endif -%}
+              </div>
+            {%- endif -%}
+          </div>
+
+          {%- comment -%} Illustration + badge (1024px and up) {%- endcomment -%}
+          <div class="sf-illustration--desktop sf-show-lg">
+            {%- if section.settings.illustration != blank -%}
+              {{ section.settings.illustration | image_url: width: 700 | image_tag: alt: section.settings.heading, loading: 'lazy' }}
+            {%- else -%}
+              <img src="{{ 'shelf-illustration.png' | asset_url }}" alt="{{ section.settings.heading | escape }}" loading="lazy" />
+            {%- endif -%}
+            {%- if section.settings.show_badge -%}
+              <div class="sf-badge">
+                <div class="sf-badge__ring" data-sf-eu-ring>
+                  <span class="sf-badge__eu">EU</span>
+                </div>
+                <span class="sf-badge__caption">{{ section.settings.badge_text | escape }}</span>
+              </div>
+            {%- endif -%}
+          </div>
+        </div>
+      </form>
+    </facet-filters-form>
+
+    {%- comment -%} ============ BELOW-CARD SUMMARY (desktop) ============ {%- endcomment -%}
+    <div class="sf-summary">
+      <p class="sf-summary__count" data-sf-count-full{% if active_count == 0 %} hidden{% endif %}>
+        {{ 'sections.shelf_filter.count_filtered' | t: count: collection.products_count, total: collection.all_products_count }}
+      </p>
+
+      <div class="sf-summary__active-row">
+        <div class="sf-active active-facets-desktop" data-sf-active-list>
+          {%- for filter in collection.filters -%}
+            {%- assign group_key = filter.param_name | default: filter.values.first.param_name -%}
+            {%- for value in filter.active_values -%}
+              <span class="sf-active-chip">
+                {{ value.label | escape }}
+                <a href="{{ value.url_to_remove }}" class="sf-active-chip__remove js-facet-remove" data-sf-remove="{{ group_key }}" aria-label="{{ 'sections.shelf_filter.remove_filter' | t }}">
+                  <svg class="sf-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{{ i_x }}</svg>
+                </a>
+              </span>
+            {%- endfor -%}
+          {%- endfor -%}
+        </div>
+        <a href="{{ collection.url }}" class="sf-clear" data-sf-clear{% if active_count == 0 %} hidden{% endif %}>{{ 'sections.shelf_filter.clear_all' | t }}</a>
+      </div>
+
+      {%- comment -%} Sort (desktop). Wrapped in FacetSortForm so the theme picks it up. {%- endcomment -%}
+      <facet-filters-form>
+        <form id="FacetSortForm" class="sf-sort sf-sort--center sf-summary__sort">
+          <label class="sf-summary__sort-label">{{ 'sections.shelf_filter.sort_by' | t }}</label>
+          <button type="button" class="sf-sort__trigger" data-sf-sort-trigger aria-expanded="false" aria-haspopup="listbox">
+            <span class="sf-sort__value" data-sf-sort-value>{{ current_sort_name | escape }}</span>
+            <svg class="sf-sort__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{{ i_chevron }}</svg>
+          </button>
+          <div class="sf-sort__menu" data-sf-sort-menu hidden role="listbox">
+            {%- for option in collection.sort_options -%}
+              {%- assign is_checked = false -%}
+              {%- if option.value == collection.sort_by -%}{%- assign is_checked = true -%}{%- elsif collection.sort_by == blank and forloop.first -%}{%- assign is_checked = true -%}{%- endif -%}
+              <label class="sf-option{% if is_checked %} is-selected{% endif %}">
+                <input type="radio" class="sf-sr-only" name="sort_by" value="{{ option.value }}" data-sf-sort-input data-sf-sort-label="{{ option.name | escape }}"{% if is_checked %} checked{% endif %} />
+                <svg class="sf-option__check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{{ i_check }}</svg>
+                <span>{{ option.name | escape }}</span>
+              </label>
+            {%- endfor -%}
+          </div>
+        </form>
+      </facet-filters-form>
+    </div>
+  </div>
+
+  {%- comment -%} ============ MOBILE SHEET (bottom drawer) ============ {%- endcomment -%}
+  <div class="sf-sheet" data-sf-sheet aria-hidden="true">
+    <div class="sf-sheet__overlay" data-sf-sheet-close></div>
+    <div class="sf-sheet__panel" role="dialog" aria-modal="true" aria-label="{{ 'sections.shelf_filter.filter_and_sort' | t }}">
+      <div class="sf-sheet__header">
+        <h2 class="sf-sheet__title">{{ 'sections.shelf_filter.filter_and_sort' | t }}</h2>
+        <button type="button" class="sf-sheet__close" data-sf-sheet-close aria-label="{{ 'sections.shelf_filter.close' | t }}">
+          <svg class="sf-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{{ i_x }}</svg>
+        </button>
+      </div>
+
+      <facet-filters-form>
+        <form class="sf-sheet__body" id="FacetFiltersFormMobile" novalidate>
+          {%- comment -%} Sort {%- endcomment -%}
+          <div>
+            <label class="sf-sheet__sort-label">{{ 'sections.shelf_filter.sort_by' | t }}</label>
+            <div class="sf-sort sf-sort--block">
+              <button type="button" class="sf-sort__trigger" data-sf-sort-trigger aria-expanded="false" aria-haspopup="listbox">
+                <span class="sf-sort__value" data-sf-sort-value>{{ current_sort_name | escape }}</span>
+                <svg class="sf-sort__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{{ i_chevron }}</svg>
+              </button>
+              <div class="sf-sort__menu" data-sf-sort-menu hidden role="listbox">
+                {%- for option in collection.sort_options -%}
+                  {%- assign is_checked = false -%}
+                  {%- if option.value == collection.sort_by -%}{%- assign is_checked = true -%}{%- elsif collection.sort_by == blank and forloop.first -%}{%- assign is_checked = true -%}{%- endif -%}
+                  <label class="sf-option{% if is_checked %} is-selected{% endif %}">
+                    <input type="radio" class="sf-sr-only" name="sort_by" value="{{ option.value }}" data-sf-sort-input data-sf-sort-label="{{ option.name | escape }}"{% if is_checked %} checked{% endif %} />
+                    <svg class="sf-option__check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{{ i_check }}</svg>
+                    <span>{{ option.name | escape }}</span>
+                  </label>
+                {%- endfor -%}
+              </div>
+            </div>
+          </div>
+
+          {%- comment -%} 1) Pill-style filters {%- endcomment -%}
+          {%- for filter in collection.filters -%}
+            {%- if filter.type != 'list' -%}{%- continue -%}{%- endif -%}
+            {%- assign fkey = filter.label | downcase | strip | prepend: ',' | append: ',' -%}
+            {%- unless pills_norm contains fkey -%}{%- continue -%}{%- endunless -%}
+            {%- assign group_key = filter.param_name | default: filter.values.first.param_name -%}
+            <div>
+              <span class="sf-group__label">{{ filter.label | escape }}</span>
+              <div class="sf-loads" role="group" aria-label="{{ filter.label | escape }}">
+                {%- for value in filter.values -%}
+                  <label class="sf-load{% if value.active %} is-active{% endif %}">
+                    <input type="radio" class="sf-sr-only" name="{{ value.param_name }}" value="{{ value.value }}" data-sf-input data-sf-group="{{ group_key }}"{% if value.active %} checked{% endif %} />
+                    <span class="sf-load__dot">
+                      <svg class="sf-load__check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{{ i_check }}</svg>
+                      <span class="sf-load__dot-inner"></span>
+                    </span>
+                    <span class="sf-load__text">{{ value.label | escape }}</span>
+                  </label>
+                {%- endfor -%}
+              </div>
+            </div>
+          {%- endfor -%}
+
+          {%- comment -%} 2) Dropdown-style filters {%- endcomment -%}
+          <div class="sf-grid-2">
+            {%- for filter in collection.filters -%}
+              {%- if filter.type != 'list' -%}{%- continue -%}{%- endif -%}
+              {%- assign fkey = filter.label | downcase | strip | prepend: ',' | append: ',' -%}
+              {%- if pills_norm contains fkey -%}{%- continue -%}{%- endif -%}
+              {%- if cards_norm contains fkey -%}{%- continue -%}{%- endif -%}
+              {%- assign group_key = filter.param_name | default: filter.values.first.param_name -%}
+              {%- assign active_label = '' -%}
+              {%- for value in filter.values -%}{%- if value.active -%}{%- assign active_label = value.label -%}{%- endif -%}{%- endfor -%}
+              <div class="sf-field" data-sf-dropdown>
+                <span class="sf-field__label">{{ filter.label | escape }}</span>
+                <button type="button" class="sf-select{% if active_label != '' %} is-filled{% endif %}" data-sf-dropdown-trigger aria-expanded="false" aria-haspopup="listbox">
+                  <span class="sf-select__value" data-sf-value data-placeholder="{{ placeholder | escape }}">{{ active_label | default: placeholder | escape }}</span>
+                  <svg class="sf-select__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{{ i_chevron }}</svg>
+                </button>
+                <div class="sf-select__menu" data-sf-dropdown-menu hidden role="listbox">
+                  <div class="sf-select__list">
+                    {%- for value in filter.values -%}
+                      <label class="sf-option{% if value.active %} is-selected{% endif %}">
+                        <input type="radio" class="sf-sr-only" name="{{ value.param_name }}" value="{{ value.value }}" data-sf-input data-sf-group="{{ group_key }}"{% if value.active %} checked{% endif %} />
+                        <svg class="sf-option__check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{{ i_check }}</svg>
+                        <span>{{ value.label | escape }}</span>
+                      </label>
+                    {%- endfor -%}
+                  </div>
+                </div>
+              </div>
+            {%- endfor -%}
+          </div>
+
+          {%- comment -%} 3) Card-style filters {%- endcomment -%}
+          {%- for filter in collection.filters -%}
+            {%- if filter.type != 'list' -%}{%- continue -%}{%- endif -%}
+            {%- assign fkey = filter.label | downcase | strip | prepend: ',' | append: ',' -%}
+            {%- unless cards_norm contains fkey -%}{%- continue -%}{%- endunless -%}
+            {%- assign group_key = filter.param_name | default: filter.values.first.param_name -%}
+            <div>
+              <span class="sf-group__label">{{ filter.label | escape }}</span>
+              <div class="sf-surfaces">
+                {%- for value in filter.values -%}
+                  {%- assign opt = shop.metaobjects.auflage_options.values | where: 'option_label', value.label | first -%}
+                  {%- assign opt_name = opt.option_display_name | default: value.label -%}
+                  <label class="sf-surface{% if value.active %} is-active{% endif %}">
+                    <input type="radio" class="sf-sr-only" name="{{ value.param_name }}" value="{{ value.value }}" data-sf-input data-sf-group="{{ group_key }}"{% if value.active %} checked{% endif %} />
+                    <span class="sf-surface__body">
+                      <span class="sf-surface__label">{{ opt_name | escape }}</span>
+                      {%- if opt != blank -%}
+                        {%- if opt.subtitle != blank -%}<span class="sf-surface__sub">{{ opt.subtitle }}</span>{%- endif -%}
+                        {%- if opt.note != blank -%}<span class="sf-surface__price">{{ opt.note }}</span>{%- endif -%}
+                      {%- elsif value.count -%}
+                        <span class="sf-surface__sub">{{ value.count }}</span>
+                      {%- endif -%}
+                    </span>
+                    <span class="sf-surface__thumb">
+                      {%- if opt.image != blank -%}{{ opt.image | image_url: width: 96 | image_tag: loading: 'lazy', alt: opt_name | escape }}{%- endif -%}
+                    </span>
+                  </label>
+                {%- endfor -%}
+              </div>
+            </div>
+          {%- endfor -%}
+        </form>
+      </facet-filters-form>
+    </div>
+  </div>
+</shelf-filter>
+
+{% schema %}
+{
+  "name": "t:sections.shelf_filter.name",
+  "tag": "section",
+  "class": "shelf-filter-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:sections.shelf_filter.settings.header_general.content"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:sections.shelf_filter.settings.heading.label",
+      "default": "Wähle dein Palettenregal"
+    },
+    {
+      "type": "image_picker",
+      "id": "illustration",
+      "label": "t:sections.shelf_filter.settings.illustration.label",
+      "info": "t:sections.shelf_filter.settings.illustration.info"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_badge",
+      "label": "t:sections.shelf_filter.settings.show_badge.label",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "badge_text",
+      "label": "t:sections.shelf_filter.settings.badge_text.label",
+      "default": "Made in Europe"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.shelf_filter.settings.header_filter_display.content",
+      "info": "t:sections.shelf_filter.settings.header_filter_display.info"
+    },
+    {
+      "type": "text",
+      "id": "pills_filters",
+      "label": "t:sections.shelf_filter.settings.pills_filters.label",
+      "default": "Belastung pro Palette"
+    },
+    {
+      "type": "text",
+      "id": "cards_filters",
+      "label": "t:sections.shelf_filter.settings.cards_filters.label",
+      "default": "Auflage"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.shelf_filter.settings.header_secondary_links.content"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_link_1",
+      "label": "t:sections.shelf_filter.settings.show_link_1.label",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "link_1_label",
+      "label": "t:sections.shelf_filter.settings.link_1_label.label",
+      "default": "Zubehör"
+    },
+    {
+      "type": "url",
+      "id": "link_1_url",
+      "label": "t:sections.shelf_filter.settings.link_1_url.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_link_2",
+      "label": "t:sections.shelf_filter.settings.show_link_2.label",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "link_2_label",
+      "label": "t:sections.shelf_filter.settings.link_2_label.label",
+      "default": "FAQ"
+    },
+    {
+      "type": "url",
+      "id": "link_2_url",
+      "label": "t:sections.shelf_filter.settings.link_2_url.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.shelf_filter.settings.header_style.content"
+    },
+    {
+      "type": "text",
+      "id": "primary_hsl",
+      "label": "t:sections.shelf_filter.settings.primary_hsl.label",
+      "info": "t:sections.shelf_filter.settings.primary_hsl.info",
+      "default": "24 100% 50%"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.shelf_filter.presets.name"
+    }
+  ],
+  "enabled_on": {
+    "templates": ["collection"]
+  }
+}
+{% endschema %}

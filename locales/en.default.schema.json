@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin language editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "local-220": {
     "preorder": "Show \"pre-order\" button label"
@@ -201,6 +210,68 @@
     }
   },
   "sections": {
+    "shelf_filter": {
+      "name": "Shelf filter",
+      "settings": {
+        "header_general": {
+          "content": "General"
+        },
+        "heading": {
+          "label": "Heading"
+        },
+        "illustration": {
+          "label": "Illustration",
+          "info": "If left empty, the bundled shelf-illustration.png is used."
+        },
+        "show_badge": {
+          "label": "Show \"Made in Europe\" badge"
+        },
+        "badge_text": {
+          "label": "Badge text"
+        },
+        "header_filter_display": {
+          "content": "Filter display",
+          "info": "Comma-separated filter labels (named exactly as in the shop filter). All other list filters are shown as a dropdown."
+        },
+        "pills_filters": {
+          "label": "Pill filters"
+        },
+        "cards_filters": {
+          "label": "Card filters"
+        },
+        "header_secondary_links": {
+          "content": "Secondary links"
+        },
+        "show_link_1": {
+          "label": "Show link 1"
+        },
+        "link_1_label": {
+          "label": "Link 1 text"
+        },
+        "link_1_url": {
+          "label": "Link 1 URL"
+        },
+        "show_link_2": {
+          "label": "Show link 2"
+        },
+        "link_2_label": {
+          "label": "Link 2 text"
+        },
+        "link_2_url": {
+          "label": "Link 2 URL"
+        },
+        "header_style": {
+          "content": "Style"
+        },
+        "primary_hsl": {
+          "label": "Accent colour (HSL channels)",
+          "info": "As HSL channels without hsl(), e.g. \"24 100% 50%\"."
+        }
+      },
+      "presets": {
+        "name": "Shelf filter"
+      }
+    },
     "main-404": {
       "name": "Main 404"
     },

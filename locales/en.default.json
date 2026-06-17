@@ -1,4 +1,26 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin language editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
+  "sections": {
+    "shelf_filter": {
+      "placeholder": "Select",
+      "sort_by": "Sort by:",
+      "filter_and_sort": "Filter and sort",
+      "active_filters": "Active filters:",
+      "clear_all": "Clear all",
+      "remove_filter": "Remove filter",
+      "close": "Close",
+      "count_filtered": "{{ count }} of {{ total }} products shown",
+      "count_all": "{{ count }} products shown"
+    }
+  },
   "general": {
     "404": {
       "title": "Page not found",
