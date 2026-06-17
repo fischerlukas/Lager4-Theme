@@ -79,7 +79,7 @@
         "cards_filters": "Auflage",
         "show_link_1": true,
         "link_1_label": "Zubehör",
-        "link_1_url": "",
+        "link_1_url": "shopify://collections",
         "show_link_2": false,
         "link_2_label": "FAQ",
         "link_2_url": "",
