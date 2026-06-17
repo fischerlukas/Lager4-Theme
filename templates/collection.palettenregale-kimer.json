@@ -78,7 +78,7 @@
         "pills_filters": "Belastung pro Palette",
         "cards_filters": "Auflage",
         "show_link_1": true,
-        "link_1_label": "Zubehör",
+        "link_1_label": "Zubehör / Teilekatalog",
         "link_1_url": "shopify://collections",
         "show_link_2": false,
         "link_2_label": "FAQ",
