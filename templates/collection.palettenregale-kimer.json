@@ -77,6 +77,12 @@
         "badge_text": "Made in Europe",
         "pills_filters": "Belastung pro Palette",
         "cards_filters": "Auflage",
+        "show_link_1": true,
+        "link_1_label": "Zubehör",
+        "link_1_url": "",
+        "show_link_2": false,
+        "link_2_label": "FAQ",
+        "link_2_url": "",
         "primary_hsl": "24 100% 50%"
       }
     },
