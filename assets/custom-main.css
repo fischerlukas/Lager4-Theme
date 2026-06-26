@@ -61,30 +61,6 @@ div.flex-buttons > #CheckOut-exemptify {
   padding-inline-start: 0rem !important;
 }
 
-.t-selector-option > div strong,
-.t-selector-option > div span {
-  white-space: nowrap;
-}
-
-@media (max-width: 768px) {
-  .t-selector-option {
-    position: relative;
-    display: flex;
-    flex-direction: column; /* wichtig */
-    align-items: center;
-    justify-content: center;
-    padding: 1rem 0;
-    text-align: center;
-  }
-
-  .t-selector-option .switch-wrapper {
-    margin: 1rem auto;
-    position: relative; /* kein absolute, da column layout */
-    left: auto;
-    transform: none;
-  }
-}
-
 #AjaxCartSubtotal
   > div
   > div.additional-checkout-buttons.additional-checkout-buttons--vertical {
