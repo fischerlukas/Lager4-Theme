@@ -72,8 +72,7 @@
     "shelf_filter": {
       "type": "shelf-filter",
       "custom_css": [
-        ".sf-card__title {font-weight: 300; font-size: 30px;}",
-        ".sf-card__header-icon {height: 1.65rem; width: 1.65rem;}"
+        "@media (min-width: 600px) {.sf-card__title {font-weight: 300; font-size: 30px;}.sf-card__header-icon {height: 1.65rem; width: 1.65rem;}}"
       ],
       "settings": {
         "heading": "Wähle dein Palettenregal",
