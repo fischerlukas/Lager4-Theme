@@ -76,8 +76,8 @@
       "custom_css": [],
       "settings": {
         "products_number": 12,
-        "enable_filtering": true,
-        "enable_sorting": true,
+        "enable_filtering": false,
+        "enable_sorting": false,
         "filters_position": "top"
       }
     },
