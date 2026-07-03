@@ -20,21 +20,22 @@
         "height": "small"
       }
     },
-    "image_with_hotspots_ntReJ3": {
-      "type": "image-with-hotspots",
+    "shelf_filter_4ewn3b": {
+      "type": "shelf-filter",
+      "name": "t:sections.shelf_filter.presets.name",
       "settings": {
-        "heading": "Palettenregale von Lager4",
-        "subheading": "finde deine perfekte <strong>Konfiguration</strong>",
-        "section_heading_size": "text-size--large",
-        "section_heading_layout": "section-heading--left section-heading--one-row",
-        "cta_label": "",
-        "cta_url": "",
-        "image": "shopify://shop_images/Titelbild_Regal_6ffc3bce-e77a-42da-bcc9-ad52eb6059ba.jpg",
-        "border_radius": 0,
-        "color_text": "#000000",
-        "color_background": "#ffffff",
-        "gutter_decrease": false,
-        "seo_h_tag": "h2"
+        "heading": "Wähle dein Palettenregal",
+        "show_badge": true,
+        "badge_text": "Made in Europe",
+        "pills_filters": "Belastung pro Palette",
+        "cards_filters": "Auflage",
+        "show_link_1": true,
+        "link_1_label": "Zubehör",
+        "link_1_url": "",
+        "show_link_2": true,
+        "link_2_label": "FAQ",
+        "link_2_url": "",
+        "primary_hsl": "24 100% 50%"
       }
     },
     "product-grid": {
@@ -91,7 +92,7 @@
   },
   "order": [
     "banner",
-    "image_with_hotspots_ntReJ3",
+    "shelf_filter_4ewn3b",
     "product-grid",
     "custom_liquid_6Tgj9e"
   ]
