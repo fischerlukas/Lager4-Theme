@@ -339,7 +339,7 @@ div.sidebar__footer > #AjaxCartSubtotal > div > div.uid-toggle-wrapper {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
-  font-family: "Avenir Next Rounded", sans-serif;
+  font-family: inherit;
   font-size: 14px;
   overflow: hidden;
   margin-top: -40px;
