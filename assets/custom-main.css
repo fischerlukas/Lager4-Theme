@@ -496,7 +496,7 @@ div.sidebar__footer > #AjaxCartSubtotal > div > div.uid-toggle-wrapper {
   display: grid;
   grid-column: span 4;
   place-items: end;
-  font-family: "Quicksand", sans-serif;
+  font-family: inherit;
   font-optical-sizing: auto;
   font-size: 32px;
   color: #ff6700;
