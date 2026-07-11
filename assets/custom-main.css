@@ -333,7 +333,7 @@ div.sidebar__footer > #AjaxCartSubtotal > div > div.uid-toggle-wrapper {
 .custom-tab-container {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 30px;
+  gap: 40px;
   padding: 40px 20px 40px 20px;
   width: 100%;
   -webkit-box-sizing: border-box;
