@@ -1,1 +1,81 @@
-{"sections":{"main":{"type":"main-list-collections","blocks":{"collection_AxdR3g":{"type":"collection","settings":{"collection":"stander"}},"collection_YBqEg9":{"type":"collection","settings":{"collection":"traversen"}},"collection_KdpcgV":{"type":"collection","settings":{"collection":"standerprofile"}},"collection_Betr7j":{"type":"collection","settings":{"collection":"anfahrschutz"}},"collection_X8ixgt":{"type":"collection","settings":{"collection":"standerstreben"}},"collection_DxgNqn":{"type":"collection","settings":{"collection":"ersatzteile"}}},"block_order":["collection_AxdR3g","collection_YBqEg9","collection_KdpcgV","collection_Betr7j","collection_X8ixgt","collection_DxgNqn"],"settings":{"layout":"grid-3 grid-lap-2 grid-tiny-1","image_aspect_ratio":"1.33333","image_border_radius":0,"display_type":"selected","sort":"products_high"}},"custom_liquid_x9bTkz":{"type":"custom-liquid","settings":{"custom_liquid":"<div class=\"shape-divider-bg-wrap\">\n  <div class=\"shape-divider-wrap \" style=\" height: 80px;\" data-height=\"80\" data-front=\"\" data-style=\"curve\" data-position=\"top\">\n    <svg class=\"shape-divider\" aria-hidden=\"true\" fill=\"#ffffff\" xmlns=\"http:\/\/www.w3.org\/2000\/svg\" viewBox=\"0 0 1000 100\" preserveAspectRatio=\"none\"> \n      <path d=\"M 0 0 c 0 0 200 50 500 50 s 500 -50 500 -50 v 101 h -1000 v -100 z\">\n      <\/path> \n    <\/svg>\n  <\/div>\n  <div class=\"shape-divider-box\">\n    <div class=\"shape-divider-headline-container\">\n      <h3 class=\"shape-divider-headline text-font--primary text-size--xlarge\">Du hast Fragen zu unseren Produkten?<\/h3>\n    <\/div>\n    \n    <div class=\"shape-divider-button-container\">\n      <a href=\"..\/pages\/contact\" class=\"shape-divider-button button button--outline button--icon\">\n        <span aria-hidden=\"true\" class=\"button__icon\">\n          <svg width=\"21\" height=\"9\" viewBox=\"0 0 21 9\" fill=\"none\" xmlns=\"http:\/\/www.w3.org\/2000\/svg\"><path d=\"M20.354 4.854a.5.5 0 0 0 0-.708L17.172.964a.5.5 0 1 0-.707.708L19.293 4.5l-2.828 2.828a.5.5 0 1 0 .707.708l3.182-3.182ZM0 5h20V4H0v1Z\" fill=\"#000\"><\/path>\n          <\/svg>\n        <\/span>\n        <span>Schreib uns!<\/span>                \n      <\/a>\n    <\/div>\n  <\/div>\n<\/div>","full_width":true,"remove_margin":false}}},"order":["main","custom_liquid_x9bTkz"]}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-list-collections",
+      "blocks": {
+        "collection_AxdR3g": {
+          "type": "collection",
+          "settings": {
+            "collection": "stander"
+          }
+        },
+        "collection_YBqEg9": {
+          "type": "collection",
+          "settings": {
+            "collection": "traversen"
+          }
+        },
+        "collection_KdpcgV": {
+          "type": "collection",
+          "settings": {
+            "collection": "standerprofile"
+          }
+        },
+        "collection_Betr7j": {
+          "type": "collection",
+          "settings": {
+            "collection": "anfahrschutz"
+          }
+        },
+        "collection_X8ixgt": {
+          "type": "collection",
+          "settings": {
+            "collection": "auflagen"
+          }
+        },
+        "collection_DxgNqn": {
+          "type": "collection",
+          "settings": {
+            "collection": "ersatzteile"
+          }
+        }
+      },
+      "block_order": [
+        "collection_AxdR3g",
+        "collection_YBqEg9",
+        "collection_KdpcgV",
+        "collection_Betr7j",
+        "collection_X8ixgt",
+        "collection_DxgNqn"
+      ],
+      "settings": {
+        "layout": "grid-3 grid-lap-2 grid-tiny-1",
+        "image_aspect_ratio": "1.33333",
+        "image_border_radius": 0,
+        "display_type": "selected",
+        "sort": "products_high"
+      }
+    },
+    "custom_liquid_x9bTkz": {
+      "type": "custom-liquid",
+      "settings": {
+        "custom_liquid": "<div class=\"shape-divider-bg-wrap\">\n  <div class=\"shape-divider-wrap \" style=\" height: 80px;\" data-height=\"80\" data-front=\"\" data-style=\"curve\" data-position=\"top\">\n    <svg class=\"shape-divider\" aria-hidden=\"true\" fill=\"#ffffff\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 1000 100\" preserveAspectRatio=\"none\"> \n      <path d=\"M 0 0 c 0 0 200 50 500 50 s 500 -50 500 -50 v 101 h -1000 v -100 z\">\n      </path> \n    </svg>\n  </div>\n  <div class=\"shape-divider-box\">\n    <div class=\"shape-divider-headline-container\">\n      <h3 class=\"shape-divider-headline text-font--primary text-size--xlarge\">Du hast Fragen zu unseren Produkten?</h3>\n    </div>\n    \n    <div class=\"shape-divider-button-container\">\n      <a href=\"../pages/contact\" class=\"shape-divider-button button button--outline button--icon\">\n        <span aria-hidden=\"true\" class=\"button__icon\">\n          <svg width=\"21\" height=\"9\" viewBox=\"0 0 21 9\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M20.354 4.854a.5.5 0 0 0 0-.708L17.172.964a.5.5 0 1 0-.707.708L19.293 4.5l-2.828 2.828a.5.5 0 1 0 .707.708l3.182-3.182ZM0 5h20V4H0v1Z\" fill=\"#000\"></path>\n          </svg>\n        </span>\n        <span>Schreib uns!</span>                \n      </a>\n    </div>\n  </div>\n</div>",
+        "full_width": true,
+        "remove_margin": false
+      }
+    }
+  },
+  "order": [
+    "main",
+    "custom_liquid_x9bTkz"
+  ]
+}
