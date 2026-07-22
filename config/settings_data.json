@@ -241,6 +241,18 @@
         "settings": {
           "popup_border_radius": 10
         }
+      },
+      "main-password-header": {
+        "type": "main-password-header",
+        "settings": {
+          "logo_height": 80
+        }
+      },
+      "main-password-footer": {
+        "type": "main-password-footer",
+        "settings": {
+          "show_social": false
+        }
       }
     },
     "content_for_index": [],
@@ -336,9 +348,9 @@
           "show_exemption_warning": true
         }
       },
-      "14872573165681918521": {
-        "type": "shopify://apps/k-google-reviews-importer/blocks/app-extension/d356cdc8-81d9-427a-96f3-78536845c525",
-        "disabled": true,
+      "13429640401162358610": {
+        "type": "shopify://apps/google-reviews/blocks/app-embed-block/4eeaae1c-902b-481c-bec5-3f32291a58d5",
+        "disabled": false,
         "settings": {}
       }
     }
