@@ -241,18 +241,6 @@
         "settings": {
           "popup_border_radius": 10
         }
-      },
-      "main-password-header": {
-        "type": "main-password-header",
-        "settings": {
-          "logo_height": 80
-        }
-      },
-      "main-password-footer": {
-        "type": "main-password-footer",
-        "settings": {
-          "show_social": false
-        }
       }
     },
     "content_for_index": [],
@@ -350,7 +338,7 @@
       },
       "13429640401162358610": {
         "type": "shopify://apps/google-reviews/blocks/app-embed-block/4eeaae1c-902b-481c-bec5-3f32291a58d5",
-        "disabled": false,
+        "disabled": true,
         "settings": {}
       }
     }
