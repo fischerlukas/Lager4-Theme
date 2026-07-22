@@ -335,6 +335,11 @@
           "exemption_font_family": "inherit",
           "show_exemption_warning": true
         }
+      },
+      "14872573165681918521": {
+        "type": "shopify://apps/k-google-reviews-importer/blocks/app-extension/d356cdc8-81d9-427a-96f3-78536845c525",
+        "disabled": true,
+        "settings": {}
       }
     }
   },
