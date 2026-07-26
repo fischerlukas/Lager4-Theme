@@ -1,0 +1,151 @@
+{{ 'l4-product-details.css' | asset_url | stylesheet_tag }}
+
+<div
+  id="L4Downloads-{{ section.id }}"
+  class="custom-tab-container l4-product-detail"
+  style="
+    --l4-product-detail-padding-left: {{ section.settings.padding_left | default: 0 }}px;
+    --l4-product-detail-padding-right: {{ section.settings.padding_right | default: 0 }}px;
+  "
+>
+  <div class="custom-downloads shadow-rounded">
+    <div class="custom-heading">
+      {{ section.settings.heading | escape }}
+    </div>
+
+    <div class="custom-link-container">
+      {%- for block in section.blocks -%}
+        {%- liquid
+          assign download_file = product.metafields.custom[block.settings.metafield_key].value
+          assign download_url = download_file.url
+          if block.settings.link != blank
+            assign download_url = block.settings.link
+          endif
+        -%}
+
+        {%- if download_url != blank -%}
+          <a
+            href="{{ download_url | escape }}"
+            class="custom-link-button l4-product-detail__download button button--outline button--icon"
+            {{ block.shopify_attributes }}
+          >
+        {%- else -%}
+          <span
+            class="custom-link-button l4-product-detail__download button button--outline button--icon"
+            aria-disabled="true"
+            {{ block.shopify_attributes }}
+          >
+        {%- endif -%}
+          <span class="button__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" focusable="false">
+              <path d="M12 3v12m0 0 5-5m-5 5-5-5M5 20h14" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+          <span class="button__text">{{ block.settings.label | escape }}</span>
+        {%- if download_url != blank -%}
+          </a>
+        {%- else -%}
+          </span>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Downloads",
+  "class": "l4-product-detail-section l4-product-detail-section--downloads",
+  "max_blocks": 6,
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Überschrift",
+      "default": "Downloads"
+    },
+    {
+      "type": "header",
+      "content": "Optionale Abstände"
+    },
+    {
+      "type": "range",
+      "id": "padding_left",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Zusätzlicher Abstand links",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_right",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Zusätzlicher Abstand rechts",
+      "default": 0
+    }
+  ],
+  "blocks": [
+    {
+      "type": "download",
+      "name": "Download",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Bezeichnung",
+          "default": "Datenblatt"
+        },
+        {
+          "type": "text",
+          "id": "metafield_key",
+          "label": "Datei-Metafeld",
+          "info": "Schlüssel aus dem Namespace custom, z. B. datenblatt",
+          "default": "datenblatt"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Alternativer Link",
+          "info": "Überschreibt die Datei aus dem Metafeld, wenn gesetzt."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Downloads",
+      "blocks": [
+        {
+          "type": "download",
+          "settings": {
+            "label": "Montageanleitung",
+            "metafield_key": "montageanleitung"
+          }
+        },
+        {
+          "type": "download",
+          "settings": {
+            "label": "Datenblatt",
+            "metafield_key": "datenblatt"
+          }
+        },
+        {
+          "type": "download",
+          "settings": {
+            "label": "Technische Zeichnung",
+            "metafield_key": "technische_zeichnung"
+          }
+        }
+      ]
+    }
+  ],
+  "enabled_on": {
+    "templates": ["product"]
+  }
+}
+{% endschema %}

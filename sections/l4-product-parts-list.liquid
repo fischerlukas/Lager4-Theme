@@ -1,0 +1,67 @@
+{{ 'l4-product-details.css' | asset_url | stylesheet_tag }}
+
+<div
+  id="L4PartsList-{{ section.id }}"
+  class="custom-tab-container l4-product-detail"
+  style="
+    --l4-product-detail-padding-left: {{ section.settings.padding_left | default: 0 }}px;
+    --l4-product-detail-padding-right: {{ section.settings.padding_right | default: 0 }}px;
+  "
+>
+  <div class="custom-parts shadow-rounded">
+    <div class="custom-heading">
+      {{ section.settings.heading | escape }}
+    </div>
+
+    <div class="custom-parts-container">
+      {{ product.description }}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Stückliste",
+  "class": "l4-product-detail-section l4-product-detail-section--parts",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Überschrift",
+      "default": "Stückliste"
+    },
+    {
+      "type": "header",
+      "content": "Optionale Abstände"
+    },
+    {
+      "type": "range",
+      "id": "padding_left",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Zusätzlicher Abstand links",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_right",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Zusätzlicher Abstand rechts",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Stückliste"
+    }
+  ],
+  "enabled_on": {
+    "templates": ["product"]
+  }
+}
+{% endschema %}

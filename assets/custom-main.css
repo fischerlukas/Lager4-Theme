@@ -346,7 +346,7 @@ div.sidebar__footer > #AjaxCartSubtotal > div > div.uid-toggle-wrapper {
   font-family: inherit;
   font-size: 14px;
   overflow: hidden;
-  margin-top: -40px;
+  /* margin-top: -40px; */ /* Remove due to inconsistency */
 }
 
 .custom-attributes {

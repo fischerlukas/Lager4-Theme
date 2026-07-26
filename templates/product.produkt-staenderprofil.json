@@ -144,8 +144,132 @@
         "seo_h_tag": "h2"
       }
     },
+    "l4_technical_data": {
+      "type": "l4-product-technical-data",
+      "blocks": {
+        "specification_01": {
+          "type": "specification",
+          "settings": {
+            "label": "Modell",
+            "metafield_key": "modell",
+            "icon": "cube"
+          }
+        },
+        "specification_02": {
+          "type": "specification",
+          "settings": {
+            "label": "Artikelnummer",
+            "metafield_key": "artikelnummer",
+            "icon": "hash"
+          }
+        },
+        "specification_03": {
+          "type": "specification",
+          "settings": {
+            "label": "Höhe",
+            "metafield_key": "hoehe",
+            "icon": "arrows-vertical"
+          }
+        },
+        "specification_04": {
+          "type": "specification",
+          "settings": {
+            "label": "Profil",
+            "metafield_key": "profil",
+            "icon": "selection-all"
+          }
+        },
+        "specification_05": {
+          "type": "specification",
+          "settings": {
+            "label": "Max. Belastung pro Feld",
+            "metafield_key": "belastung_pro_feld",
+            "icon": "dots-nine"
+          }
+        },
+        "specification_06": {
+          "type": "specification",
+          "settings": {
+            "label": "Max. Knicklänge",
+            "metafield_key": "maximale_knicklaenge",
+            "icon": "split-vertical"
+          }
+        },
+        "specification_07": {
+          "type": "specification",
+          "settings": {
+            "label": "Oberfläche",
+            "metafield_key": "oberfl_che",
+            "icon": "paint-brush-household"
+          }
+        }
+      },
+      "block_order": [
+        "specification_01",
+        "specification_02",
+        "specification_03",
+        "specification_04",
+        "specification_05",
+        "specification_06",
+        "specification_07"
+      ],
+      "settings": {
+        "heading": "Technische Daten",
+        "hide_empty_values": false,
+        "padding_left": 0,
+        "padding_right": 0
+      }
+    },
+    "l4_parts_list": {
+      "type": "l4-product-parts-list",
+      "settings": {
+        "heading": "Stückliste",
+        "padding_left": 0,
+        "padding_right": 0
+      }
+    },
+    "l4_downloads": {
+      "type": "l4-product-downloads",
+      "blocks": {
+        "download_01": {
+          "type": "download",
+          "settings": {
+            "label": "Montageanleitung",
+            "metafield_key": "montageanleitung",
+            "link": ""
+          }
+        },
+        "download_02": {
+          "type": "download",
+          "settings": {
+            "label": "Datenblatt",
+            "metafield_key": "datenblatt",
+            "link": ""
+          }
+        },
+        "download_03": {
+          "type": "download",
+          "settings": {
+            "label": "Technische Zeichnung",
+            "metafield_key": "technische_zeichnung",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "download_01",
+        "download_02",
+        "download_03"
+      ],
+      "settings": {
+        "heading": "Downloads",
+        "padding_left": 0,
+        "padding_right": 0
+      }
+    },
     "custom_liquid_Y47VhD": {
       "type": "custom-liquid",
+      "disabled": true,
       "custom_css": [],
       "settings": {
         "custom_liquid": "<link\n  rel=\"stylesheet\"\n  type=\"text/css\"\n  href=\"https://unpkg.com/@phosphor-icons/web@2.0.3/src/duotone/style.css\"\n/>\n\n<link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n<link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>\n<link href=\"https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap\" rel=\"stylesheet\">\n\n<div class=\"custom-tab-container\">\n\n  <div class=\"custom-attributes shadow-rounded\">\n    <div class=\"custom-heading\">\n      Technische Daten\n    </div>\n    <div class=\"custom-attributes-grid\">\n      <div class=\"custom-attribute-container\">\n        <div class=\"custom-icon-container\">\n            <div class=\"custom-icon ph-duotone ph-cube\"></div>\n        </div>\n        <div class=\"custom-text-container\">\n            <div class=\"custom-text-bg\">\n              Modell\n            </div>\n            <div class=\"custom-text-sm\">\n              {{product.metafields.custom.modell.value}}\n            </div>\n        </div>\n      </div>\n\n      <div class=\"custom-attribute-container\">\n        <div class=\"custom-icon-container\">\n            <div class=\"custom-icon ph-duotone ph-hash\"></div>\n        </div>\n        <div class=\"custom-text-container\">\n            <div class=\"custom-text-bg\">\n              Artikelnummer\n            </div>\n            <div class=\"custom-text-sm\">\n              {{product.metafields.custom.artikelnummer.value}}\n            </div>\n        </div>\n      </div>\n\n      <div class=\"custom-attribute-container\">\n        <div class=\"custom-icon-container\">\n            <div class=\"custom-icon ph-duotone ph-arrows-vertical\"></div>\n        </div>\n        <div class=\"custom-text-container\">\n            <div class=\"custom-text-bg\">\n              Höhe\n            </div>\n            <div class=\"custom-text-sm\">\n              {{product.metafields.custom.hoehe.value}}\n            </div>\n        </div>\n      </div>\n\n      <div class=\"custom-attribute-container\">\n        <div class=\"custom-icon-container\">\n            <div class=\"custom-icon ph-duotone ph-selection-all\"></div>\n        </div>\n        <div class=\"custom-text-container\">\n            <div class=\"custom-text-bg\">\n              Profil\n            </div>\n            <div class=\"custom-text-sm\">\n              {{product.metafields.custom.profil.value}}\n            </div>\n        </div>\n      </div>\n\n      <div class=\"custom-attribute-container\">\n        <div class=\"custom-icon-container\">\n            <div class=\"custom-icon ph-duotone ph-dots-nine\"></div>\n        </div>\n        <div class=\"custom-text-container\">\n            <div class=\"custom-text-bg\">\n              Max. Belastung pro Feld\n            </div>\n            <div class=\"custom-text-sm\">\n              {{product.metafields.custom.belastung_pro_feld.value}}\n            </div>\n        </div>\n      </div>\n\n      <div class=\"custom-attribute-container\">\n        <div class=\"custom-icon-container\">\n            <div class=\"custom-icon ph-duotone ph-split-vertical\"></div>\n        </div>\n        <div class=\"custom-text-container\">\n            <div class=\"custom-text-bg\">\n              Max. Knicklänge\n            </div>\n            <div class=\"custom-text-sm\">\n              {{product.metafields.custom.maximale_knicklaenge.value}}\n            </div>\n        </div>\n      </div>\n\n      <div class=\"custom-attribute-container\">\n        <div class=\"custom-icon-container\">\n            <div class=\"custom-icon ph-duotone ph-paint-brush-household\"></div>\n        </div>\n        <div class=\"custom-text-container\">\n            <div class=\"custom-text-bg\">\n              Oberfläche\n            </div>\n            <div class=\"custom-text-sm\">\n              {{product.metafields.custom.oberfl_che.value}}\n            </div>\n        </div>\n      </div>\n\n    </div>\n\n  </div>\n  <div class=\"custom-parts shadow-rounded\">\n    <div class=\"custom-heading\">\n      Stückliste\n    </div>\n    <div class=\"custom-parts-container\">\n      {{product.description}}\n    </div>\n  </div>\n  <div class=\"custom-downloads shadow-rounded\">\n    <div class=\"custom-heading\">\n      Downloads\n    </div>\n    <div class=\"custom-link-container\">\n\n      <a href=\"{{product.metafields.custom.montageanleitung.value.url}}\" class=\"custom-link-button\">\n        <div class=\"custom-link-text\">\n          <span>Montageanleitung</span>\n          <i class=\"ph-duotone ph-download-simple custom-link-icon\"></i>\n        </div>\n      </a>\n\n      <a href=\"{{product.metafields.custom.datenblatt.value.url}}\" class=\"custom-link-button\">\n        <div class=\"custom-link-text\">\n          <span>Datenblatt</span>\n          <i class=\"ph-duotone ph-download-simple custom-link-icon\"></i>\n        </div>\n      </a>\n\n      <a href=\"{{product.metafields.custom.technische_zeichnung.value.url}}\" class=\"custom-link-button\">\n        <div class=\"custom-link-text\">\n          <span>Technische Zeichnung</span>\n          <i class=\"ph-duotone ph-download-simple custom-link-icon\"></i>\n        </div>\n      </a>\n\n    </div>\n  </div>\n</div>",
@@ -291,6 +415,9 @@
   "order": [
     "main",
     "text_columns_KH84tq",
+    "l4_technical_data",
+    "l4_parts_list",
+    "l4_downloads",
     "custom_liquid_Y47VhD",
     "product-recommendations",
     "content_toggles_CUt8Ht",

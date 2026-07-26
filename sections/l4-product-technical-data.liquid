@@ -1,0 +1,141 @@
+{{ 'l4-product-details.css' | asset_url | stylesheet_tag }}
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/@phosphor-icons/web@2.0.3/src/duotone/style.css"
+>
+
+<div
+  id="L4TechnicalData-{{ section.id }}"
+  class="custom-tab-container l4-product-detail"
+  style="
+    --l4-product-detail-padding-left: {{ section.settings.padding_left | default: 0 }}px;
+    --l4-product-detail-padding-right: {{ section.settings.padding_right | default: 0 }}px;
+  "
+>
+  <div class="custom-attributes shadow-rounded">
+    <div class="custom-heading">
+      {{ section.settings.heading | escape }}
+    </div>
+
+    <div class="custom-attributes-grid">
+      {%- for block in section.blocks -%}
+        {%- liquid
+          assign specification = product.metafields.custom[block.settings.metafield_key]
+          assign specification_value = specification.value
+        -%}
+
+        {%- unless section.settings.hide_empty_values and specification_value == blank -%}
+          <div class="custom-attribute-container" {{ block.shopify_attributes }}>
+            <div class="custom-icon-container">
+              <div class="custom-icon ph-duotone ph-{{ block.settings.icon | handle }}" aria-hidden="true"></div>
+            </div>
+            <div class="custom-text-container">
+              <div class="custom-text-bg">{{ block.settings.label | escape }}</div>
+              <div class="custom-text-sm">{{ specification_value }}</div>
+            </div>
+          </div>
+        {%- endunless -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Technische Daten",
+  "class": "l4-product-detail-section l4-product-detail-section--technical",
+  "max_blocks": 20,
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Überschrift",
+      "default": "Technische Daten"
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_empty_values",
+      "label": "Leere Werte ausblenden",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Optionale Abstände"
+    },
+    {
+      "type": "range",
+      "id": "padding_left",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Zusätzlicher Abstand links",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_right",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Zusätzlicher Abstand rechts",
+      "default": 0
+    }
+  ],
+  "blocks": [
+    {
+      "type": "specification",
+      "name": "Technische Angabe",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Bezeichnung",
+          "default": "Modell"
+        },
+        {
+          "type": "text",
+          "id": "metafield_key",
+          "label": "Metafeld-Schlüssel",
+          "info": "Schlüssel aus dem Namespace custom, z. B. modell",
+          "default": "modell"
+        },
+        {
+          "type": "text",
+          "id": "icon",
+          "label": "Phosphor Icon",
+          "info": "Icon-Name ohne ph-, z. B. cube",
+          "default": "cube"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Technische Daten",
+      "blocks": [
+        {
+          "type": "specification",
+          "settings": {
+            "label": "Modell",
+            "metafield_key": "modell",
+            "icon": "cube"
+          }
+        },
+        {
+          "type": "specification",
+          "settings": {
+            "label": "Artikelnummer",
+            "metafield_key": "artikelnummer",
+            "icon": "hash"
+          }
+        }
+      ]
+    }
+  ],
+  "enabled_on": {
+    "templates": ["product"]
+  }
+}
+{% endschema %}

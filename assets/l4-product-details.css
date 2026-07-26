@@ -1,0 +1,93 @@
+/*
+ * Shopify wraps each extracted card in its own section. These rules only
+ * recreate the original two-column placement; the card styling itself stays
+ * in custom-main.css and uses the original custom-* classes.
+ */
+.l4-product-detail-section--technical,
+.l4-product-detail-section--parts {
+  float: left;
+  width: 50%;
+}
+
+.l4-product-detail-section--downloads {
+  clear: both;
+}
+
+.l4-product-detail.custom-tab-container {
+  --l4-product-detail-padding-left: 0px;
+  --l4-product-detail-padding-right: 0px;
+  display: block;
+  gap: 0;
+}
+
+.l4-product-detail-section--technical .l4-product-detail {
+  padding-top: var(--gutter-regular);
+  padding-right: calc(var(--gutter-regular) + var(--l4-product-detail-padding-right, 0px));
+  padding-bottom: var(--gutter-regular);
+  padding-left: calc(var(--gutter-container) + var(--l4-product-detail-padding-left, 0px));
+}
+
+.l4-product-detail-section--parts .l4-product-detail {
+  padding-top: var(--gutter-regular);
+  padding-right: calc(var(--gutter-container) + var(--l4-product-detail-padding-right, 0px));
+  padding-bottom: var(--gutter-regular);
+  padding-left: calc(var(--gutter-regular) + var(--l4-product-detail-padding-left, 0px));
+}
+
+.l4-product-detail-section--downloads .l4-product-detail {
+  padding-top: var(--gutter-regular);
+  padding-right: calc(var(--gutter-container) + var(--l4-product-detail-padding-right, 0px));
+  padding-bottom: var(--gutter-regular);
+  padding-left: calc(var(--gutter-container) + var(--l4-product-detail-padding-left, 0px));
+}
+
+/*
+ * Keep the theme's button--icon movement, but restore the original download
+ * button palette from the custom Liquid implementation.
+ */
+.l4-product-detail__download.custom-link-button.button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  color: #000;
+  background-color: rgba(0, 0, 0, 0.04);
+  border-color: rgba(0, 0, 0, 0.04);
+  transition: all 175ms linear;
+  font-size: 16px;
+}
+
+.l4-product-detail__download.custom-link-button.button .button__icon {
+  color: currentColor;
+}
+
+.l4-product-detail__download.custom-link-button.button .button__icon svg path {
+  fill: none;
+  stroke: currentColor;
+}
+
+.l4-product-detail__download.custom-link-button.button:hover {
+  color: #fff;
+  background-color: #ff6700;
+  border-color: #ff6700;
+}
+
+.l4-product-detail__download[aria-disabled="true"] {
+  cursor: default;
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+@media only screen and (max-width: 1050px) {
+  .l4-product-detail-section--technical,
+  .l4-product-detail-section--parts {
+    float: none;
+    width: 100%;
+  }
+
+  .l4-product-detail-section--technical .l4-product-detail,
+  .l4-product-detail-section--parts .l4-product-detail {
+    padding-right: calc(var(--gutter-container) + var(--l4-product-detail-padding-right, 0px));
+    padding-left: calc(var(--gutter-container) + var(--l4-product-detail-padding-left, 0px));
+  }
+}
