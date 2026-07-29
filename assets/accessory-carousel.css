@@ -13,8 +13,10 @@ accessory-carousel {
   --accessory-carousel-discount-color: #63af62;
   --accessory-carousel-card-width: 280px;
   --accessory-carousel-gap: var(--accessory-carousel-mobile-gap, 16px);
-  --accessory-carousel-section-padding-top: 24px;
-  --accessory-carousel-section-padding-bottom: 0px;
+  --accessory-carousel-section-padding-top-mobile: 20px;
+  --accessory-carousel-section-padding-bottom-mobile: 20px;
+  --accessory-carousel-section-padding-top-desktop: 20px;
+  --accessory-carousel-section-padding-bottom-desktop: 20px;
   --accessory-carousel-section-padding-left: 0px;
   --accessory-carousel-section-padding-right: 0px;
   --accessory-carousel-panel-padding-block-mobile: 42px;
@@ -25,6 +27,10 @@ accessory-carousel {
   --accessory-carousel-image-radius: 20px;
   --accessory-carousel-heading-size-mobile: 30px;
   --accessory-carousel-heading-size-desktop: 36px;
+  --accessory-carousel-heading-padding-top: 0px;
+  --accessory-carousel-heading-padding-right: 0px;
+  --accessory-carousel-heading-padding-bottom: 0px;
+  --accessory-carousel-heading-padding-left: 0px;
 
   display: block;
 }
@@ -37,9 +43,9 @@ accessory-carousel *::after {
 
 accessory-carousel .accessory-carousel {
   width: 100%;
-  padding-top: var(--accessory-carousel-section-padding-top);
+  padding-top: var(--accessory-carousel-section-padding-top-mobile);
   padding-right: var(--accessory-carousel-section-padding-right, 0px);
-  padding-bottom: var(--accessory-carousel-section-padding-bottom);
+  padding-bottom: var(--accessory-carousel-section-padding-bottom-mobile);
   padding-left: var(--accessory-carousel-section-padding-left, 0px);
   background: var(--accessory-carousel-page-background);
   color: var(--accessory-carousel-text-color);
@@ -85,6 +91,10 @@ accessory-carousel .accessory-carousel__product-title {
 
 accessory-carousel .accessory-carousel__heading {
   margin-bottom: 0.5rem;
+  padding: var(--accessory-carousel-heading-padding-top)
+    var(--accessory-carousel-heading-padding-right)
+    var(--accessory-carousel-heading-padding-bottom)
+    var(--accessory-carousel-heading-padding-left);
   color: var(--accessory-carousel-text-color);
   font-family: inherit;
   font-size: var(--accessory-carousel-heading-size-mobile);
@@ -562,6 +572,11 @@ accessory-carousel .accessory-carousel__footer-link svg {
 
   accessory-carousel .accessory-carousel__panel {
     padding: var(--accessory-carousel-panel-padding-desktop);
+  }
+
+  accessory-carousel .accessory-carousel {
+    padding-top: var(--accessory-carousel-section-padding-top-desktop);
+    padding-bottom: var(--accessory-carousel-section-padding-bottom-desktop);
   }
 
   accessory-carousel .accessory-carousel__heading {

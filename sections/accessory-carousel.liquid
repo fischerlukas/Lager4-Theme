@@ -7,18 +7,43 @@
     assign source_product = product
   endif
 
+  assign parent_model_values = blank
+  assign parent_model_display = ''
   assign displayed_products = blank
-  if source_product != blank and section.settings.metafield_namespace != blank and section.settings.metafield_key != blank
-    assign recommendations_metafield = source_product.metafields[section.settings.metafield_namespace][section.settings.metafield_key]
-    if recommendations_metafield != blank and recommendations_metafield.type == 'list.product_reference'
-      assign displayed_products = recommendations_metafield.value
+  assign matched_accessory_collection = blank
+  assign model_match_1 = section.settings.model_match_1 | strip
+  assign model_match_2 = section.settings.model_match_2 | strip
+  assign model_match_3 = section.settings.model_match_3 | strip
+
+  if source_product != blank
+    assign parent_model_values = source_product.metafields.custom.modell.value
+    assign parent_model_display = parent_model_values | join: ', '
+  endif
+
+  if parent_model_values != blank
+    if model_match_1 != blank and parent_model_values contains model_match_1
+      assign matched_accessory_collection = section.settings.accessory_collection_1
+    elsif model_match_2 != blank and parent_model_values contains model_match_2
+      assign matched_accessory_collection = section.settings.accessory_collection_2
+    elsif model_match_3 != blank and parent_model_values contains model_match_3
+      assign matched_accessory_collection = section.settings.accessory_collection_3
     endif
   endif
 
-  if displayed_products == blank
-    # The all_products object is handle-based and cannot be iterated.
-    # Shopify's all collection is the iterable storefront equivalent.
-    assign displayed_products = collections.all.products
+  if matched_accessory_collection != blank
+    assign displayed_products = matched_accessory_collection.products
+  endif
+
+  assign discount_percentage = section.settings.discount_percentage | default: 10 | plus: 0
+  assign discount_enabled = false
+  assign discount_multiplier = 100
+  if section.settings.show_discount_badge and discount_percentage > 0
+    assign discount_enabled = true
+    assign discount_multiplier = 100 | minus: discount_percentage
+  endif
+  assign discount_code = ''
+  if discount_enabled
+    assign discount_code = section.settings.discount_code | strip
   endif
 
   assign section_background = section.settings.section_background
@@ -26,7 +51,14 @@
     assign section_background = 'transparent'
   endif
 
-  assign footer_url = section.settings.footer_url | default: routes.all_products_collection_url
+  assign footer_url = section.settings.footer_url
+  if footer_url == blank and matched_accessory_collection != blank
+    assign footer_url = matched_accessory_collection.url
+  endif
+  if footer_url == blank
+    assign footer_url = routes.all_products_collection_url
+  endif
+
   assign muted_text_color = section.settings.text_color | color_modify: 'alpha', 0.6
   assign soft_text_color = section.settings.text_color | color_modify: 'alpha', 0.5
   assign quantity_border_color = section.settings.text_color | color_modify: 'alpha', 0.3
@@ -34,6 +66,7 @@
   assign progress_muted_color = section.settings.text_color | color_modify: 'alpha', 0.08
 -%}
 
+{%- if displayed_products != blank or request.design_mode -%}
 <accessory-carousel
   id="AccessoryCarousel-{{ section.id }}"
   class="shopify-section-accessory-carousel{% unless section.settings.full_width %} l4-accessory-carousel-container--large {% else %} l4-accessory-carousel-container--fullwidth {% endunless %}"
@@ -43,6 +76,7 @@
   data-pause-on-hover="{{ section.settings.pause_on_hover }}"
   data-mouse-wheel="{{ section.settings.enable_mouse_wheel }}"
   data-max-desktop-items="{{ section.settings.max_desktop_items }}"
+  data-discount-code="{{ discount_code | escape }}"
   style="
     --accessory-carousel-font-family: var(--font-body-family, 'Nunito', sans-serif);
     --accessory-carousel-page-background: {{ section_background }};
@@ -59,8 +93,10 @@
     --accessory-carousel-card-width: {{ section.settings.card_width }}px;
     --accessory-carousel-mobile-gap: {{ section.settings.mobile_gap }}px;
     --accessory-carousel-desktop-gap: {{ section.settings.desktop_gap }}px;
-    --accessory-carousel-section-padding-top: {{ section.settings.padding_top }}px;
-    --accessory-carousel-section-padding-bottom: {{ section.settings.padding_bottom }}px;
+    --accessory-carousel-section-padding-top-mobile: {{ section.settings.padding_top_mobile }}px;
+    --accessory-carousel-section-padding-bottom-mobile: {{ section.settings.padding_bottom_mobile }}px;
+    --accessory-carousel-section-padding-top-desktop: {{ section.settings.padding_top }}px;
+    --accessory-carousel-section-padding-bottom-desktop: {{ section.settings.padding_bottom }}px;
     --accessory-carousel-section-padding-left: {{ section.settings.padding_left | default: 0 }}px;
     --accessory-carousel-section-padding-right: {{ section.settings.padding_right | default: 0 }}px;
     --accessory-carousel-panel-padding-block-mobile: {{ section.settings.panel_padding_vertical_mobile }}px;
@@ -71,6 +107,10 @@
     --accessory-carousel-image-radius: {{ section.settings.image_radius }}px;
     --accessory-carousel-heading-size-mobile: {{ section.settings.heading_size_mobile }}px;
     --accessory-carousel-heading-size-desktop: {{ section.settings.heading_size_desktop }}px;
+    --accessory-carousel-heading-padding-top: {{ section.settings.heading_padding_top | default: 0 }}px;
+    --accessory-carousel-heading-padding-right: {{ section.settings.heading_padding_right | default: 0 }}px;
+    --accessory-carousel-heading-padding-bottom: {{ section.settings.heading_padding_bottom | default: 0 }}px;
+    --accessory-carousel-heading-padding-left: {{ section.settings.heading_padding_left | default: 0 }}px;
   "
 >
   <section
@@ -123,14 +163,10 @@
               {%- for accessory_product in displayed_products limit: section.settings.product_limit -%}
                 {%- liquid
                   assign accessory_variant = accessory_product.selected_or_first_available_variant
-                  assign current_price = accessory_variant.price
-                  assign compare_at_price = accessory_variant.compare_at_price
-                  assign has_compare_at_discount = false
-                  assign calculated_discount_percent = 0
-                  if compare_at_price != blank and compare_at_price > current_price
-                    assign has_compare_at_discount = true
-                    assign discount_amount = compare_at_price | minus: current_price
-                    assign calculated_discount_percent = discount_amount | times: 100.0 | divided_by: compare_at_price | round
+                  assign base_price = accessory_variant.price
+                  assign current_price = base_price
+                  if discount_enabled
+                    assign current_price = base_price | times: discount_multiplier | divided_by: 100.0 | round
                   endif
                   assign product_form_id = 'AccessoryCarouselForm-' | append: section.id | append: '-' | append: accessory_product.id
                   assign quantity_id = 'AccessoryCarouselQuantity-' | append: section.id | append: '-' | append: accessory_product.id
@@ -163,9 +199,9 @@
                       {{ 'product-1' | placeholder_svg_tag: 'accessory-carousel__image accessory-carousel__placeholder' }}
                     {%- endif -%}
 
-                    {%- if section.settings.show_discount_badge and has_compare_at_discount -%}
+                    {%- if discount_enabled -%}
                       <span class="accessory-carousel__discount">
-                        <span>{{ calculated_discount_percent }} %</span>
+                        <span>{{ discount_percentage }} %</span>
                       </span>
                     {%- endif -%}
 
@@ -191,10 +227,10 @@
 
                       <div class="accessory-carousel__product-row">
                         <div class="accessory-carousel__price">
-                          {%- if has_compare_at_discount -%}
+                          {%- if discount_enabled -%}
                             <span class="accessory-carousel__original-price">
                               {{ section.settings.original_price_prefix }}
-                              {{ compare_at_price | money }}
+                              {{ base_price | money }}
                             </span>
                           {%- endif -%}
                           <span class="accessory-carousel__current-price">
@@ -251,17 +287,31 @@
                       <button
                         type="submit"
                         name="add"
-                        class="accessory-carousel__add-button"
+                        class="accessory-carousel__add-button button--loader"
                         aria-label="{{ accessory_product.title | append: ' — ' | append: section.settings.add_to_cart_label | escape }}"
                         {%- unless accessory_variant.available %}
                           disabled
                         {%- endunless %}
                       >
-                        {%- if accessory_variant.available -%}
-                          {{ section.settings.add_to_cart_label }}
-                        {%- else -%}
-                          {{ section.settings.sold_out_label }}
-                        {%- endif -%}
+                        <span class="button__text">
+                          {%- if accessory_variant.available -%}
+                            {{ section.settings.add_to_cart_label }}
+                          {%- else -%}
+                            {{ section.settings.sold_out_label }}
+                          {%- endif -%}
+                        </span>
+                        <span class="button__preloader" aria-hidden="true">
+                          <svg class="button__preloader-element" viewBox="25 25 50 50">
+                            <circle
+                              cx="50"
+                              cy="50"
+                              r="20"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="4"
+                            ></circle>
+                          </svg>
+                        </span>
                       </button>
                     {%- endform -%}
                   </div>
@@ -321,9 +371,18 @@
             </svg>
           </button>
         </div>
+      {%- elsif request.design_mode -%}
+        <p class="accessory-carousel__description">
+          No accessory collection is configured for model
+          “{{ parent_model_display | default: 'not set' | escape }}”. Select a matching model value and collection in
+          this section’s product source settings.
+        </p>
       {%- endif -%}
 
-      {%- if section.settings.show_footer_link and section.settings.footer_label != blank -%}
+      {%- if displayed_products != blank
+        and section.settings.show_footer_link
+        and section.settings.footer_label != blank
+      -%}
         <div class="accessory-carousel__footer">
           <a href="{{ footer_url }}" class="accessory-carousel__footer-link">
             {{ section.settings.footer_label }}
@@ -346,6 +405,7 @@
     </div>
   </section>
 </accessory-carousel>
+{%- endif -%}
 
 {% schema %}
 {
@@ -355,26 +415,47 @@
   "settings": [
     {
       "type": "header",
-      "content": "Product source"
+      "content": "Model-based product source"
     },
     {
       "type": "product",
       "id": "source_product",
-      "label": "Source product",
+      "label": "Parent/source product",
       "info": "Optional. When empty, the product for the current product page is used."
     },
     {
       "type": "text",
-      "id": "metafield_namespace",
-      "label": "Metafield namespace",
-      "default": "custom"
+      "id": "model_match_1",
+      "label": "Model value 1",
+      "default": "P45",
+      "info": "Exact, case-sensitive match against any entry in the product.metafields.custom.modell list."
+    },
+    {
+      "type": "collection",
+      "id": "accessory_collection_1",
+      "label": "Accessory collection 1"
     },
     {
       "type": "text",
-      "id": "metafield_key",
-      "label": "Metafield key",
-      "default": "accessory_recommendations",
-      "info": "The metafield must be a list of product references. If it is missing or empty, products from the all-products collection are used."
+      "id": "model_match_2",
+      "label": "Model value 2",
+      "default": "P90"
+    },
+    {
+      "type": "collection",
+      "id": "accessory_collection_2",
+      "label": "Accessory collection 2"
+    },
+    {
+      "type": "text",
+      "id": "model_match_3",
+      "label": "Model value 3",
+      "default": "P150"
+    },
+    {
+      "type": "collection",
+      "id": "accessory_collection_3",
+      "label": "Accessory collection 3"
     },
     {
       "type": "range",
@@ -410,8 +491,26 @@
     {
       "type": "checkbox",
       "id": "show_discount_badge",
-      "label": "Show discount badge",
-      "default": true
+      "label": "Enable accessory discount",
+      "default": true,
+      "info": "Shows the percentage badge and calculated price. Configure the same discount separately in Shopify Discounts or your discount app for cart and checkout."
+    },
+    {
+      "type": "range",
+      "id": "discount_percentage",
+      "min": 1,
+      "max": 90,
+      "step": 1,
+      "unit": "%",
+      "label": "Discount percentage",
+      "default": 10
+    },
+    {
+      "type": "text",
+      "id": "discount_code",
+      "label": "Discount code",
+      "default": "",
+      "info": "Applied automatically when an accessory is added. The code’s eligibility and percentage are controlled in Shopify Discounts."
     },
     {
       "type": "text",
@@ -617,8 +716,8 @@
       "max": 160,
       "step": 2,
       "unit": "px",
-      "default": 24,
-      "label": "Top padding"
+      "default": 20,
+      "label": "Desktop top padding"
     },
     {
       "type": "range",
@@ -627,8 +726,28 @@
       "max": 160,
       "step": 2,
       "unit": "px",
-      "default": 0,
-      "label": "Bottom padding"
+      "default": 20,
+      "label": "Desktop bottom padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 160,
+      "step": 2,
+      "unit": "px",
+      "default": 20,
+      "label": "Mobile top padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 160,
+      "step": 2,
+      "unit": "px",
+      "default": 20,
+      "label": "Mobile bottom padding"
     },
     {
       "type": "range",
@@ -703,6 +822,50 @@
       "unit": "px",
       "default": 36,
       "label": "Desktop heading size"
+    },
+    {
+      "type": "header",
+      "content": "Heading padding"
+    },
+    {
+      "type": "range",
+      "id": "heading_padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "default": 0,
+      "label": "Top"
+    },
+    {
+      "type": "range",
+      "id": "heading_padding_right",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "default": 0,
+      "label": "Right"
+    },
+    {
+      "type": "range",
+      "id": "heading_padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "default": 0,
+      "label": "Bottom"
+    },
+    {
+      "type": "range",
+      "id": "heading_padding_left",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "default": 0,
+      "label": "Left"
     },
     {
       "type": "header",

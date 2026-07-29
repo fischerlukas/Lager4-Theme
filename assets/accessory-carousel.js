@@ -33,6 +33,7 @@
 
       this.handleClick = this.handleClick.bind(this);
       this.handleInput = this.handleInput.bind(this);
+      this.handleSubmit = this.handleSubmit.bind(this);
       this.handleKeydown = this.handleKeydown.bind(this);
       this.handlePointerEnter = this.handlePointerEnter.bind(this);
       this.handlePointerLeave = this.handlePointerLeave.bind(this);
@@ -109,6 +110,7 @@
 
       this.addEventListener("click", this.handleClick, options);
       this.addEventListener("input", this.handleInput, options);
+      this.addEventListener("submit", this.handleSubmit, options);
       this.addEventListener("keydown", this.handleKeydown, options);
       this.addEventListener("pointerenter", this.handlePointerEnter, options);
       this.addEventListener("pointerleave", this.handlePointerLeave, options);
@@ -354,6 +356,185 @@
       }
 
       input.value = String(Math.max(1, Number.parseInt(input.value, 10) || 1));
+    }
+
+    async handleSubmit(event) {
+      if (
+        !(event.target instanceof HTMLFormElement) ||
+        !event.target.matches(".accessory-carousel__purchase")
+      ) {
+        return;
+      }
+
+      event.preventDefault();
+
+      const form = event.target;
+      const submitButton = form.querySelector('.accessory-carousel__add-button[type="submit"]');
+
+      if (!submitButton || submitButton.classList.contains("working")) {
+        return;
+      }
+
+      this.clearCartError(form);
+      this.setButtonLoading(submitButton, true);
+
+      try {
+        await this.addAccessory(form);
+
+        try {
+          await this.applyDiscountCode();
+        } catch (error) {
+          this.showCartError(form, error);
+        }
+
+        await this.refreshCartDrawer();
+        this.openCartDrawer();
+      } catch (error) {
+        this.showCartError(form, error);
+      } finally {
+        this.setButtonLoading(submitButton, false);
+      }
+    }
+
+    async addAccessory(form) {
+      const cartAddUrl =
+        window.KROWN?.settings?.routes?.cart_add_url ||
+        `${this.shopifyRoot}cart/add`;
+      const response = await fetch(`${cartAddUrl}.js`, {
+        method: "POST",
+        headers: {
+          "X-Requested-With": "XMLHttpRequest",
+        },
+        body: new FormData(form),
+      });
+      const result = await response.json();
+
+      if (!response.ok || result.status === 422) {
+        throw new Error(result.description || result.message || "The accessory could not be added.");
+      }
+    }
+
+    async applyDiscountCode() {
+      const discountCode = this.dataset.discountCode?.trim();
+
+      if (!discountCode) {
+        return;
+      }
+
+      const response = await fetch(`${this.shopifyRoot}cart/update.js`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Requested-With": "XMLHttpRequest",
+        },
+        body: JSON.stringify({
+          discount: discountCode,
+        }),
+      });
+      const result = await response.json();
+
+      if (!response.ok || result.status) {
+        throw new Error(result.description || result.message || "The discount could not be applied.");
+      }
+    }
+
+    async refreshCartDrawer() {
+      const cartDrawer = document.getElementById("site-cart-sidebar");
+
+      if (!cartDrawer) {
+        return;
+      }
+
+      const response = await fetch("?section_id=helper-cart", {
+        headers: {
+          "X-Requested-With": "XMLHttpRequest",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("The cart drawer could not be refreshed.");
+      }
+
+      const text = await response.text();
+      const sectionDocument = new DOMParser().parseFromString(text, "text/html");
+      const nextCartForm = sectionDocument.getElementById("AjaxCartForm");
+      const nextCartSubtotal = sectionDocument.getElementById("AjaxCartSubtotal");
+      const cartForm = document.getElementById("AjaxCartForm");
+      const cartSubtotal = document.getElementById("AjaxCartSubtotal");
+
+      if (!nextCartForm || !nextCartSubtotal || !cartForm || !cartSubtotal) {
+        throw new Error("The cart drawer response was incomplete.");
+      }
+
+      cartForm.innerHTML = nextCartForm.innerHTML;
+      cartSubtotal.innerHTML = nextCartSubtotal.innerHTML;
+
+      if (typeof cartForm.ajaxifyCartItems === "function") {
+        cartForm.ajaxifyCartItems();
+      }
+
+      const cartCount = cartForm.querySelector("[data-cart-count]");
+      const cartTotal = cartForm.querySelector("[data-cart-total]");
+
+      if (cartCount) {
+        document.querySelectorAll("[data-header-cart-count]").forEach((element) => {
+          element.textContent = cartCount.textContent;
+        });
+      }
+
+      if (cartTotal) {
+        document.querySelectorAll("[data-header-cart-total]").forEach((element) => {
+          element.textContent = cartTotal.textContent;
+        });
+      }
+
+      const recommendations = document.getElementById("cart-recommendations-sidebar");
+      if (typeof recommendations?.generateRecommendations === "function") {
+        recommendations.innerHTML = "";
+        recommendations.generateRecommendations();
+      }
+    }
+
+    openCartDrawer() {
+      const cartDrawer = document.getElementById("site-cart-sidebar");
+
+      if (cartDrawer && typeof cartDrawer.show === "function") {
+        cartDrawer.show();
+        return;
+      }
+
+      window.location.href = window.KROWN?.settings?.routes?.cart_url || `${this.shopifyRoot}cart`;
+    }
+
+    get shopifyRoot() {
+      return window.Shopify?.routes?.root || "/";
+    }
+
+    setButtonLoading(button, isLoading) {
+      button.classList.toggle("working", isLoading);
+      button.setAttribute("aria-busy", String(isLoading));
+
+      if (isLoading) {
+        button.setAttribute("aria-disabled", "true");
+      } else {
+        button.removeAttribute("aria-disabled");
+      }
+    }
+
+    clearCartError(form) {
+      form.querySelector("[data-accessory-cart-error]")?.remove();
+    }
+
+    showCartError(form, error) {
+      this.clearCartError(form);
+
+      const alert = document.createElement("span");
+      alert.className = "alert alert--error";
+      alert.dataset.accessoryCartError = "";
+      alert.setAttribute("role", "alert");
+      alert.textContent =
+        error instanceof Error ? error.message : "The request could not be completed.";
+      form.append(alert);
     }
 
     handleKeydown(event) {

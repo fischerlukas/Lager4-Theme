@@ -6,16 +6,22 @@
 
 <div
   id="L4TechnicalData-{{ section.id }}"
-  class="custom-tab-container l4-product-detail"
+  class="l4-product-detail l4-product-detail--grid"
   style="
+    --l4-product-detail-padding-top: {{ section.settings.padding_top | default: 20 }}px;
+    --l4-product-detail-padding-bottom: {{ section.settings.padding_bottom | default: 20 }}px;
     --l4-product-detail-padding-left: {{ section.settings.padding_left | default: 0 }}px;
     --l4-product-detail-padding-right: {{ section.settings.padding_right | default: 0 }}px;
+    --l4-product-detail-heading-padding-top: {{ section.settings.heading_padding_top | default: 0 }}px;
+    --l4-product-detail-heading-padding-right: {{ section.settings.heading_padding_right | default: 0 }}px;
+    --l4-product-detail-heading-padding-bottom: {{ section.settings.heading_padding_bottom | default: 0 }}px;
+    --l4-product-detail-heading-padding-left: {{ section.settings.heading_padding_left | default: 0 }}px;
   "
 >
-  <div class="custom-attributes shadow-rounded">
-    <div class="custom-heading">
+  <div class="custom-attributes l4-product-detail__card">
+    <h2 class="l4-product-detail__heading">
       {{ section.settings.heading | escape }}
-    </div>
+    </h2>
 
     <div class="custom-attributes-grid">
       {%- for block in section.blocks -%}
@@ -38,11 +44,23 @@
       {%- endfor -%}
     </div>
   </div>
+
+  {%- unless section.settings.show_parts_list == false -%}
+    <div class="custom-parts l4-product-detail__card">
+      <h2 class="l4-product-detail__heading">
+        {{ section.settings.parts_heading | default: 'Stückliste' | escape }}
+      </h2>
+
+      <div class="custom-parts-container">
+        {{ product.description }}
+      </div>
+    </div>
+  {%- endunless -%}
 </div>
 
 {% schema %}
 {
-  "name": "Technische Daten",
+  "name": "Technik + Stückliste",
   "class": "l4-product-detail-section l4-product-detail-section--technical",
   "max_blocks": 20,
   "settings": [
@@ -53,6 +71,50 @@
       "default": "Technische Daten"
     },
     {
+      "type": "header",
+      "content": "Überschrift-Abstände"
+    },
+    {
+      "type": "range",
+      "id": "heading_padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Oben",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "heading_padding_right",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Rechts",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "heading_padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Unten",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "heading_padding_left",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Links",
+      "default": 0
+    },
+    {
       "type": "checkbox",
       "id": "hide_empty_values",
       "label": "Leere Werte ausblenden",
@@ -60,7 +122,43 @@
     },
     {
       "type": "header",
-      "content": "Optionale Abstände"
+      "content": "Stückliste"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_parts_list",
+      "label": "Stückliste anzeigen",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "parts_heading",
+      "label": "Überschrift",
+      "default": "Stückliste"
+    },
+    {
+      "type": "header",
+      "content": "Abstände"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 160,
+      "step": 2,
+      "unit": "px",
+      "label": "Abstand oben",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 160,
+      "step": 2,
+      "unit": "px",
+      "label": "Abstand unten",
+      "default": 20
     },
     {
       "type": "range",
@@ -113,7 +211,7 @@
   ],
   "presets": [
     {
-      "name": "Technische Daten",
+      "name": "Technik + Stückliste",
       "blocks": [
         {
           "type": "specification",

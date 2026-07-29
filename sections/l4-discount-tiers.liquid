@@ -84,6 +84,10 @@
     --l4d-heading-size-mobile: {{ section.settings.heading_size_mobile }}px;
     --l4d-heading-size-desktop: {{ section.settings.heading_size }}px;
     --l4d-heading-weight: {{ section.settings.heading_weight }};
+    --l4d-heading-padding-top: {{ section.settings.heading_padding_top | default: 0 }}px;
+    --l4d-heading-padding-right: {{ section.settings.heading_padding_right | default: 0 }}px;
+    --l4d-heading-padding-bottom: {{ section.settings.heading_padding_bottom | default: 0 }}px;
+    --l4d-heading-padding-left: {{ section.settings.heading_padding_left | default: 0 }}px;
     --l4d-body-weight: {{ section.settings.body_weight }};
     --l4d-threshold-size-mobile: {{ section.settings.threshold_size_mobile }}px;
     --l4d-threshold-size-desktop: {{ section.settings.threshold_size }}px;
@@ -266,6 +270,50 @@
       ]
     },
     {
+      "type": "header",
+      "content": "Heading padding"
+    },
+    {
+      "type": "range",
+      "id": "heading_padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "heading_padding_right",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Right",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "heading_padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Bottom",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "heading_padding_left",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Left",
+      "default": 0
+    },
+    {
       "type": "checkbox",
       "id": "show_note",
       "label": "Show note",
@@ -368,7 +416,7 @@
       "step": 2,
       "unit": "px",
       "label": "Top padding",
-      "default": 50
+      "default": 20
     },
     {
       "type": "range",
@@ -378,7 +426,7 @@
       "step": 2,
       "unit": "px",
       "label": "Bottom padding",
-      "default": 30
+      "default": 20
     },
     {
       "type": "range",
@@ -408,7 +456,7 @@
       "step": 2,
       "unit": "px",
       "label": "Mobile top padding",
-      "default": 48
+      "default": 20
     },
     {
       "type": "range",
@@ -418,7 +466,7 @@
       "step": 2,
       "unit": "px",
       "label": "Mobile bottom padding",
-      "default": 10
+      "default": 20
     },
     {
       "type": "range",

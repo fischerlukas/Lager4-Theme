@@ -427,6 +427,7 @@ div.sidebar__footer > #AjaxCartSubtotal > div > div.uid-toggle-wrapper {
   grid-template-columns: repeat(2, 1fr);
   padding: 0 30px 30px 30px;
   gap: 20px;
+  width: 100%;
 }
 
 .custom-attribute-container {

@@ -1,23 +1,7 @@
-{{ 'l4-product-details.css' | asset_url | stylesheet_tag }}
-
-<div
-  id="L4PartsList-{{ section.id }}"
-  class="custom-tab-container l4-product-detail"
-  style="
-    --l4-product-detail-padding-left: {{ section.settings.padding_left | default: 0 }}px;
-    --l4-product-detail-padding-right: {{ section.settings.padding_right | default: 0 }}px;
-  "
->
-  <div class="custom-parts shadow-rounded">
-    <div class="custom-heading">
-      {{ section.settings.heading | escape }}
-    </div>
-
-    <div class="custom-parts-container">
-      {{ product.description }}
-    </div>
-  </div>
-</div>
+{%- comment -%}
+  Legacy compatibility section. The parts list is now rendered by
+  l4-product-technical-data so both cards share one grid container.
+{%- endcomment -%}
 
 {% schema %}
 {
@@ -53,11 +37,6 @@
       "unit": "px",
       "label": "Zusätzlicher Abstand rechts",
       "default": 0
-    }
-  ],
-  "presets": [
-    {
-      "name": "Stückliste"
     }
   ],
   "enabled_on": {

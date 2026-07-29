@@ -184,14 +184,6 @@
         "padding_right": 0
       }
     },
-    "l4_parts_list": {
-      "type": "l4-product-parts-list",
-      "settings": {
-        "heading": "Stückliste",
-        "padding_left": 0,
-        "padding_right": 0
-      }
-    },
     "l4_downloads": {
       "type": "l4-product-downloads",
       "blocks": {
@@ -380,7 +372,6 @@
     "main",
     "text_columns_KH84tq",
     "l4_technical_data",
-    "l4_parts_list",
     "l4_downloads",
     "custom_liquid_Y47VhD",
     "product-recommendations",

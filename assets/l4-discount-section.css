@@ -40,9 +40,9 @@ l4-discount-section.l4-discount *::after {
 l4-discount-section.l4-discount .l4-discount__inner {
   width: 100%;
   margin: 0 auto;
-  padding-top: var(--l4d-padding-top-mobile, 48px);
+  padding-top: var(--l4d-padding-top-mobile, 20px);
   padding-right: var(--l4d-padding-right, 0px);
-  padding-bottom: var(--l4d-padding-bottom-mobile, 10px);
+  padding-bottom: var(--l4d-padding-bottom-mobile, 20px);
   padding-left: var(--l4d-padding-left, 0px);
 }
 
@@ -61,6 +61,10 @@ l4-discount-section.l4-discount .l4-discount__card {
 
 l4-discount-section.l4-discount .l4-discount__heading {
   margin: 0;
+  padding: var(--l4d-heading-padding-top, 0)
+    var(--l4d-heading-padding-right, 0)
+    var(--l4d-heading-padding-bottom, 0)
+    var(--l4d-heading-padding-left, 0);
   color: var(--l4d-text-color, #1c1f24);
   font: inherit;
   font-size: var(--l4d-heading-size-mobile, 26px);
@@ -251,8 +255,8 @@ l4-discount-section.l4-discount .l4-discount__empty {
 
 @media (min-width: 768px) {
   l4-discount-section.l4-discount .l4-discount__inner {
-    padding-top: var(--l4d-padding-top-desktop, 50px);
-    padding-bottom: var(--l4d-padding-bottom-desktop, 30px);
+    padding-top: var(--l4d-padding-top-desktop, 20px);
+    padding-bottom: var(--l4d-padding-bottom-desktop, 20px);
   }
 
   l4-discount-section.l4-discount .l4-discount__card {
