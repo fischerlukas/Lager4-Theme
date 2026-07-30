@@ -107,6 +107,25 @@
     --accessory-carousel-image-radius: {{ section.settings.image_radius }}px;
     --accessory-carousel-heading-size-mobile: {{ section.settings.heading_size_mobile }}px;
     --accessory-carousel-heading-size-desktop: {{ section.settings.heading_size_desktop }}px;
+    --accessory-carousel-heading-weight: {{ section.settings.heading_weight }};
+    --accessory-carousel-description-size: {{ section.settings.description_size }}px;
+    --accessory-carousel-description-weight: {{ section.settings.description_weight }};
+    --accessory-carousel-subheading-size: {{ section.settings.subheading_size }}px;
+    --accessory-carousel-subheading-weight: {{ section.settings.subheading_weight }};
+    --accessory-carousel-discount-size: {{ section.settings.discount_badge_size }}px;
+    --accessory-carousel-discount-weight: {{ section.settings.discount_badge_weight }};
+    --accessory-carousel-product-title-size: {{ section.settings.product_title_size }}px;
+    --accessory-carousel-product-title-weight: {{ section.settings.product_title_weight }};
+    --accessory-carousel-original-price-size: {{ section.settings.original_price_size }}px;
+    --accessory-carousel-original-price-weight: {{ section.settings.original_price_weight }};
+    --accessory-carousel-current-price-size: {{ section.settings.current_price_size }}px;
+    --accessory-carousel-current-price-weight: {{ section.settings.current_price_weight }};
+    --accessory-carousel-quantity-size: {{ section.settings.quantity_size }}px;
+    --accessory-carousel-quantity-weight: {{ section.settings.quantity_weight }};
+    --accessory-carousel-add-button-size: {{ section.settings.add_button_size }}px;
+    --accessory-carousel-add-button-weight: {{ section.settings.add_button_weight }};
+    --accessory-carousel-footer-size: {{ section.settings.footer_size }}px;
+    --accessory-carousel-footer-weight: {{ section.settings.footer_weight }};
     --accessory-carousel-heading-padding-top: {{ section.settings.heading_padding_top | default: 0 }}px;
     --accessory-carousel-heading-padding-right: {{ section.settings.heading_padding_right | default: 0 }}px;
     --accessory-carousel-heading-padding-bottom: {{ section.settings.heading_padding_bottom | default: 0 }}px;
@@ -324,24 +343,25 @@
         <div class="accessory-carousel__navigation">
           <button
             type="button"
-            class="accessory-carousel__nav-button accessory-carousel__nav-button--previous"
+            class="accessory-carousel__nav-button accessory-carousel__nav-button--previous css-slider-button css-slider-prev disabled"
             data-carousel-previous
             aria-label="{{ section.settings.previous_label | escape }}"
+            style="display: block"
             disabled
           >
             <svg
-              width="6"
+              fill="none"
               height="11"
               viewBox="0 0 6 11"
-              fill="none"
+              width="6"
               xmlns="http://www.w3.org/2000/svg"
               aria-hidden="true"
             >
               <path
                 clip-rule="evenodd"
-                fill-rule="evenodd"
                 d="m4.32845 10.0708-4.18198-4.18194c-.195261-.19526-.195261-.51185 0-.70711l4.18198-4.181979c.19527-.195262.51185-.195262.70711 0 .19526.195259.19526.511849 0 .707109l-3.32843 3.32842s-.70713.4647-.00002 1l3.32845 3.32843c.19526.19526.19526.51185 0 .70707-.19526.1953-.51185.1953-.70711 0z"
-                fill="currentColor"
+                fill="#000"
+                fill-rule="evenodd"
               ></path>
             </svg>
           </button>
@@ -350,23 +370,24 @@
 
           <button
             type="button"
-            class="accessory-carousel__nav-button accessory-carousel__nav-button--next"
+            class="accessory-carousel__nav-button accessory-carousel__nav-button--next css-slider-button css-slider-next"
             data-carousel-next
             aria-label="{{ section.settings.next_label | escape }}"
+            style="display: block"
           >
             <svg
-              width="6"
+              fill="none"
               height="11"
               viewBox="0 0 6 11"
-              fill="none"
+              width="6"
               xmlns="http://www.w3.org/2000/svg"
               aria-hidden="true"
             >
               <path
                 clip-rule="evenodd"
-                fill-rule="evenodd"
                 d="m.853555.999962 4.181985 4.181978c.19526.19526.19526.51185 0 .70711l-4.181983 4.18195c-.195263.1953-.511845.1953-.707108 0-.1952631-.19523-.1952632-.51181 0-.70708l3.328431-3.32842s.70713-.4647.00002-1l-3.328453-3.32843c-.1952626-.19526-.1952627-.51185 0-.707108.195263-.195262.511845-.195262.707108 0z"
-                fill="currentColor"
+                fill="#000"
+                fill-rule="evenodd"
               ></path>
             </svg>
           </button>
@@ -461,9 +482,9 @@
       "type": "range",
       "id": "product_limit",
       "min": 1,
-      "max": 10,
+      "max": 20,
       "step": 1,
-      "default": 10,
+      "default": 20,
       "label": "Maximum products"
     },
     {
@@ -509,7 +530,6 @@
       "type": "text",
       "id": "discount_code",
       "label": "Discount code",
-      "default": "",
       "info": "Applied automatically when an accessory is added. The code’s eligibility and percentage are controlled in Shopify Discounts."
     },
     {
@@ -810,7 +830,7 @@
       "max": 48,
       "step": 1,
       "unit": "px",
-      "default": 30,
+      "default": 24,
       "label": "Mobile heading size"
     },
     {
@@ -820,8 +840,188 @@
       "max": 64,
       "step": 1,
       "unit": "px",
-      "default": 36,
+      "default": 28,
       "label": "Desktop heading size"
+    },
+    {
+      "type": "range",
+      "id": "heading_weight",
+      "min": 100,
+      "max": 900,
+      "step": 100,
+      "default": 700,
+      "label": "Heading weight"
+    },
+    {
+      "type": "range",
+      "id": "description_size",
+      "min": 10,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 14,
+      "label": "Description size"
+    },
+    {
+      "type": "range",
+      "id": "description_weight",
+      "min": 100,
+      "max": 900,
+      "step": 100,
+      "default": 500,
+      "label": "Description weight"
+    },
+    {
+      "type": "range",
+      "id": "subheading_size",
+      "min": 12,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 18,
+      "label": "Product list heading size"
+    },
+    {
+      "type": "range",
+      "id": "subheading_weight",
+      "min": 100,
+      "max": 900,
+      "step": 100,
+      "default": 600,
+      "label": "Product list heading weight"
+    },
+    {
+      "type": "range",
+      "id": "discount_badge_size",
+      "min": 8,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 11,
+      "label": "Discount badge size"
+    },
+    {
+      "type": "range",
+      "id": "discount_badge_weight",
+      "min": 100,
+      "max": 900,
+      "step": 100,
+      "default": 900,
+      "label": "Discount badge weight"
+    },
+    {
+      "type": "range",
+      "id": "product_title_size",
+      "min": 12,
+      "max": 26,
+      "step": 1,
+      "unit": "px",
+      "default": 16,
+      "label": "Product title size"
+    },
+    {
+      "type": "range",
+      "id": "product_title_weight",
+      "min": 100,
+      "max": 900,
+      "step": 100,
+      "default": 700,
+      "label": "Product title weight"
+    },
+    {
+      "type": "range",
+      "id": "original_price_size",
+      "min": 8,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 10,
+      "label": "Original price size"
+    },
+    {
+      "type": "range",
+      "id": "original_price_weight",
+      "min": 100,
+      "max": 900,
+      "step": 100,
+      "default": 500,
+      "label": "Original price weight"
+    },
+    {
+      "type": "range",
+      "id": "current_price_size",
+      "min": 14,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 20,
+      "label": "Current price size"
+    },
+    {
+      "type": "range",
+      "id": "current_price_weight",
+      "min": 100,
+      "max": 900,
+      "step": 100,
+      "default": 700,
+      "label": "Current price weight"
+    },
+    {
+      "type": "range",
+      "id": "quantity_size",
+      "min": 10,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 14,
+      "label": "Quantity size"
+    },
+    {
+      "type": "range",
+      "id": "quantity_weight",
+      "min": 100,
+      "max": 900,
+      "step": 100,
+      "default": 300,
+      "label": "Quantity weight"
+    },
+    {
+      "type": "range",
+      "id": "add_button_size",
+      "min": 8,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "default": 11,
+      "label": "Add button size"
+    },
+    {
+      "type": "range",
+      "id": "add_button_weight",
+      "min": 100,
+      "max": 900,
+      "step": 100,
+      "default": 700,
+      "label": "Add button weight"
+    },
+    {
+      "type": "range",
+      "id": "footer_size",
+      "min": 8,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 12,
+      "label": "Footer link size"
+    },
+    {
+      "type": "range",
+      "id": "footer_weight",
+      "min": 100,
+      "max": 900,
+      "step": 100,
+      "default": 700,
+      "label": "Footer link weight"
     },
     {
       "type": "header",

@@ -76,6 +76,8 @@
     --l4d-tier-padding-inline-mobile: {{ section.settings.tier_padding_inline_mobile }}px;
     --l4d-tier-padding-block-desktop: {{ section.settings.tier_padding_block }}px;
     --l4d-tier-padding-inline-desktop: {{ section.settings.tier_padding_inline }}px;
+    --l4d-tier-scale-mobile: {{ section.settings.tier_scale_mobile }}%;
+    --l4d-tier-scale-desktop: {{ section.settings.tier_scale }}%;
     --l4d-featured-column: {{ section.settings.featured_position }};
     --l4d-columns-tablet: {{ section.settings.columns_tablet }};
     --l4d-columns-desktop: {{ section.settings.columns_desktop }};
@@ -91,6 +93,8 @@
     --l4d-body-weight: {{ section.settings.body_weight }};
     --l4d-threshold-size-mobile: {{ section.settings.threshold_size_mobile }}px;
     --l4d-threshold-size-desktop: {{ section.settings.threshold_size }}px;
+    --l4d-price-size-mobile: {{ section.settings.price_size_mobile }}px;
+    --l4d-price-size-desktop: {{ section.settings.price_size }}px;
     --l4d-note-size-mobile: {{ section.settings.note_size_mobile }}px;
     --l4d-note-size-desktop: {{ section.settings.note_size }}px;
     --l4d-plus-size-mobile: {{ section.settings.plus_size_mobile }}px;
@@ -157,7 +161,18 @@
               {{ featured_block.shopify_attributes }}
             >
               <span class="l4-discount__threshold">
-                {{ featured_block.settings.threshold | escape }}
+                {%- if featured_block.settings.threshold_price != blank -%}
+                  {%- if featured_block.settings.threshold_prefix != blank -%}
+                    <span class="l4-discount__threshold-prefix">
+                      {{- featured_block.settings.threshold_prefix | escape -}}
+                    </span>
+                  {%- endif -%}
+                  <span class="l4-discount__threshold-price">
+                    {{- featured_block.settings.threshold_price | escape -}}
+                  </span>
+                {%- else -%}
+                  {{ featured_block.settings.threshold | escape }}
+                {%- endif -%}
               </span>
               <div class="l4-discount__reward">
                 {%- if featured_block.settings.show_icon -%}
@@ -189,7 +204,18 @@
                   {{ block.shopify_attributes }}
                 >
                   <span class="l4-discount__threshold">
-                    {{ block.settings.threshold | escape }}
+                    {%- if block.settings.threshold_price != blank -%}
+                      {%- if block.settings.threshold_prefix != blank -%}
+                        <span class="l4-discount__threshold-prefix">
+                          {{- block.settings.threshold_prefix | escape -}}
+                        </span>
+                      {%- endif -%}
+                      <span class="l4-discount__threshold-price">
+                        {{- block.settings.threshold_price | escape -}}
+                      </span>
+                    {%- else -%}
+                      {{ block.settings.threshold | escape }}
+                    {%- endif -%}
                   </span>
                   <div class="l4-discount__reward">
                     {%- if block.settings.show_icon -%}
@@ -569,6 +595,28 @@
       "default": 12
     },
     {
+      "type": "range",
+      "id": "tier_scale",
+      "min": 50,
+      "max": 150,
+      "step": 5,
+      "unit": "%",
+      "label": "Desktop tier scale",
+      "info": "Scales each complete tier, including its content.",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "tier_scale_mobile",
+      "min": 50,
+      "max": 150,
+      "step": 5,
+      "unit": "%",
+      "label": "Mobile and tablet tier scale",
+      "info": "Scales each complete tier, including its content.",
+      "default": 100
+    },
+    {
       "type": "header",
       "content": "Typography"
     },
@@ -641,6 +689,26 @@
       "step": 1,
       "unit": "px",
       "label": "Mobile threshold size",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "price_size",
+      "min": 16,
+      "max": 48,
+      "step": 1,
+      "unit": "px",
+      "label": "Price size",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "price_size_mobile",
+      "min": 14,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "label": "Mobile price size",
       "default": 24
     },
     {
@@ -980,9 +1048,15 @@
       "settings": [
         {
           "type": "text",
-          "id": "threshold",
-          "label": "Threshold",
-          "default": "ab 2.000 €"
+          "id": "threshold_prefix",
+          "label": "Price prefix",
+          "default": "ab"
+        },
+        {
+          "type": "text",
+          "id": "threshold_price",
+          "label": "Price",
+          "default": "2.000 €"
         },
         {
           "type": "text",
@@ -1007,28 +1081,32 @@
         {
           "type": "tier",
           "settings": {
-            "threshold": "ab 2.000 €",
+            "threshold_prefix": "ab",
+            "threshold_price": "2.000 €",
             "discount": "freier Versand"
           }
         },
         {
           "type": "tier",
           "settings": {
-            "threshold": "ab 3.000 €",
+            "threshold_prefix": "ab",
+            "threshold_price": "3.000 €",
             "discount": "6 %"
           }
         },
         {
           "type": "tier",
           "settings": {
-            "threshold": "ab 5.000 €",
+            "threshold_prefix": "ab",
+            "threshold_price": "5.000 €",
             "discount": "10 %"
           }
         },
         {
           "type": "tier",
           "settings": {
-            "threshold": "ab 10.000 €",
+            "threshold_prefix": "ab",
+            "threshold_price": "10.000 €",
             "discount": "20 %"
           }
         }

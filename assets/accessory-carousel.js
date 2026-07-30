@@ -294,6 +294,8 @@
       this.dotsContainer.replaceChildren(fragment);
       this.previousButton.disabled = this.page === 0;
       this.nextButton.disabled = this.page === this.totalPages - 1;
+      this.previousButton.classList.toggle("disabled", this.previousButton.disabled);
+      this.nextButton.classList.toggle("disabled", this.nextButton.disabled);
     }
 
     handleClick(event) {

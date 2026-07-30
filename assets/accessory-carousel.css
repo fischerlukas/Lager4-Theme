@@ -27,6 +27,25 @@ accessory-carousel {
   --accessory-carousel-image-radius: 20px;
   --accessory-carousel-heading-size-mobile: 30px;
   --accessory-carousel-heading-size-desktop: 36px;
+  --accessory-carousel-heading-weight: 700;
+  --accessory-carousel-description-size: 14px;
+  --accessory-carousel-description-weight: 500;
+  --accessory-carousel-subheading-size: 18px;
+  --accessory-carousel-subheading-weight: 600;
+  --accessory-carousel-discount-size: 11px;
+  --accessory-carousel-discount-weight: 900;
+  --accessory-carousel-product-title-size: 16px;
+  --accessory-carousel-product-title-weight: 700;
+  --accessory-carousel-original-price-size: 10px;
+  --accessory-carousel-original-price-weight: 500;
+  --accessory-carousel-current-price-size: 20px;
+  --accessory-carousel-current-price-weight: 700;
+  --accessory-carousel-quantity-size: 14px;
+  --accessory-carousel-quantity-weight: 300;
+  --accessory-carousel-add-button-size: 11px;
+  --accessory-carousel-add-button-weight: 700;
+  --accessory-carousel-footer-size: 12px;
+  --accessory-carousel-footer-weight: 700;
   --accessory-carousel-heading-padding-top: 0px;
   --accessory-carousel-heading-padding-right: 0px;
   --accessory-carousel-heading-padding-bottom: 0px;
@@ -99,7 +118,7 @@ accessory-carousel .accessory-carousel__heading {
   font-family: inherit;
   font-size: var(--accessory-carousel-heading-size-mobile);
   font-style: normal;
-  font-weight: 700;
+  font-weight: var(--accessory-carousel-heading-weight);
   letter-spacing: -0.025em;
   line-height: 1.2;
   text-transform: none;
@@ -109,11 +128,11 @@ accessory-carousel .accessory-carousel__heading {
 accessory-carousel .accessory-carousel__description {
   color: var(--accessory-carousel-muted-text-color);
   font-family: inherit;
-  font-size: 0.875rem;
+  font-size: var(--accessory-carousel-description-size);
   font-style: normal;
-  font-weight: 500;
+  font-weight: var(--accessory-carousel-description-weight);
   letter-spacing: normal;
-  line-height: 1.25rem;
+  line-height: 1.43;
   text-transform: none;
 }
 
@@ -122,11 +141,11 @@ accessory-carousel .accessory-carousel__subheading {
   margin-bottom: -1rem;
   color: var(--accessory-carousel-text-color);
   font-family: inherit;
-  font-size: 1.125rem;
+  font-size: var(--accessory-carousel-subheading-size);
   font-style: normal;
-  font-weight: 600;
+  font-weight: var(--accessory-carousel-subheading-weight);
   letter-spacing: normal;
-  line-height: 1.75rem;
+  line-height: 1.5556;
   text-transform: none;
 }
 
@@ -135,7 +154,25 @@ accessory-carousel .accessory-carousel__track {
   position: relative;
 }
 
+@media (max-width: 767px) {
+  accessory-carousel.l4-accessory-carousel-container--large
+    .accessory-carousel__carousel {
+    margin-inline: calc(
+      0px - var(--accessory-carousel-panel-padding-inline-mobile) -
+        var(--gutter-container, 0px)
+    );
+  }
+
+  accessory-carousel.l4-accessory-carousel-container--fullwidth
+    .accessory-carousel__carousel {
+    margin-inline: calc(
+      0px - var(--accessory-carousel-panel-padding-inline-mobile)
+    );
+  }
+}
+
 accessory-carousel .accessory-carousel__track {
+  overflow-x: hidden;
   overflow-x: clip;
   overflow-y: visible;
   overflow-clip-margin: 30px;
@@ -176,13 +213,13 @@ accessory-carousel .accessory-carousel__page {
   flex-shrink: 0;
   justify-content: center;
   gap: var(--accessory-carousel-gap);
-  padding-block: 0.5rem;
+  padding-block: 1.5rem;
 }
 
 accessory-carousel:not([data-hydrated]) .accessory-carousel__items {
   justify-content: center;
   gap: var(--accessory-carousel-gap);
-  padding-block: 0.5rem;
+  padding-block: 1.5rem;
 }
 
 accessory-carousel:not([data-hydrated])
@@ -244,8 +281,8 @@ accessory-carousel .accessory-carousel__discount {
   border-radius: 9999px;
   background: var(--accessory-carousel-discount-color);
   color: #ffffff;
-  font-size: 11px;
-  font-weight: 900;
+  font-size: var(--accessory-carousel-discount-size);
+  font-weight: var(--accessory-carousel-discount-weight);
   letter-spacing: -0.025em;
   line-height: 1;
   text-transform: uppercase;
@@ -278,9 +315,9 @@ accessory-carousel .accessory-carousel__product-title {
   overflow: hidden;
   color: var(--accessory-carousel-text-color);
   font-family: inherit;
-  font-size: 1rem;
+  font-size: var(--accessory-carousel-product-title-size);
   font-style: normal;
-  font-weight: 700;
+  font-weight: var(--accessory-carousel-product-title-weight);
   letter-spacing: normal;
   line-height: 1.25;
   text-transform: none;
@@ -325,8 +362,8 @@ accessory-carousel .accessory-carousel__price {
 
 accessory-carousel .accessory-carousel__original-price {
   color: var(--accessory-carousel-soft-text-color);
-  font-size: 10px;
-  font-weight: 500;
+  font-size: var(--accessory-carousel-original-price-size);
+  font-weight: var(--accessory-carousel-original-price-weight);
   font-variant-numeric: tabular-nums;
   line-height: 1;
   text-decoration-line: line-through;
@@ -335,10 +372,10 @@ accessory-carousel .accessory-carousel__original-price {
 
 accessory-carousel .accessory-carousel__current-price {
   color: var(--accessory-carousel-text-color);
-  font-size: 1.25rem;
-  font-weight: 700;
+  font-size: var(--accessory-carousel-current-price-size);
+  font-weight: var(--accessory-carousel-current-price-weight);
   font-variant-numeric: tabular-nums;
-  line-height: 1.75rem;
+  line-height: 1.4;
   white-space: nowrap;
 }
 
@@ -349,7 +386,7 @@ accessory-carousel .accessory-carousel__quantity {
   border: 1px solid var(--accessory-carousel-quantity-border-color);
   border-radius: 9999px;
   background: var(--accessory-carousel-card-background);
-  font-weight: 300;
+  font-weight: var(--accessory-carousel-quantity-weight);
 }
 
 accessory-carousel .accessory-carousel__quantity button,
@@ -394,7 +431,7 @@ accessory-carousel .accessory-carousel__quantity input {
   background: transparent;
   box-shadow: none;
   color: var(--accessory-carousel-text-color);
-  font-size: 0.875rem;
+  font-size: var(--accessory-carousel-quantity-size);
   font-variant-numeric: tabular-nums;
   line-height: 1.25rem;
   text-align: center;
@@ -418,8 +455,8 @@ accessory-carousel .accessory-carousel__add-button {
     0 5px 20px -3px rgb(50 50 93 / 20%),
     0 8px 16px -8px rgb(0 0 0 / 30%);
   cursor: pointer;
-  font-size: 11px;
-  font-weight: 700;
+  font-size: var(--accessory-carousel-add-button-size);
+  font-weight: var(--accessory-carousel-add-button-weight);
   letter-spacing: 0.1em;
   text-transform: uppercase;
   transition:
@@ -455,31 +492,6 @@ accessory-carousel .accessory-carousel__nav-button {
   opacity: 0.8;
   cursor: pointer;
   transition: all 175ms linear;
-}
-
-accessory-carousel .accessory-carousel__nav-button svg {
-  display: block;
-  width: 6px;
-  height: 11px;
-  flex-shrink: 0;
-}
-
-accessory-carousel .accessory-carousel__nav-button--previous::after,
-accessory-carousel .accessory-carousel__nav-button--next::before {
-  display: inline-block;
-  width: 0;
-  height: 1px;
-  background: var(--accessory-carousel-progress-color);
-  content: "";
-  transition: width 175ms ease;
-}
-
-accessory-carousel .accessory-carousel__nav-button--previous::after {
-  margin-inline-start: -0.3125rem;
-}
-
-accessory-carousel .accessory-carousel__nav-button--next::before {
-  margin-inline-end: -0.3125rem;
 }
 
 accessory-carousel .accessory-carousel__nav-button:disabled {
@@ -549,10 +561,10 @@ accessory-carousel .accessory-carousel__footer-link {
   align-items: center;
   gap: 0.5rem;
   color: var(--accessory-carousel-text-color);
-  font-size: 0.75rem;
-  font-weight: 700;
+  font-size: var(--accessory-carousel-footer-size);
+  font-weight: var(--accessory-carousel-footer-weight);
   letter-spacing: 0.1em;
-  line-height: 1rem;
+  line-height: 1.3334;
   text-decoration: none;
   text-transform: uppercase;
   transition: color 150ms cubic-bezier(0.4, 0, 0.2, 1);
@@ -587,6 +599,11 @@ accessory-carousel .accessory-carousel__footer-link svg {
   accessory-carousel .accessory-carousel__subheading {
     margin-bottom: -1.5rem;
   }
+
+  accessory-carousel .accessory-carousel__page,
+  accessory-carousel:not([data-hydrated]) .accessory-carousel__items {
+    padding-block: 0.5rem;
+  }
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -612,11 +629,6 @@ accessory-carousel .accessory-carousel__footer-link svg {
 
   accessory-carousel .accessory-carousel__nav-button:not(:disabled):hover {
     opacity: 1;
-  }
-
-  accessory-carousel .accessory-carousel__nav-button--previous:not(:disabled):hover::after,
-  accessory-carousel .accessory-carousel__nav-button--next:not(:disabled):hover::before {
-    width: 18px;
   }
 
   accessory-carousel .accessory-carousel__footer-link:hover {

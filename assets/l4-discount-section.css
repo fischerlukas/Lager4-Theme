@@ -111,7 +111,9 @@ l4-discount-section.l4-discount .l4-discount__tier {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  justify-self: center;
   gap: var(--l4d-tier-content-gap, 12px);
+  width: 100%;
   margin: 0;
   padding: var(--l4d-tier-padding-block-mobile, 24px)
     var(--l4d-tier-padding-inline-mobile, 12px);
@@ -119,9 +121,14 @@ l4-discount-section.l4-discount .l4-discount__tier {
   background: var(--l4d-tier-background, #f6f6f6);
   border: 0;
   border-radius: var(--l4d-tier-radius, 8px);
+  zoom: var(--l4d-tier-scale-mobile, 100%);
 }
 
 l4-discount-section.l4-discount .l4-discount__threshold {
+  display: inline-flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.25em;
   color: inherit;
   font: inherit;
   font-size: var(--l4d-threshold-size-mobile, 24px);
@@ -131,6 +138,10 @@ l4-discount-section.l4-discount .l4-discount__threshold {
   text-align: center;
   text-transform: none;
   white-space: nowrap;
+}
+
+l4-discount-section.l4-discount .l4-discount__threshold-price {
+  font-size: var(--l4d-price-size-mobile, 24px);
 }
 
 l4-discount-section.l4-discount .l4-discount__reward {
@@ -294,10 +305,15 @@ l4-discount-section.l4-discount .l4-discount__empty {
   l4-discount-section.l4-discount .l4-discount__tier {
     padding: var(--l4d-tier-padding-block-desktop, 32px)
       var(--l4d-tier-padding-inline-desktop, 20px);
+    zoom: var(--l4d-tier-scale-desktop, 100%);
   }
 
   l4-discount-section.l4-discount .l4-discount__threshold {
     font-size: var(--l4d-threshold-size-desktop, 30px);
+  }
+
+  l4-discount-section.l4-discount .l4-discount__threshold-price {
+    font-size: var(--l4d-price-size-desktop, 30px);
   }
 
   l4-discount-section.l4-discount .l4-discount__plus {
