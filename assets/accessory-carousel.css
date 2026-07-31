@@ -494,6 +494,16 @@ accessory-carousel .accessory-carousel__nav-button {
   transition: all 175ms linear;
 }
 
+/* The base slider extends each SVG with an animated pseudo-element.
+   Safari can composite that shaft as a second icon, so keep only the SVG. */
+accessory-carousel
+  .accessory-carousel__nav-button.css-slider-prev::after,
+accessory-carousel
+  .accessory-carousel__nav-button.css-slider-next::before {
+  display: none;
+  content: none;
+}
+
 accessory-carousel .accessory-carousel__nav-button:disabled {
   opacity: 0.3;
   cursor: auto;

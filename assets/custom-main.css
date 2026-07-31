@@ -93,10 +93,6 @@ div.flex-buttons > #CheckOut-exemptify {
 }
 
 /* UID-Toggle */
-.uid-toggle-wrapper {
-  display: none;
-}
-
 div.sidebar__footer > #AjaxCartSubtotal > div > div.uid-toggle-wrapper {
   display: none;
 }
