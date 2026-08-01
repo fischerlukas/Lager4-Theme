@@ -88,21 +88,21 @@ l4-discount-section.l4-discount .l4-discount__tiers {
   display: flex;
   min-width: 0;
   flex-direction: column;
-  gap: var(--l4d-tier-gap-mobile, 12px);
+  row-gap: var(--l4d-tier-gap-mobile, 12px);
 }
 
 l4-discount-section.l4-discount .l4-discount__featured-row {
   display: grid;
   min-width: 0;
   grid-template-columns: minmax(0, 1fr);
-  gap: var(--l4d-tier-gap-mobile, 12px);
+  row-gap: var(--l4d-tier-gap-mobile, 12px);
 }
 
 l4-discount-section.l4-discount .l4-discount__tier-row {
   display: grid;
   min-width: 0;
   grid-template-columns: minmax(0, 1fr);
-  gap: var(--l4d-tier-gap-mobile, 12px);
+  row-gap: var(--l4d-tier-gap-mobile, 12px);
 }
 
 l4-discount-section.l4-discount .l4-discount__tier {
@@ -289,10 +289,14 @@ l4-discount-section.l4-discount .l4-discount__empty {
 }
 
 @media (min-width: 1024px) {
-  l4-discount-section.l4-discount .l4-discount__tiers,
+  l4-discount-section.l4-discount .l4-discount__tiers {
+    row-gap: var(--l4d-tier-gap-plus-icon, 16px);
+  }
+
   l4-discount-section.l4-discount .l4-discount__featured-row,
   l4-discount-section.l4-discount .l4-discount__tier-row {
-    gap: var(--l4d-tier-gap-desktop, 16px);
+    column-gap: var(--l4d-tier-gap-desktop, 16px);
+    row-gap: var(--l4d-tier-gap-desktop, 16px);
   }
 
   l4-discount-section.l4-discount .l4-discount__tier-row {
