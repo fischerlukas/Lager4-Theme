@@ -72,6 +72,7 @@ accessory-carousel .accessory-carousel {
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
 }
 
 accessory-carousel .accessory-carousel__panel {

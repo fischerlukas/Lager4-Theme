@@ -484,6 +484,7 @@ div.sidebar__footer > #AjaxCartSubtotal > div > div.uid-toggle-wrapper {
 .custom-parts-container table {
   table-layout: fixed;
   max-width: 100%;
+  width: 100%;
 }
 
 .custom-parts-container tr {
