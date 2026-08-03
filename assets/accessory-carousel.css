@@ -215,6 +215,7 @@ accessory-carousel .accessory-carousel__page {
   justify-content: center;
   gap: var(--accessory-carousel-gap);
   padding-block: 1.5rem;
+  padding-inline: 1rem;
 }
 
 accessory-carousel:not([data-hydrated]) .accessory-carousel__items {
@@ -481,6 +482,7 @@ accessory-carousel .accessory-carousel__navigation {
 }
 
 accessory-carousel .accessory-carousel__nav-button {
+  position: relative;
   display: flex;
   width: 2.5rem;
   height: 2.5rem;
@@ -490,25 +492,54 @@ accessory-carousel .accessory-carousel__nav-button {
   border-radius: 100%;
   background: transparent;
   color: var(--accessory-carousel-progress-color);
-  opacity: 0.8;
   cursor: pointer;
+  opacity: 0.8;
   transition: all 175ms linear;
+  user-select: none;
 }
 
-/* The base slider extends each SVG with an animated pseudo-element.
-   Safari can composite that shaft as a second icon, so keep only the SVG. */
-accessory-carousel
-  .accessory-carousel__nav-button.css-slider-prev::after,
-accessory-carousel
-  .accessory-carousel__nav-button.css-slider-next::before {
-  display: none;
-  content: none;
+accessory-carousel .accessory-carousel__nav-button svg {
+  display: block;
+  flex-shrink: 0;
+  pointer-events: none;
 }
 
-accessory-carousel .accessory-carousel__nav-button:disabled {
+accessory-carousel .accessory-carousel__nav-button svg path {
+  fill: currentColor;
+}
+
+html[dir="rtl"] accessory-carousel .accessory-carousel__nav-button svg {
+  transform: rotate(180deg);
+}
+
+accessory-carousel .accessory-carousel__nav-button--previous::after,
+accessory-carousel .accessory-carousel__nav-button--next::before {
+  display: inline-block;
+  width: 0;
+  height: 1px;
+  flex-shrink: 0;
+  background-color: currentColor;
+  content: "";
+  transition: width 175ms ease;
+}
+
+accessory-carousel .accessory-carousel__nav-button--previous::after {
+  margin-inline-start: -0.3125rem;
+}
+
+accessory-carousel .accessory-carousel__nav-button--next::before {
+  margin-inline-end: -0.3125rem;
+}
+
+accessory-carousel .accessory-carousel__nav-button.disabled {
   opacity: 0.3;
   cursor: auto;
   pointer-events: none;
+}
+
+accessory-carousel .accessory-carousel__nav-button:focus-visible {
+  outline: 2px solid var(--accessory-carousel-accent-color);
+  outline-offset: 2px;
 }
 
 accessory-carousel .accessory-carousel__dots {
@@ -638,8 +669,15 @@ accessory-carousel .accessory-carousel__footer-link svg {
       0 8px 16px -8px rgb(0 0 0 / 30%);
   }
 
-  accessory-carousel .accessory-carousel__nav-button:not(:disabled):hover {
+  accessory-carousel .accessory-carousel__nav-button:not(.disabled):hover {
     opacity: 1;
+  }
+
+  accessory-carousel
+    .accessory-carousel__nav-button--previous:not(.disabled):hover::after,
+  accessory-carousel
+    .accessory-carousel__nav-button--next:not(.disabled):hover::before {
+    width: 18px;
   }
 
   accessory-carousel .accessory-carousel__footer-link:hover {
@@ -654,6 +692,11 @@ accessory-carousel .accessory-carousel__footer-link svg {
 @media (prefers-reduced-motion: reduce) {
   accessory-carousel .accessory-carousel__items,
   accessory-carousel .accessory-carousel__footer-link svg {
+    transition-duration: 1ms;
+  }
+
+  accessory-carousel .accessory-carousel__nav-button--previous::after,
+  accessory-carousel .accessory-carousel__nav-button--next::before {
     transition-duration: 1ms;
   }
 }

@@ -341,13 +341,13 @@
         </div>
 
         <div class="accessory-carousel__navigation">
-          <button
-            type="button"
-            class="accessory-carousel__nav-button accessory-carousel__nav-button--previous css-slider-button css-slider-prev disabled"
+          <span
+            class="accessory-carousel__nav-button accessory-carousel__nav-button--previous disabled"
             data-carousel-previous
+            role="button"
             aria-label="{{ section.settings.previous_label | escape }}"
-            style="display: block"
-            disabled
+            aria-disabled="true"
+            tabindex="-1"
           >
             <svg
               fill="none"
@@ -364,16 +364,17 @@
                 fill-rule="evenodd"
               ></path>
             </svg>
-          </button>
+          </span>
 
           <div class="accessory-carousel__dots" data-carousel-dots></div>
 
-          <button
-            type="button"
-            class="accessory-carousel__nav-button accessory-carousel__nav-button--next css-slider-button css-slider-next"
+          <span
+            class="accessory-carousel__nav-button accessory-carousel__nav-button--next"
             data-carousel-next
+            role="button"
             aria-label="{{ section.settings.next_label | escape }}"
-            style="display: block"
+            aria-disabled="false"
+            tabindex="0"
           >
             <svg
               fill="none"
@@ -390,7 +391,7 @@
                 fill-rule="evenodd"
               ></path>
             </svg>
-          </button>
+          </span>
         </div>
       {%- elsif request.design_mode -%}
         <p class="accessory-carousel__description">

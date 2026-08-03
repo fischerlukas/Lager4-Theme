@@ -79,15 +79,15 @@
       this.track = this.querySelector("[data-carousel-track]");
       this.itemsContainer = this.querySelector("[data-carousel-items]");
       this.dotsContainer = this.querySelector("[data-carousel-dots]");
-      this.previousButton = this.querySelector("[data-carousel-previous]");
-      this.nextButton = this.querySelector("[data-carousel-next]");
+      this.previousControl = this.querySelector("[data-carousel-previous]");
+      this.nextControl = this.querySelector("[data-carousel-next]");
 
       if (
         !this.track ||
         !this.itemsContainer ||
         !this.dotsContainer ||
-        !this.previousButton ||
-        !this.nextButton
+        !this.previousControl ||
+        !this.nextControl
       ) {
         return;
       }
@@ -292,10 +292,14 @@
       }
 
       this.dotsContainer.replaceChildren(fragment);
-      this.previousButton.disabled = this.page === 0;
-      this.nextButton.disabled = this.page === this.totalPages - 1;
-      this.previousButton.classList.toggle("disabled", this.previousButton.disabled);
-      this.nextButton.classList.toggle("disabled", this.nextButton.disabled);
+      this.setNavigationControlState(this.previousControl, this.page === 0);
+      this.setNavigationControlState(this.nextControl, this.page === this.totalPages - 1);
+    }
+
+    setNavigationControlState(control, disabled) {
+      control.classList.toggle("disabled", disabled);
+      control.setAttribute("aria-disabled", String(disabled));
+      control.tabIndex = disabled ? -1 : 0;
     }
 
     handleClick(event) {
@@ -310,29 +314,36 @@
         return;
       }
 
-      const button = event.target.closest("button");
+      const control = event.target.closest('button, [role="button"]');
 
-      if (!button || !this.contains(button)) {
+      if (!control || !this.contains(control)) {
         return;
       }
 
-      if (button.matches("[data-carousel-previous]")) {
+      if (
+        control.matches("[data-carousel-previous], [data-carousel-next]") &&
+        control.getAttribute("aria-disabled") === "true"
+      ) {
+        return;
+      }
+
+      if (control.matches("[data-carousel-previous]")) {
         this.go(-1);
         return;
       }
 
-      if (button.matches("[data-carousel-next]")) {
+      if (control.matches("[data-carousel-next]")) {
         this.go(1);
         return;
       }
 
-      if (button.matches("[data-carousel-page]")) {
-        this.goToPage(button.dataset.carouselPage);
+      if (control.matches("[data-carousel-page]")) {
+        this.goToPage(control.dataset.carouselPage);
         return;
       }
 
-      if (button.matches("[data-quantity-change]")) {
-        const input = button
+      if (control.matches("[data-quantity-change]")) {
+        const input = control
           .closest(".accessory-carousel__quantity")
           ?.querySelector('input[type="number"]');
 
@@ -341,7 +352,7 @@
         }
 
         const currentValue = Number.parseInt(input.value, 10) || 1;
-        const change = Number.parseInt(button.dataset.quantityChange, 10);
+        const change = Number.parseInt(control.dataset.quantityChange, 10);
         input.value = String(Math.max(1, currentValue + change));
       }
     }
@@ -540,6 +551,20 @@
     }
 
     handleKeydown(event) {
+      if (
+        event.target instanceof Element &&
+        event.target.matches("[data-carousel-previous], [data-carousel-next]") &&
+        (event.key === "Enter" || event.key === " ")
+      ) {
+        event.preventDefault();
+
+        if (event.target.getAttribute("aria-disabled") !== "true") {
+          event.target.click();
+        }
+
+        return;
+      }
+
       if (
         event.target !== this.track &&
         !(event.target instanceof Element && event.target.matches("[data-carousel-page]"))
