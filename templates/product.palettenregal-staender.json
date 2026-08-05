@@ -402,7 +402,7 @@
         "heading_padding_right": 0,
         "heading_padding_bottom": 16,
         "heading_padding_left": 0,
-        "hide_empty_values": false,
+        "hide_empty_values": true,
         "show_parts_list": true,
         "parts_heading": "Stückliste",
         "padding_top": 20,
