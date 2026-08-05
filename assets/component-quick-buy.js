@@ -275,6 +275,8 @@ if ( ! window.handleAddToCart ) {
 						document.getElementById('AjaxCartForm').querySelector('form').prepend(alert);
 					}
 					document.getElementById('AjaxCartSubtotal').innerHTML = cartSubtotalInnerHTML;
+					if ( typeof window.updateAllVatTexts === 'function' ) window.updateAllVatTexts();
+					if ( typeof window.updateShippingCosts === 'function' ) window.updateShippingCosts();
 					
 				}
 
