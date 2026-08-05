@@ -147,12 +147,328 @@
         "seo_h_tag": "h2"
       }
     },
+    "l4_discount_tiers_NgAky6": {
+      "type": "l4-discount-tiers",
+      "blocks": {
+        "tier_BLLLYw": {
+          "type": "tier",
+          "settings": {
+            "threshold_prefix": "ab",
+            "threshold_price": "2.000 €",
+            "discount": "freier Versand",
+            "show_icon": true
+          }
+        },
+        "tier_eL3qnm": {
+          "type": "tier",
+          "settings": {
+            "threshold_prefix": "ab",
+            "threshold_price": "3.000 €",
+            "discount": "6 %",
+            "show_icon": true
+          }
+        },
+        "tier_3bTfPc": {
+          "type": "tier",
+          "settings": {
+            "threshold_prefix": "ab",
+            "threshold_price": "5.000 €",
+            "discount": "10 %",
+            "show_icon": true
+          }
+        },
+        "tier_Pm9ahf": {
+          "type": "tier",
+          "settings": {
+            "threshold_prefix": "ab",
+            "threshold_price": "10.000 €",
+            "discount": "20 %",
+            "show_icon": true
+          }
+        }
+      },
+      "block_order": [
+        "tier_BLLLYw",
+        "tier_eL3qnm",
+        "tier_3bTfPc",
+        "tier_Pm9ahf"
+      ],
+      "name": "Discount tiers",
+      "settings": {
+        "show_heading": true,
+        "heading": "",
+        "heading_tag": "h2",
+        "heading_alignment": "center",
+        "heading_padding_top": 0,
+        "heading_padding_right": 0,
+        "heading_padding_bottom": 10,
+        "heading_padding_left": 0,
+        "show_note": true,
+        "note": "",
+        "note_alignment": "center",
+        "show_plus": true,
+        "plus_character": "+",
+        "show_plus_mobile": false,
+        "full_width": false,
+        "min_height": "auto",
+        "featured_position": "2",
+        "columns_tablet": "3",
+        "columns_desktop": "3",
+        "padding_top": 100,
+        "padding_bottom": 20,
+        "padding_left": 0,
+        "padding_right": 0,
+        "padding_top_mobile": 100,
+        "padding_bottom_mobile": 20,
+        "card_padding": 44,
+        "card_padding_mobile": 30,
+        "card_gap": 24,
+        "tier_gap": 10,
+        "tier_gap_mobile": 20,
+        "tier_gap_plus_icon": 16,
+        "tier_content_gap": 12,
+        "tier_padding_block": 32,
+        "tier_padding_inline": 20,
+        "tier_padding_block_mobile": 24,
+        "tier_padding_inline_mobile": 20,
+        "tier_scale": 90,
+        "tier_scale_mobile": 100,
+        "use_theme_font": true,
+        "custom_font": "assistant_n4",
+        "heading_size": 26,
+        "heading_size_mobile": 26,
+        "heading_weight": 200,
+        "body_weight": 400,
+        "threshold_size": 30,
+        "threshold_size_mobile": 24,
+        "price_size": 30,
+        "price_size_mobile": 24,
+        "tag_size": 16,
+        "tag_size_mobile": 14,
+        "note_size": 14,
+        "note_size_mobile": 12,
+        "plus_size": 36,
+        "plus_size_mobile": 30,
+        "icon_size": 32,
+        "reward_gap": 8,
+        "tag_line_height": 24,
+        "tag_padding_block": 4,
+        "tag_padding_inline": 12,
+        "tag_text_indent": 12,
+        "show_tag_hole": true,
+        "tag_hole_size": 6,
+        "tag_hole_offset": 4,
+        "tag_rotation": -6,
+        "tag_transform_origin": "center center",
+        "section_background": "transparent",
+        "card_background": "#ffffff",
+        "tier_background": "#f6f6f6",
+        "text_color": "#1c1f24",
+        "muted_color": "#74777d",
+        "accent_color": "#ff6700",
+        "tag_text_color": "#ffffff",
+        "tag_hole_color": "#ffffff",
+        "card_radius": 50,
+        "tier_radius": 30,
+        "tag_radius": 8,
+        "card_border_width": 0,
+        "card_border_color": "#e5e5e5",
+        "show_card_shadow": true,
+        "shadow_color": "#000000",
+        "shadow_opacity": 30,
+        "shadow_blur": 30,
+        "shadow_spread": -10,
+        "show_tag_shadow": true,
+        "tag_shadow_opacity": 45
+      }
+    },
+    "l4_technical_data": {
+      "type": "l4-product-technical-data",
+      "blocks": {
+        "specification_01": {
+          "type": "specification",
+          "settings": {
+            "label": "Modell",
+            "metafield_key": "modell",
+            "icon": "cube"
+          }
+        },
+        "specification_02": {
+          "type": "specification",
+          "settings": {
+            "label": "Artikelnummer",
+            "metafield_key": "artikelnummer",
+            "icon": "hash"
+          }
+        },
+        "specification_03": {
+          "type": "specification",
+          "settings": {
+            "label": "Länge",
+            "metafield_key": "laenge",
+            "icon": "arrows-horizontal"
+          }
+        },
+        "specification_04": {
+          "type": "specification",
+          "settings": {
+            "label": "Höhe",
+            "metafield_key": "hoehe",
+            "icon": "arrows-vertical"
+          }
+        },
+        "specification_05": {
+          "type": "specification",
+          "settings": {
+            "label": "Tiefe",
+            "metafield_key": "tiefe",
+            "icon": "arrows-out-simple"
+          }
+        },
+        "specification_06": {
+          "type": "specification",
+          "settings": {
+            "label": "Regalauflage",
+            "metafield_key": "auflage",
+            "icon": "stack-simple"
+          }
+        },
+        "specification_07": {
+          "type": "specification",
+          "settings": {
+            "label": "Anzahl Ebenen",
+            "metafield_key": "ebenen",
+            "icon": "equals"
+          }
+        },
+        "specification_08": {
+          "type": "specification",
+          "settings": {
+            "label": "Max. Belastung pro Palette",
+            "metafield_key": "belastung_pro_palette",
+            "icon": "dot"
+          }
+        },
+        "specification_09": {
+          "type": "specification",
+          "settings": {
+            "label": "Max. Belastung pro Ebene",
+            "metafield_key": "belastung_pro_ebene",
+            "icon": "dots-three"
+          }
+        },
+        "specification_10": {
+          "type": "specification",
+          "settings": {
+            "label": "Max. Belastung pro Feld",
+            "metafield_key": "belastung_pro_feld",
+            "icon": "dots-nine"
+          }
+        },
+        "specification_11": {
+          "type": "specification",
+          "settings": {
+            "label": "Oberfläche",
+            "metafield_key": "oberfl_che",
+            "icon": "paint-brush-household"
+          }
+        },
+        "specification_12": {
+          "type": "specification",
+          "settings": {
+            "label": "Palettenplätze",
+            "metafield_key": "pallettenplaetze",
+            "icon": "grid-nine"
+          }
+        }
+      },
+      "block_order": [
+        "specification_01",
+        "specification_02",
+        "specification_03",
+        "specification_04",
+        "specification_05",
+        "specification_06",
+        "specification_07",
+        "specification_08",
+        "specification_09",
+        "specification_10",
+        "specification_11",
+        "specification_12"
+      ],
+      "settings": {
+        "heading": "Technische Daten",
+        "heading_padding_top": 0,
+        "heading_padding_right": 0,
+        "heading_padding_bottom": 0,
+        "heading_padding_left": 0,
+        "hide_empty_values": false,
+        "show_parts_list": true,
+        "parts_heading": "Stückliste",
+        "padding_top": 20,
+        "padding_bottom": 20,
+        "padding_left": 0,
+        "padding_right": 0
+      }
+    },
+    "l4_downloads": {
+      "type": "l4-product-downloads",
+      "blocks": {
+        "download_01": {
+          "type": "download",
+          "settings": {
+            "label": "Montageanleitung",
+            "metafield_key": "montageanleitung",
+            "link": ""
+          }
+        },
+        "download_02": {
+          "type": "download",
+          "settings": {
+            "label": "Datenblatt",
+            "metafield_key": "datenblatt",
+            "link": ""
+          }
+        },
+        "download_03": {
+          "type": "download",
+          "settings": {
+            "label": "Technische Zeichnung",
+            "metafield_key": "technische_zeichnung",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "download_01",
+        "download_02",
+        "download_03"
+      ],
+      "settings": {
+        "heading": "Downloads",
+        "heading_padding_top": 0,
+        "heading_padding_right": 0,
+        "heading_padding_bottom": 0,
+        "heading_padding_left": 0,
+        "button_background": "#f5f5f5",
+        "button_background_hover": "#ff6700",
+        "button_text_color": "#000000",
+        "button_text_color_hover": "#ffffff",
+        "button_border_width": 0,
+        "button_border_color": "#000000",
+        "padding_top": 20,
+        "padding_bottom": 0,
+        "padding_left": 0,
+        "padding_right": 0
+      }
+    },
     "custom_liquid_Y47VhD": {
       "type": "custom-liquid",
+      "disabled": true,
       "settings": {
         "custom_liquid": "<link\n  rel=\"stylesheet\"\n  type=\"text/css\"\n  href=\"https://unpkg.com/@phosphor-icons/web@2.0.3/src/duotone/style.css\"\n/>\n\n<link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n<link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>\n<link href=\"https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap\" rel=\"stylesheet\">\n\n<div class=\"custom-tab-container\">\n\n  <div class=\"custom-attributes shadow-rounded\">\n    <div class=\"custom-heading\">\n      Technische Daten\n    </div>\n    <div class=\"custom-attributes-grid\">\n      <div class=\"custom-attribute-container\">\n        <div class=\"custom-icon-container\">\n            <div class=\"custom-icon ph-duotone ph-cube\"></div>\n        </div>\n        <div class=\"custom-text-container\">\n            <div class=\"custom-text-bg\">\n              Modell\n            </div>\n            <div class=\"custom-text-sm\">\n              {{product.metafields.custom.modell.value}}\n            </div>\n        </div>\n      </div>\n\n      <div class=\"custom-attribute-container\">\n        <div class=\"custom-icon-container\">\n            <div class=\"custom-icon ph-duotone ph-hash\"></div>\n        </div>\n        <div class=\"custom-text-container\">\n            <div class=\"custom-text-bg\">\n              Artikelnummer\n            </div>\n            <div class=\"custom-text-sm\">\n              {{product.metafields.custom.artikelnummer.value}}\n            </div>\n        </div>\n      </div>\n\n      <div class=\"custom-attribute-container\">\n        <div class=\"custom-icon-container\">\n            <div class=\"custom-icon ph-duotone ph-arrows-horizontal\"></div>\n        </div>\n        <div class=\"custom-text-container\">\n            <div class=\"custom-text-bg\">\n              Länge\n            </div>\n            <div class=\"custom-text-sm\">\n              {{product.metafields.custom.laenge.value}}\n            </div>\n        </div>\n      </div>\n\n      <div class=\"custom-attribute-container\">\n        <div class=\"custom-icon-container\">\n            <div class=\"custom-icon ph-duotone ph-arrows-vertical\"></div>\n        </div>\n        <div class=\"custom-text-container\">\n            <div class=\"custom-text-bg\">\n              Höhe\n            </div>\n            <div class=\"custom-text-sm\">\n              {{product.metafields.custom.hoehe.value}}\n            </div>\n        </div>\n      </div>\n\n      <div class=\"custom-attribute-container\">\n        <div class=\"custom-icon-container\">\n            <div class=\"custom-icon ph-duotone ph-arrows-out-simple\"></div>\n        </div>\n        <div class=\"custom-text-container\">\n            <div class=\"custom-text-bg\">\n              Tiefe\n            </div>\n            <div class=\"custom-text-sm\">\n              {{product.metafields.custom.tiefe.value}}\n            </div>\n        </div>\n      </div>\n\n      <div class=\"custom-attribute-container\">\n        <div class=\"custom-icon-container\">\n            <div class=\"custom-icon ph-duotone ph-stack-simple\"></div>\n        </div>\n        <div class=\"custom-text-container\">\n            <div class=\"custom-text-bg\">\n              Regalauflage\n            </div>\n            <div class=\"custom-text-sm\">\n              {{product.metafields.custom.auflage.value}}\n            </div>\n        </div>\n      </div>\n\n      <div class=\"custom-attribute-container\">\n        <div class=\"custom-icon-container\">\n            <div class=\"custom-icon ph-duotone ph-equals\"></div>\n        </div>\n        <div class=\"custom-text-container\">\n            <div class=\"custom-text-bg\">\n              Anzahl Ebenen\n            </div>\n            <div class=\"custom-text-sm\">\n              {{product.metafields.custom.ebenen.value}}\n            </div>\n        </div>\n      </div>\n\n      <div class=\"custom-attribute-container\">\n        <div class=\"custom-icon-container\">\n            <div class=\"custom-icon ph-duotone ph-dot\"></div>\n        </div>\n        <div class=\"custom-text-container\">\n            <div class=\"custom-text-bg\">\n              Max. Belastung pro Palette\n            </div>\n            <div class=\"custom-text-sm\">\n              {{product.metafields.custom.belastung_pro_palette.value}}\n            </div>\n        </div>\n      </div>\n\n      <div class=\"custom-attribute-container\">\n        <div class=\"custom-icon-container\">\n            <div class=\"custom-icon ph-duotone ph-dots-three\"></div>\n        </div>\n        <div class=\"custom-text-container\">\n            <div class=\"custom-text-bg\">\n              Max. Belastung pro Ebene\n            </div>\n            <div class=\"custom-text-sm\">\n              {{product.metafields.custom.belastung_pro_ebene.value}}\n            </div>\n        </div>\n      </div>\n\n      <div class=\"custom-attribute-container\">\n        <div class=\"custom-icon-container\">\n            <div class=\"custom-icon ph-duotone ph-dots-nine\"></div>\n        </div>\n        <div class=\"custom-text-container\">\n            <div class=\"custom-text-bg\">\n              Max. Belastung pro Feld\n            </div>\n            <div class=\"custom-text-sm\">\n              {{product.metafields.custom.belastung_pro_feld.value}}\n            </div>\n        </div>\n      </div>\n\n      <div class=\"custom-attribute-container\">\n        <div class=\"custom-icon-container\">\n            <div class=\"custom-icon ph-duotone ph-paint-brush-household\"></div>\n        </div>\n        <div class=\"custom-text-container\">\n            <div class=\"custom-text-bg\">\n              Oberfläche\n            </div>\n            <div class=\"custom-text-sm\">\n              {{product.metafields.custom.oberfl_che.value}}\n            </div>\n        </div>\n      </div>\n\n      <div class=\"custom-attribute-container\">\n        <div class=\"custom-icon-container\">\n            <div class=\"custom-icon ph-duotone ph-grid-nine\"></div>\n        </div>\n        <div class=\"custom-text-container\">\n            <div class=\"custom-text-bg\">\n              Palettenplätze\n            </div>\n            <div class=\"custom-text-sm\">\n              {{product.metafields.custom.pallettenplaetze.value}}\n            </div>\n        </div>\n      </div>\n\n    </div>\n\n  </div>\n  <div class=\"custom-parts shadow-rounded\">\n    <div class=\"custom-heading\">\n      Stückliste\n    </div>\n    <div class=\"custom-parts-container\">\n      {{product.description}}\n    </div>\n  </div>\n  <div class=\"custom-downloads shadow-rounded\">\n    <div class=\"custom-heading\">\n      Downloads\n    </div>\n    <div class=\"custom-link-container\">\n\n      <a href=\"{{product.metafields.custom.montageanleitung.value.url}}\" class=\"custom-link-button\">\n        <div class=\"custom-link-text\">\n          <span>Montageanleitung</span>\n          <i class=\"ph-duotone ph-download-simple custom-link-icon\"></i>\n        </div>\n      </a>\n\n      <a href=\"{{product.metafields.custom.datenblatt.value.url}}\" class=\"custom-link-button\">\n        <div class=\"custom-link-text\">\n          <span>Datenblatt</span>\n          <i class=\"ph-duotone ph-download-simple custom-link-icon\"></i>\n        </div>\n      </a>\n\n      <a href=\"{{product.metafields.custom.technische_zeichnung.value.url}}\" class=\"custom-link-button\">\n        <div class=\"custom-link-text\">\n          <span>Technische Zeichnung</span>\n          <i class=\"ph-duotone ph-download-simple custom-link-icon\"></i>\n        </div>\n      </a>\n\n    </div>\n  </div>\n</div>",
         "full_width": true,
-        "remove_margin": false
+        "remove_margin": true
       }
     },
     "product-recommendations": {
@@ -293,6 +609,93 @@
         "seo_h_tag": "h2"
       }
     },
+    "accessory_carousel": {
+      "type": "accessory-carousel",
+      "name": "Accessory carousel",
+      "settings": {
+        "source_product": "",
+        "model_match_1": "P45",
+        "accessory_collection_1": "p45-modell-recommendation-list",
+        "model_match_2": "P90",
+        "accessory_collection_2": "p90-modell-recommendation-list",
+        "model_match_3": "P150",
+        "accessory_collection_3": "p150-modell-recommendation-list",
+        "product_limit": 20,
+        "heading": "Zubehör hinzufügen und Sparen",
+        "description": "Kaufe Regal und Zubehör in Kombination und spare beim Zubehör.",
+        "subheading": "Zu diesem Regal passende Teile:",
+        "show_discount_badge": false,
+        "discount_percentage": 20,
+        "discount_code": "",
+        "original_price_prefix": "statt",
+        "add_to_cart_label": "In den Warenkorb",
+        "sold_out_label": "Ausverkauft",
+        "show_footer_link": true,
+        "footer_label": "Alle Zubehörartikel ansehen",
+        "footer_url": "",
+        "transparent_background": false,
+        "section_background": "#ffffff",
+        "panel_background": "#f2f2f2",
+        "card_background": "#ffffff",
+        "text_color": "#0a0a0a",
+        "accent_color": "#ff6700",
+        "discount_color": "#63af62",
+        "full_width": false,
+        "card_width": 280,
+        "max_desktop_items": 4,
+        "mobile_gap": 16,
+        "desktop_gap": 24,
+        "autoplay": false,
+        "autoplay_speed": 5,
+        "pause_on_hover": true,
+        "enable_mouse_wheel": false,
+        "panel_radius": 30,
+        "card_radius": 30,
+        "image_radius": 20,
+        "padding_top": 60,
+        "padding_bottom": 0,
+        "padding_top_mobile": 40,
+        "padding_bottom_mobile": 0,
+        "padding_left": 0,
+        "padding_right": 0,
+        "panel_padding_vertical_mobile": 42,
+        "panel_padding_horizontal_mobile": 22,
+        "panel_padding_desktop": 50,
+        "heading_size_mobile": 24,
+        "heading_size_desktop": 28,
+        "heading_weight": 400,
+        "description_size": 14,
+        "description_weight": 400,
+        "subheading_size": 18,
+        "subheading_weight": 400,
+        "discount_badge_size": 11,
+        "discount_badge_weight": 400,
+        "product_title_size": 16,
+        "product_title_weight": 400,
+        "original_price_size": 10,
+        "original_price_weight": 400,
+        "current_price_size": 20,
+        "current_price_weight": 400,
+        "quantity_size": 14,
+        "quantity_weight": 300,
+        "add_button_size": 11,
+        "add_button_weight": 700,
+        "footer_size": 12,
+        "footer_weight": 400,
+        "heading_padding_top": 0,
+        "heading_padding_right": 0,
+        "heading_padding_bottom": 0,
+        "heading_padding_left": 0,
+        "carousel_label": "Passendes Zubehör",
+        "previous_label": "Zurück",
+        "next_label": "Weiter",
+        "page_label": "Seite [page] anzeigen",
+        "interaction_instructions": "Mit den Pfeiltasten oder einer Wischgeste durch das Karussell navigieren.",
+        "quantity_label": "Menge",
+        "decrease_quantity_label": "Menge verringern",
+        "increase_quantity_label": "Menge erhöhen"
+      }
+    },
     "custom_liquid_KCH6NE": {
       "type": "custom-liquid",
       "settings": {
@@ -305,9 +708,13 @@
   "order": [
     "main",
     "text_columns_KH84tq",
+    "l4_discount_tiers_NgAky6",
+    "l4_technical_data",
+    "l4_downloads",
     "custom_liquid_Y47VhD",
     "product-recommendations",
     "content_toggles_CUt8Ht",
+    "accessory_carousel",
     "custom_liquid_KCH6NE"
   ]
 }

@@ -1,0 +1,46 @@
+{%- comment -%}
+  Legacy compatibility section. The parts list is now rendered by
+  l4-product-technical-data so both cards share one grid container.
+{%- endcomment -%}
+
+{% schema %}
+{
+  "name": "Stückliste",
+  "class": "l4-product-detail-section l4-product-detail-section--parts",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Überschrift",
+      "default": "Stückliste"
+    },
+    {
+      "type": "header",
+      "content": "Optionale Abstände"
+    },
+    {
+      "type": "range",
+      "id": "padding_left",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Zusätzlicher Abstand links",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_right",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Zusätzlicher Abstand rechts",
+      "default": 0
+    }
+  ],
+  "enabled_on": {
+    "templates": ["product"]
+  }
+}
+{% endschema %}

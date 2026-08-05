@@ -1,0 +1,1131 @@
+{{ 'accessory-carousel.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'accessory-carousel.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign source_product = section.settings.source_product
+  if source_product == blank and product != blank
+    assign source_product = product
+  endif
+
+  assign parent_model_values = blank
+  assign parent_model_display = ''
+  assign displayed_products = blank
+  assign matched_accessory_collection = blank
+  assign model_match_1 = section.settings.model_match_1 | strip
+  assign model_match_2 = section.settings.model_match_2 | strip
+  assign model_match_3 = section.settings.model_match_3 | strip
+
+  if source_product != blank
+    assign parent_model_values = source_product.metafields.custom.modell.value
+    assign parent_model_display = parent_model_values | join: ', '
+  endif
+
+  if parent_model_values != blank
+    if model_match_1 != blank and parent_model_values contains model_match_1
+      assign matched_accessory_collection = section.settings.accessory_collection_1
+    elsif model_match_2 != blank and parent_model_values contains model_match_2
+      assign matched_accessory_collection = section.settings.accessory_collection_2
+    elsif model_match_3 != blank and parent_model_values contains model_match_3
+      assign matched_accessory_collection = section.settings.accessory_collection_3
+    endif
+  endif
+
+  if matched_accessory_collection != blank
+    assign displayed_products = matched_accessory_collection.products
+  endif
+
+  assign discount_percentage = section.settings.discount_percentage | default: 10 | plus: 0
+  assign discount_enabled = false
+  assign discount_multiplier = 100
+  if section.settings.show_discount_badge and discount_percentage > 0
+    assign discount_enabled = true
+    assign discount_multiplier = 100 | minus: discount_percentage
+  endif
+  assign discount_code = ''
+  if discount_enabled
+    assign discount_code = section.settings.discount_code | strip
+  endif
+
+  assign section_background = section.settings.section_background
+  if section.settings.transparent_background
+    assign section_background = 'transparent'
+  endif
+
+  assign footer_url = section.settings.footer_url
+  if footer_url == blank and matched_accessory_collection != blank
+    assign footer_url = matched_accessory_collection.url
+  endif
+  if footer_url == blank
+    assign footer_url = routes.all_products_collection_url
+  endif
+
+  assign muted_text_color = section.settings.text_color | color_modify: 'alpha', 0.6
+  assign soft_text_color = section.settings.text_color | color_modify: 'alpha', 0.5
+  assign quantity_border_color = section.settings.text_color | color_modify: 'alpha', 0.3
+  assign progress_color = section.settings.text_color
+  assign progress_muted_color = section.settings.text_color | color_modify: 'alpha', 0.08
+-%}
+
+{%- if displayed_products != blank or request.design_mode -%}
+<accessory-carousel
+  id="AccessoryCarousel-{{ section.id }}"
+  class="shopify-section-accessory-carousel{% unless section.settings.full_width %} l4-accessory-carousel-container--large {% else %} l4-accessory-carousel-container--fullwidth {% endunless %}"
+  data-page-label="{{ section.settings.page_label | escape }}"
+  data-autoplay="{{ section.settings.autoplay }}"
+  data-autoplay-interval="{{ section.settings.autoplay_speed | times: 1000 }}"
+  data-pause-on-hover="{{ section.settings.pause_on_hover }}"
+  data-mouse-wheel="{{ section.settings.enable_mouse_wheel }}"
+  data-max-desktop-items="{{ section.settings.max_desktop_items }}"
+  data-discount-code="{{ discount_code | escape }}"
+  style="
+    --accessory-carousel-font-family: var(--font-body-family, 'Nunito', sans-serif);
+    --accessory-carousel-page-background: {{ section_background }};
+    --accessory-carousel-panel-background: {{ section.settings.panel_background }};
+    --accessory-carousel-card-background: {{ section.settings.card_background }};
+    --accessory-carousel-text-color: {{ section.settings.text_color }};
+    --accessory-carousel-muted-text-color: {{ muted_text_color }};
+    --accessory-carousel-soft-text-color: {{ soft_text_color }};
+    --accessory-carousel-quantity-border-color: {{ quantity_border_color }};
+    --accessory-carousel-progress-color: {{ progress_color }};
+    --accessory-carousel-progress-muted-color: {{ progress_muted_color }};
+    --accessory-carousel-accent-color: {{ section.settings.accent_color }};
+    --accessory-carousel-discount-color: {{ section.settings.discount_color }};
+    --accessory-carousel-card-width: {{ section.settings.card_width }}px;
+    --accessory-carousel-mobile-gap: {{ section.settings.mobile_gap }}px;
+    --accessory-carousel-desktop-gap: {{ section.settings.desktop_gap }}px;
+    --accessory-carousel-section-padding-top-mobile: {{ section.settings.padding_top_mobile }}px;
+    --accessory-carousel-section-padding-bottom-mobile: {{ section.settings.padding_bottom_mobile }}px;
+    --accessory-carousel-section-padding-top-desktop: {{ section.settings.padding_top }}px;
+    --accessory-carousel-section-padding-bottom-desktop: {{ section.settings.padding_bottom }}px;
+    --accessory-carousel-section-padding-left: {{ section.settings.padding_left | default: 0 }}px;
+    --accessory-carousel-section-padding-right: {{ section.settings.padding_right | default: 0 }}px;
+    --accessory-carousel-panel-padding-block-mobile: {{ section.settings.panel_padding_vertical_mobile }}px;
+    --accessory-carousel-panel-padding-inline-mobile: {{ section.settings.panel_padding_horizontal_mobile }}px;
+    --accessory-carousel-panel-padding-desktop: {{ section.settings.panel_padding_desktop }}px;
+    --accessory-carousel-panel-radius: {{ section.settings.panel_radius }}px;
+    --accessory-carousel-card-radius: {{ section.settings.card_radius }}px;
+    --accessory-carousel-image-radius: {{ section.settings.image_radius }}px;
+    --accessory-carousel-heading-size-mobile: {{ section.settings.heading_size_mobile }}px;
+    --accessory-carousel-heading-size-desktop: {{ section.settings.heading_size_desktop }}px;
+    --accessory-carousel-heading-weight: {{ section.settings.heading_weight }};
+    --accessory-carousel-description-size: {{ section.settings.description_size }}px;
+    --accessory-carousel-description-weight: {{ section.settings.description_weight }};
+    --accessory-carousel-subheading-size: {{ section.settings.subheading_size }}px;
+    --accessory-carousel-subheading-weight: {{ section.settings.subheading_weight }};
+    --accessory-carousel-discount-size: {{ section.settings.discount_badge_size }}px;
+    --accessory-carousel-discount-weight: {{ section.settings.discount_badge_weight }};
+    --accessory-carousel-product-title-size: {{ section.settings.product_title_size }}px;
+    --accessory-carousel-product-title-weight: {{ section.settings.product_title_weight }};
+    --accessory-carousel-original-price-size: {{ section.settings.original_price_size }}px;
+    --accessory-carousel-original-price-weight: {{ section.settings.original_price_weight }};
+    --accessory-carousel-current-price-size: {{ section.settings.current_price_size }}px;
+    --accessory-carousel-current-price-weight: {{ section.settings.current_price_weight }};
+    --accessory-carousel-quantity-size: {{ section.settings.quantity_size }}px;
+    --accessory-carousel-quantity-weight: {{ section.settings.quantity_weight }};
+    --accessory-carousel-add-button-size: {{ section.settings.add_button_size }}px;
+    --accessory-carousel-add-button-weight: {{ section.settings.add_button_weight }};
+    --accessory-carousel-footer-size: {{ section.settings.footer_size }}px;
+    --accessory-carousel-footer-weight: {{ section.settings.footer_weight }};
+    --accessory-carousel-heading-padding-top: {{ section.settings.heading_padding_top | default: 0 }}px;
+    --accessory-carousel-heading-padding-right: {{ section.settings.heading_padding_right | default: 0 }}px;
+    --accessory-carousel-heading-padding-bottom: {{ section.settings.heading_padding_bottom | default: 0 }}px;
+    --accessory-carousel-heading-padding-left: {{ section.settings.heading_padding_left | default: 0 }}px;
+  "
+>
+  <section
+    class="accessory-carousel"
+    {%- if section.settings.heading != blank %}
+      aria-labelledby="AccessoryCarouselHeading-{{ section.id }}"
+    {%- else %}
+      aria-label="{{ section.settings.carousel_label | escape }}"
+    {%- endif %}
+  >
+    <div class="accessory-carousel__panel">
+      <div class="accessory-carousel__header">
+        {%- if section.settings.heading != blank -%}
+          <h2
+            id="AccessoryCarouselHeading-{{ section.id }}"
+            class="accessory-carousel__heading"
+          >
+            {{ section.settings.heading }}
+          </h2>
+        {%- endif -%}
+
+        {%- if section.settings.description != blank -%}
+          <p class="accessory-carousel__description">
+            {{ section.settings.description }}
+          </p>
+        {%- endif -%}
+
+        {%- if section.settings.subheading != blank -%}
+          <p class="accessory-carousel__subheading">
+            {{ section.settings.subheading }}
+          </p>
+        {%- endif -%}
+      </div>
+
+      {%- if displayed_products != blank -%}
+        <div class="accessory-carousel__carousel">
+          <p id="AccessoryCarouselInstructions-{{ section.id }}" class="visually-hidden">
+            {{ section.settings.interaction_instructions | escape }}
+          </p>
+          <div
+            class="accessory-carousel__track"
+            data-carousel-track
+            tabindex="0"
+            role="region"
+            aria-roledescription="carousel"
+            aria-label="{{ section.settings.carousel_label | escape }}"
+            aria-describedby="AccessoryCarouselInstructions-{{ section.id }}"
+          >
+            <div class="accessory-carousel__items" data-carousel-items>
+              {%- for accessory_product in displayed_products limit: section.settings.product_limit -%}
+                {%- liquid
+                  assign accessory_variant = accessory_product.selected_or_first_available_variant
+                  assign base_price = accessory_variant.price
+                  assign current_price = base_price
+                  if discount_enabled
+                    assign current_price = base_price | times: discount_multiplier | divided_by: 100.0 | round
+                  endif
+                  assign product_form_id = 'AccessoryCarouselForm-' | append: section.id | append: '-' | append: accessory_product.id
+                  assign quantity_id = 'AccessoryCarouselQuantity-' | append: section.id | append: '-' | append: accessory_product.id
+                  assign product_image = accessory_product.featured_image
+                  assign product_image_alt = product_image.alt | default: accessory_product.title
+                -%}
+
+                <article class="accessory-carousel__card" data-carousel-item>
+                  <a
+                    class="accessory-carousel__image-frame"
+                    href="{{ accessory_product.url }}"
+                    aria-label="{{ accessory_product.title | escape }}"
+                  >
+                    {%- if product_image != blank -%}
+                      <img
+                        class="accessory-carousel__image"
+                        src="{{ product_image | image_url: width: 720 }}"
+                        srcset="
+                          {{ product_image | image_url: width: 320 }} 320w,
+                          {{ product_image | image_url: width: 480 }} 480w,
+                          {{ product_image | image_url: width: 720 }} 720w
+                        "
+                        sizes="{{ section.settings.card_width }}px"
+                        alt="{{ product_image_alt | escape }}"
+                        loading="lazy"
+                        width="512"
+                        height="512"
+                      >
+                    {%- else -%}
+                      {{ 'product-1' | placeholder_svg_tag: 'accessory-carousel__image accessory-carousel__placeholder' }}
+                    {%- endif -%}
+
+                    {%- if discount_enabled -%}
+                      <span class="accessory-carousel__discount">
+                        <span>{{ discount_percentage }} %</span>
+                      </span>
+                    {%- endif -%}
+
+                    <span class="accessory-carousel__image-shadow" aria-hidden="true"></span>
+                  </a>
+
+                  <div class="accessory-carousel__card-content">
+                    <h3 class="accessory-carousel__product-title">
+                      <a href="{{ accessory_product.url }}">{{ accessory_product.title }}</a>
+                    </h3>
+
+                    {%- form
+                      'product',
+                      accessory_product,
+                      id: product_form_id,
+                      class: 'accessory-carousel__purchase'
+                    -%}
+                      <input
+                        type="hidden"
+                        name="id"
+                        value="{{ accessory_variant.id }}"
+                      >
+
+                      <div class="accessory-carousel__product-row">
+                        <div class="accessory-carousel__price">
+                          {%- if discount_enabled -%}
+                            <span class="accessory-carousel__original-price">
+                              {{ section.settings.original_price_prefix }}
+                              {{ base_price | money }}
+                            </span>
+                          {%- endif -%}
+                          <span class="accessory-carousel__current-price">
+                            {{ current_price | money }}
+                          </span>
+                        </div>
+
+                        <div class="accessory-carousel__quantity">
+                          <button
+                            type="button"
+                            data-quantity-change="-1"
+                            aria-label="{{ section.settings.decrease_quantity_label | escape }}"
+                          >
+                            <svg
+                              width="14"
+                              height="14"
+                              viewBox="0 0 14 14"
+                              fill="none"
+                              xmlns="http://www.w3.org/2000/svg"
+                              aria-hidden="true"
+                            >
+                              <path d="M13.0566 6.5V7.5H0.0566406L0.0566407 6.5L13.0566 6.5Z" fill="currentColor"></path>
+                            </svg>
+                          </button>
+
+                          <input
+                            id="{{ quantity_id }}"
+                            type="number"
+                            name="quantity"
+                            min="1"
+                            value="1"
+                            aria-label="{{ section.settings.quantity_label | escape }}"
+                          >
+
+                          <button
+                            type="button"
+                            data-quantity-change="1"
+                            aria-label="{{ section.settings.increase_quantity_label | escape }}"
+                          >
+                            <svg
+                              width="14"
+                              height="14"
+                              viewBox="0 0 14 14"
+                              fill="none"
+                              xmlns="http://www.w3.org/2000/svg"
+                              aria-hidden="true"
+                            >
+                              <path d="M7.5 0.5V6.5H13.5V7.5H7.5V13.5H6.5V7.5H0.5V6.5H6.5V0.5H7.5Z" fill="currentColor"></path>
+                            </svg>
+                          </button>
+                        </div>
+                      </div>
+
+                      <button
+                        type="submit"
+                        name="add"
+                        class="accessory-carousel__add-button button--loader"
+                        aria-label="{{ accessory_product.title | append: ' — ' | append: section.settings.add_to_cart_label | escape }}"
+                        {%- unless accessory_variant.available %}
+                          disabled
+                        {%- endunless %}
+                      >
+                        <span class="button__text">
+                          {%- if accessory_variant.available -%}
+                            {{ section.settings.add_to_cart_label }}
+                          {%- else -%}
+                            {{ section.settings.sold_out_label }}
+                          {%- endif -%}
+                        </span>
+                        <span class="button__preloader" aria-hidden="true">
+                          <svg class="button__preloader-element" viewBox="25 25 50 50">
+                            <circle
+                              cx="50"
+                              cy="50"
+                              r="20"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="4"
+                            ></circle>
+                          </svg>
+                        </span>
+                      </button>
+                    {%- endform -%}
+                  </div>
+                </article>
+              {%- endfor -%}
+            </div>
+          </div>
+        </div>
+
+        <div class="accessory-carousel__navigation">
+          <span
+            class="accessory-carousel__nav-button accessory-carousel__nav-button--previous disabled"
+            data-carousel-previous
+            role="button"
+            aria-label="{{ section.settings.previous_label | escape }}"
+            aria-disabled="true"
+            tabindex="-1"
+          >
+            <svg
+              fill="none"
+              height="11"
+              viewBox="0 0 6 11"
+              width="6"
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true"
+            >
+              <path
+                clip-rule="evenodd"
+                d="m4.32845 10.0708-4.18198-4.18194c-.195261-.19526-.195261-.51185 0-.70711l4.18198-4.181979c.19527-.195262.51185-.195262.70711 0 .19526.195259.19526.511849 0 .707109l-3.32843 3.32842s-.70713.4647-.00002 1l3.32845 3.32843c.19526.19526.19526.51185 0 .70707-.19526.1953-.51185.1953-.70711 0z"
+                fill="#000"
+                fill-rule="evenodd"
+              ></path>
+            </svg>
+          </span>
+
+          <div class="accessory-carousel__dots" data-carousel-dots></div>
+
+          <span
+            class="accessory-carousel__nav-button accessory-carousel__nav-button--next"
+            data-carousel-next
+            role="button"
+            aria-label="{{ section.settings.next_label | escape }}"
+            aria-disabled="false"
+            tabindex="0"
+          >
+            <svg
+              fill="none"
+              height="11"
+              viewBox="0 0 6 11"
+              width="6"
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true"
+            >
+              <path
+                clip-rule="evenodd"
+                d="m.853555.999962 4.181985 4.181978c.19526.19526.19526.51185 0 .70711l-4.181983 4.18195c-.195263.1953-.511845.1953-.707108 0-.1952631-.19523-.1952632-.51181 0-.70708l3.328431-3.32842s.70713-.4647.00002-1l-3.328453-3.32843c-.1952626-.19526-.1952627-.51185 0-.707108.195263-.195262.511845-.195262.707108 0z"
+                fill="#000"
+                fill-rule="evenodd"
+              ></path>
+            </svg>
+          </span>
+        </div>
+      {%- elsif request.design_mode -%}
+        <p class="accessory-carousel__description">
+          No accessory collection is configured for model
+          “{{ parent_model_display | default: 'not set' | escape }}”. Select a matching model value and collection in
+          this section’s product source settings.
+        </p>
+      {%- endif -%}
+
+      {%- if displayed_products != blank
+        and section.settings.show_footer_link
+        and section.settings.footer_label != blank
+      -%}
+        <div class="accessory-carousel__footer">
+          <a href="{{ footer_url }}" class="accessory-carousel__footer-link">
+            {{ section.settings.footer_label }}
+            <svg
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="square"
+                stroke-linejoin="miter"
+                stroke-width="2"
+                d="M17 8l4 4m0 0l-4 4m4-4H3"
+              ></path>
+            </svg>
+          </a>
+        </div>
+      {%- endif -%}
+    </div>
+  </section>
+</accessory-carousel>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Accessory carousel",
+  "tag": "section",
+  "class": "section-accessory-carousel",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Model-based product source"
+    },
+    {
+      "type": "product",
+      "id": "source_product",
+      "label": "Parent/source product",
+      "info": "Optional. When empty, the product for the current product page is used."
+    },
+    {
+      "type": "text",
+      "id": "model_match_1",
+      "label": "Model value 1",
+      "default": "P45",
+      "info": "Exact, case-sensitive match against any entry in the product.metafields.custom.modell list."
+    },
+    {
+      "type": "collection",
+      "id": "accessory_collection_1",
+      "label": "Accessory collection 1"
+    },
+    {
+      "type": "text",
+      "id": "model_match_2",
+      "label": "Model value 2",
+      "default": "P90"
+    },
+    {
+      "type": "collection",
+      "id": "accessory_collection_2",
+      "label": "Accessory collection 2"
+    },
+    {
+      "type": "text",
+      "id": "model_match_3",
+      "label": "Model value 3",
+      "default": "P150"
+    },
+    {
+      "type": "collection",
+      "id": "accessory_collection_3",
+      "label": "Accessory collection 3"
+    },
+    {
+      "type": "range",
+      "id": "product_limit",
+      "min": 1,
+      "max": 20,
+      "step": 1,
+      "default": 20,
+      "label": "Maximum products"
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Zubehör hinzufügen und Sparen"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Kaufe Regal und Zubehör in Kombination und spare beim Zubehör."
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Product list heading",
+      "default": "Zu diesem Regal passende Teile:"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_discount_badge",
+      "label": "Enable accessory discount",
+      "default": true,
+      "info": "Shows the percentage badge and calculated price. Configure the same discount separately in Shopify Discounts or your discount app for cart and checkout."
+    },
+    {
+      "type": "range",
+      "id": "discount_percentage",
+      "min": 1,
+      "max": 90,
+      "step": 1,
+      "unit": "%",
+      "label": "Discount percentage",
+      "default": 10
+    },
+    {
+      "type": "text",
+      "id": "discount_code",
+      "label": "Discount code",
+      "info": "Applied automatically when an accessory is added. The code’s eligibility and percentage are controlled in Shopify Discounts."
+    },
+    {
+      "type": "text",
+      "id": "original_price_prefix",
+      "label": "Original price prefix",
+      "default": "statt"
+    },
+    {
+      "type": "text",
+      "id": "add_to_cart_label",
+      "label": "Add button label",
+      "default": "In den Warenkorb"
+    },
+    {
+      "type": "text",
+      "id": "sold_out_label",
+      "label": "Sold out label",
+      "default": "Ausverkauft"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_footer_link",
+      "label": "Show footer link",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "footer_label",
+      "label": "Footer link label",
+      "default": "Alle Zubehörartikel ansehen"
+    },
+    {
+      "type": "url",
+      "id": "footer_url",
+      "label": "Footer link"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "checkbox",
+      "id": "transparent_background",
+      "label": "Use transparent section background",
+      "default": false
+    },
+    {
+      "type": "color",
+      "id": "section_background",
+      "label": "Section background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "panel_background",
+      "label": "Panel background",
+      "default": "#f2f2f2"
+    },
+    {
+      "type": "color",
+      "id": "card_background",
+      "label": "Card background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "#0a0a0a"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent and button",
+      "default": "#ff6700"
+    },
+    {
+      "type": "color",
+      "id": "discount_color",
+      "label": "Discount badge",
+      "default": "#63af62"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full Width",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "card_width",
+      "min": 220,
+      "max": 420,
+      "step": 2,
+      "unit": "px",
+      "default": 280,
+      "label": "Card width"
+    },
+    {
+      "type": "range",
+      "id": "max_desktop_items",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "default": 4,
+      "label": "Maximum desktop items",
+      "info": "Maximum cards shown per page on screens 768px and wider. Fewer cards are shown when the available space is limited."
+    },
+    {
+      "type": "range",
+      "id": "mobile_gap",
+      "min": 8,
+      "max": 208,
+      "step": 2,
+      "unit": "px",
+      "default": 16,
+      "label": "Mobile card gap"
+    },
+    {
+      "type": "range",
+      "id": "desktop_gap",
+      "min": 8,
+      "max": 208,
+      "step": 2,
+      "unit": "px",
+      "default": 24,
+      "label": "Desktop card gap"
+    },
+    {
+      "type": "header",
+      "content": "Carousel behavior"
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Enable autoplay",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "autoplay_speed",
+      "min": 3,
+      "max": 12,
+      "step": 1,
+      "unit": "s",
+      "label": "Autoplay interval",
+      "default": 5
+    },
+    {
+      "type": "checkbox",
+      "id": "pause_on_hover",
+      "label": "Pause autoplay on hover",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_mouse_wheel",
+      "label": "Enable mouse-wheel navigation",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "panel_radius",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "default": 30,
+      "label": "Panel corner radius"
+    },
+    {
+      "type": "range",
+      "id": "card_radius",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "default": 30,
+      "label": "Card corner radius"
+    },
+    {
+      "type": "range",
+      "id": "image_radius",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "default": 20,
+      "label": "Image corner radius"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "default": 20,
+      "label": "Desktop top padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "default": 20,
+      "label": "Desktop bottom padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "default": 20,
+      "label": "Mobile top padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "default": 20,
+      "label": "Mobile bottom padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_left",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "default": 0,
+      "label": "Additional left padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_right",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "default": 0,
+      "label": "Additional right padding"
+    },
+    {
+      "type": "range",
+      "id": "panel_padding_vertical_mobile",
+      "min": 12,
+      "max": 212,
+      "step": 2,
+      "unit": "px",
+      "default": 42,
+      "label": "Mobile panel vertical padding"
+    },
+    {
+      "type": "range",
+      "id": "panel_padding_horizontal_mobile",
+      "min": 12,
+      "max": 212,
+      "step": 2,
+      "unit": "px",
+      "default": 22,
+      "label": "Mobile panel side padding"
+    },
+    {
+      "type": "range",
+      "id": "panel_padding_desktop",
+      "min": 20,
+      "max": 220,
+      "step": 2,
+      "unit": "px",
+      "default": 50,
+      "label": "Desktop panel padding"
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "range",
+      "id": "heading_size_mobile",
+      "min": 24,
+      "max": 124,
+      "step": 1,
+      "unit": "px",
+      "default": 24,
+      "label": "Mobile heading size"
+    },
+    {
+      "type": "range",
+      "id": "heading_size_desktop",
+      "min": 28,
+      "max": 128,
+      "step": 1,
+      "unit": "px",
+      "default": 28,
+      "label": "Desktop heading size"
+    },
+    {
+      "type": "range",
+      "id": "heading_weight",
+      "min": 100,
+      "max": 900,
+      "step": 100,
+      "default": 700,
+      "label": "Heading weight"
+    },
+    {
+      "type": "range",
+      "id": "description_size",
+      "min": 10,
+      "max": 110,
+      "step": 1,
+      "unit": "px",
+      "default": 14,
+      "label": "Description size"
+    },
+    {
+      "type": "range",
+      "id": "description_weight",
+      "min": 100,
+      "max": 900,
+      "step": 100,
+      "default": 500,
+      "label": "Description weight"
+    },
+    {
+      "type": "range",
+      "id": "subheading_size",
+      "min": 12,
+      "max": 112,
+      "step": 1,
+      "unit": "px",
+      "default": 18,
+      "label": "Product list heading size"
+    },
+    {
+      "type": "range",
+      "id": "subheading_weight",
+      "min": 100,
+      "max": 900,
+      "step": 100,
+      "default": 600,
+      "label": "Product list heading weight"
+    },
+    {
+      "type": "range",
+      "id": "discount_badge_size",
+      "min": 8,
+      "max": 108,
+      "step": 1,
+      "unit": "px",
+      "default": 11,
+      "label": "Discount badge size"
+    },
+    {
+      "type": "range",
+      "id": "discount_badge_weight",
+      "min": 100,
+      "max": 900,
+      "step": 100,
+      "default": 900,
+      "label": "Discount badge weight"
+    },
+    {
+      "type": "range",
+      "id": "product_title_size",
+      "min": 12,
+      "max": 112,
+      "step": 1,
+      "unit": "px",
+      "default": 16,
+      "label": "Product title size"
+    },
+    {
+      "type": "range",
+      "id": "product_title_weight",
+      "min": 100,
+      "max": 900,
+      "step": 100,
+      "default": 700,
+      "label": "Product title weight"
+    },
+    {
+      "type": "range",
+      "id": "original_price_size",
+      "min": 8,
+      "max": 108,
+      "step": 1,
+      "unit": "px",
+      "default": 10,
+      "label": "Original price size"
+    },
+    {
+      "type": "range",
+      "id": "original_price_weight",
+      "min": 100,
+      "max": 900,
+      "step": 100,
+      "default": 500,
+      "label": "Original price weight"
+    },
+    {
+      "type": "range",
+      "id": "current_price_size",
+      "min": 14,
+      "max": 114,
+      "step": 1,
+      "unit": "px",
+      "default": 20,
+      "label": "Current price size"
+    },
+    {
+      "type": "range",
+      "id": "current_price_weight",
+      "min": 100,
+      "max": 900,
+      "step": 100,
+      "default": 700,
+      "label": "Current price weight"
+    },
+    {
+      "type": "range",
+      "id": "quantity_size",
+      "min": 10,
+      "max": 110,
+      "step": 1,
+      "unit": "px",
+      "default": 14,
+      "label": "Quantity size"
+    },
+    {
+      "type": "range",
+      "id": "quantity_weight",
+      "min": 100,
+      "max": 900,
+      "step": 100,
+      "default": 300,
+      "label": "Quantity weight"
+    },
+    {
+      "type": "range",
+      "id": "add_button_size",
+      "min": 8,
+      "max": 108,
+      "step": 1,
+      "unit": "px",
+      "default": 11,
+      "label": "Add button size"
+    },
+    {
+      "type": "range",
+      "id": "add_button_weight",
+      "min": 100,
+      "max": 900,
+      "step": 100,
+      "default": 700,
+      "label": "Add button weight"
+    },
+    {
+      "type": "range",
+      "id": "footer_size",
+      "min": 8,
+      "max": 108,
+      "step": 1,
+      "unit": "px",
+      "default": 12,
+      "label": "Footer link size"
+    },
+    {
+      "type": "range",
+      "id": "footer_weight",
+      "min": 100,
+      "max": 900,
+      "step": 100,
+      "default": 700,
+      "label": "Footer link weight"
+    },
+    {
+      "type": "header",
+      "content": "Heading padding"
+    },
+    {
+      "type": "range",
+      "id": "heading_padding_top",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "default": 0,
+      "label": "Top"
+    },
+    {
+      "type": "range",
+      "id": "heading_padding_right",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "default": 0,
+      "label": "Right"
+    },
+    {
+      "type": "range",
+      "id": "heading_padding_bottom",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "default": 0,
+      "label": "Bottom"
+    },
+    {
+      "type": "range",
+      "id": "heading_padding_left",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "default": 0,
+      "label": "Left"
+    },
+    {
+      "type": "header",
+      "content": "Accessibility labels"
+    },
+    {
+      "type": "text",
+      "id": "carousel_label",
+      "label": "Carousel label",
+      "default": "Passendes Zubehör"
+    },
+    {
+      "type": "text",
+      "id": "previous_label",
+      "label": "Previous page label",
+      "default": "Zurück"
+    },
+    {
+      "type": "text",
+      "id": "next_label",
+      "label": "Next page label",
+      "default": "Weiter"
+    },
+    {
+      "type": "text",
+      "id": "page_label",
+      "label": "Page button label",
+      "default": "Seite [page] anzeigen",
+      "info": "Use [page] where the page number should appear."
+    },
+    {
+      "type": "text",
+      "id": "interaction_instructions",
+      "label": "Interaction instructions",
+      "default": "Mit den Pfeiltasten oder einer Wischgeste durch das Karussell navigieren."
+    },
+    {
+      "type": "text",
+      "id": "quantity_label",
+      "label": "Quantity field label",
+      "default": "Menge"
+    },
+    {
+      "type": "text",
+      "id": "decrease_quantity_label",
+      "label": "Decrease quantity label",
+      "default": "Menge verringern"
+    },
+    {
+      "type": "text",
+      "id": "increase_quantity_label",
+      "label": "Increase quantity label",
+      "default": "Menge erhöhen"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Accessory carousel"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,1144 @@
+{{ 'l4-discount-section.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'l4-discount-section.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign heading_text = section.settings.heading
+  if heading_text == blank
+    assign heading_text = 'heading' | t
+  endif
+
+  assign note_text = section.settings.note
+  if note_text == blank
+    assign note_text = 'note' | t
+  endif
+
+  assign featured_block = section.blocks.first
+  assign shadow_alpha = section.settings.shadow_opacity | divided_by: 100.0
+  assign tag_shadow_alpha = section.settings.tag_shadow_opacity | divided_by: 100.0
+-%}
+
+{%- capture cart_icon -%}
+  <svg
+    class="l4-discount__cart-icon"
+    viewBox="0 0 32 32"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path
+      d="M3 5h3.2l1.2 3M8.4 11h18l-2.6 9.2a1.8 1.8 0 0 1-1.7 1.3H12.6a1.8 1.8 0 0 1-1.7-1.3L7.4 8"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2.4"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+    <circle cx="13" cy="27" r="2.2" fill="currentColor" />
+    <circle cx="22" cy="27" r="2.2" fill="currentColor" />
+  </svg>
+{%- endcapture -%}
+
+{%- unless section.settings.use_theme_font -%}
+  <style>
+    {{ section.settings.custom_font | font_face: font_display: 'swap' }}
+  </style>
+{%- endunless -%}
+
+<style>
+  #L4Discount-{{ section.id }} {
+    --l4d-min-height: {{ section.settings.min_height }};
+    --l4d-section-background: {{ section.settings.section_background }};
+    --l4d-card-background: {{ section.settings.card_background }};
+    --l4d-tier-background: {{ section.settings.tier_background }};
+    --l4d-text-color: {{ section.settings.text_color }};
+    --l4d-muted-color: {{ section.settings.muted_color }};
+    --l4d-accent-color: {{ section.settings.accent_color }};
+    --l4d-tag-text-color: {{ section.settings.tag_text_color }};
+    --l4d-tag-hole-color: {{ section.settings.tag_hole_color }};
+    --l4d-card-radius: {{ section.settings.card_radius }}px;
+    --l4d-tier-radius: {{ section.settings.tier_radius }}px;
+    --l4d-tag-radius: {{ section.settings.tag_radius }}px;
+    --l4d-card-border-width: {{ section.settings.card_border_width }}px;
+    --l4d-card-border-color: {{ section.settings.card_border_color }};
+    --l4d-padding-top-mobile: {{ section.settings.padding_top_mobile }}px;
+    --l4d-padding-bottom-mobile: {{ section.settings.padding_bottom_mobile }}px;
+    --l4d-padding-top-desktop: {{ section.settings.padding_top }}px;
+    --l4d-padding-bottom-desktop: {{ section.settings.padding_bottom }}px;
+    --l4d-padding-left: {{ section.settings.padding_left | default: 0 }}px;
+    --l4d-padding-right: {{ section.settings.padding_right | default: 0 }}px;
+    --l4d-card-padding-mobile: {{ section.settings.card_padding_mobile }}px;
+    --l4d-card-padding-desktop: {{ section.settings.card_padding }}px;
+    --l4d-card-gap-mobile: {{ section.settings.card_gap }}px;
+    --l4d-card-gap-desktop: {{ section.settings.card_gap }}px;
+    --l4d-tier-gap-mobile: {{ section.settings.tier_gap_mobile }}px;
+    --l4d-tier-gap-desktop: {{ section.settings.tier_gap }}px;
+    --l4d-tier-gap-plus-icon: {{ section.settings.tier_gap_plus_icon }}px;
+    --l4d-tier-content-gap: {{ section.settings.tier_content_gap }}px;
+    --l4d-tier-padding-block-mobile: {{ section.settings.tier_padding_block_mobile }}px;
+    --l4d-tier-padding-inline-mobile: {{ section.settings.tier_padding_inline_mobile }}px;
+    --l4d-tier-padding-block-desktop: {{ section.settings.tier_padding_block }}px;
+    --l4d-tier-padding-inline-desktop: {{ section.settings.tier_padding_inline }}px;
+    --l4d-tier-scale-mobile: {{ section.settings.tier_scale_mobile }}%;
+    --l4d-tier-scale-desktop: {{ section.settings.tier_scale }}%;
+    --l4d-featured-column: {{ section.settings.featured_position }};
+    --l4d-columns-tablet: {{ section.settings.columns_tablet }};
+    --l4d-columns-desktop: {{ section.settings.columns_desktop }};
+    --l4d-heading-alignment: {{ section.settings.heading_alignment }};
+    --l4d-note-alignment: {{ section.settings.note_alignment }};
+    --l4d-heading-size-mobile: {{ section.settings.heading_size_mobile }}px;
+    --l4d-heading-size-desktop: {{ section.settings.heading_size }}px;
+    --l4d-heading-weight: {{ section.settings.heading_weight }};
+    --l4d-heading-padding-top: {{ section.settings.heading_padding_top | default: 0 }}px;
+    --l4d-heading-padding-right: {{ section.settings.heading_padding_right | default: 0 }}px;
+    --l4d-heading-padding-bottom: {{ section.settings.heading_padding_bottom | default: 0 }}px;
+    --l4d-heading-padding-left: {{ section.settings.heading_padding_left | default: 0 }}px;
+    --l4d-body-weight: {{ section.settings.body_weight }};
+    --l4d-threshold-size-mobile: {{ section.settings.threshold_size_mobile }}px;
+    --l4d-threshold-size-desktop: {{ section.settings.threshold_size }}px;
+    --l4d-price-size-mobile: {{ section.settings.price_size_mobile }}px;
+    --l4d-price-size-desktop: {{ section.settings.price_size }}px;
+    --l4d-note-size-mobile: {{ section.settings.note_size_mobile }}px;
+    --l4d-note-size-desktop: {{ section.settings.note_size }}px;
+    --l4d-plus-size-mobile: {{ section.settings.plus_size_mobile }}px;
+    --l4d-plus-size-desktop: {{ section.settings.plus_size }}px;
+    --l4d-icon-size: {{ section.settings.icon_size }}px;
+    --l4d-reward-gap: {{ section.settings.reward_gap }}px;
+    --l4d-tag-size-mobile: {{ section.settings.tag_size_mobile }}px;
+    --l4d-tag-size-desktop: {{ section.settings.tag_size }}px;
+    --l4d-tag-line-height: {{ section.settings.tag_line_height }}px;
+    --l4d-tag-padding-block: {{ section.settings.tag_padding_block }}px;
+    --l4d-tag-padding-inline: {{ section.settings.tag_padding_inline }}px;
+    --l4d-tag-text-indent: {{ section.settings.tag_text_indent }}px;
+    --l4d-tag-hole-size: {{ section.settings.tag_hole_size }}px;
+    --l4d-tag-hole-offset: {{ section.settings.tag_hole_offset }}px;
+    --l4d-tag-rotation: {{ section.settings.tag_rotation }}deg;
+    --l4d-tag-transform-origin: {{ section.settings.tag_transform_origin }};
+    {%- if section.settings.show_card_shadow %}
+      --l4d-card-shadow: 0 0 {{ section.settings.shadow_blur }}px {{ section.settings.shadow_spread }}px {{ section.settings.shadow_color | color_modify: 'alpha', shadow_alpha }};
+    {%- else %}
+      --l4d-card-shadow: none;
+    {%- endif %}
+    {%- if section.settings.show_tag_shadow %}
+      --l4d-tag-shadow: 0 6px 14px -4px {{ section.settings.accent_color | color_modify: 'alpha', tag_shadow_alpha }};
+    {%- else %}
+      --l4d-tag-shadow: none;
+    {%- endif %}
+    {%- if section.settings.use_theme_font %}
+      --l4d-font-family: inherit;
+      --l4d-font-style: normal;
+    {%- else %}
+      --l4d-font-family: {{ section.settings.custom_font.family }}, {{ section.settings.custom_font.fallback_families }};
+      --l4d-font-style: {{ section.settings.custom_font.style }};
+    {%- endif %}
+  }
+</style>
+
+<l4-discount-section
+  id="L4Discount-{{ section.id }}"
+  class="l4-discount{% if section.settings.show_plus_mobile %} l4-discount--plus-mobile{% endif %} {% unless section.settings.full_width %} l4-discount-container--large {% else %} l4-discount-container--fullwidth {% endunless %}"
+  data-section-id="{{ section.id }}"
+  role="region"
+  {% if section.settings.show_heading %}
+    aria-labelledby="L4DiscountHeading-{{ section.id }}"
+  {% else %}
+    aria-label="{{ heading_text | strip_html | escape }}"
+  {% endif %}
+>
+  <div class="l4-discount__inner">
+    <div class="l4-discount__card">
+      {%- if section.settings.show_heading -%}
+        <{{ section.settings.heading_tag }}
+          class="l4-discount__heading"
+          id="L4DiscountHeading-{{ section.id }}"
+        >
+          {{ heading_text }}
+        </{{ section.settings.heading_tag }}>
+      {%- endif -%}
+
+      <div class="l4-discount__tiers">
+        {%- if featured_block != blank -%}
+          <div class="l4-discount__featured-row">
+            <div
+              class="l4-discount__tier"
+              {{ featured_block.shopify_attributes }}
+            >
+              <span class="l4-discount__threshold">
+                {%- if featured_block.settings.threshold_price != blank -%}
+                  {%- if featured_block.settings.threshold_prefix != blank -%}
+                    <span class="l4-discount__threshold-prefix">
+                      {{- featured_block.settings.threshold_prefix | escape -}}
+                    </span>
+                  {%- endif -%}
+                  <span class="l4-discount__threshold-price">
+                    {{- featured_block.settings.threshold_price | escape -}}
+                  </span>
+                {%- else -%}
+                  {{ featured_block.settings.threshold | escape }}
+                {%- endif -%}
+              </span>
+              <div class="l4-discount__reward">
+                {%- if featured_block.settings.show_icon -%}
+                  {{ cart_icon }}
+                {%- endif -%}
+                <span class="l4-discount__tag">
+                  {%- if section.settings.show_tag_hole -%}
+                    <span class="l4-discount__tag-hole" aria-hidden="true"></span>
+                  {%- endif -%}
+                  <span class="l4-discount__tag-text">
+                    {{ featured_block.settings.discount | escape }}
+                  </span>
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {%- if section.blocks.size > 1 and section.settings.show_plus -%}
+            <div class="l4-discount__plus" aria-hidden="true">
+              {{ section.settings.plus_character | escape }}
+            </div>
+          {%- endif -%}
+
+          {%- if section.blocks.size > 1 -%}
+            <div class="l4-discount__tier-row">
+              {%- for block in section.blocks offset: 1 -%}
+                <div
+                  class="l4-discount__tier"
+                  {{ block.shopify_attributes }}
+                >
+                  <span class="l4-discount__threshold">
+                    {%- if block.settings.threshold_price != blank -%}
+                      {%- if block.settings.threshold_prefix != blank -%}
+                        <span class="l4-discount__threshold-prefix">
+                          {{- block.settings.threshold_prefix | escape -}}
+                        </span>
+                      {%- endif -%}
+                      <span class="l4-discount__threshold-price">
+                        {{- block.settings.threshold_price | escape -}}
+                      </span>
+                    {%- else -%}
+                      {{ block.settings.threshold | escape }}
+                    {%- endif -%}
+                  </span>
+                  <div class="l4-discount__reward">
+                    {%- if block.settings.show_icon -%}
+                      {{ cart_icon }}
+                    {%- endif -%}
+                    <span class="l4-discount__tag">
+                      {%- if section.settings.show_tag_hole -%}
+                        <span class="l4-discount__tag-hole" aria-hidden="true"></span>
+                      {%- endif -%}
+                      <span class="l4-discount__tag-text">
+                        {{ block.settings.discount | escape }}
+                      </span>
+                    </span>
+                  </div>
+                </div>
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+        {%- elsif request.design_mode -%}
+          <div class="l4-discount__empty">
+            {{ 'empty' | t }}
+          </div>
+        {%- endif -%}
+      </div>
+
+      {%- if section.settings.show_note and note_text != blank -%}
+        <p class="l4-discount__note">
+          {{ note_text | escape }}
+        </p>
+      {%- endif -%}
+    </div>
+  </div>
+</l4-discount-section>
+
+{% schema %}
+{
+  "name": "Discount tiers",
+  "tag": "section",
+  "class": "l4-discount-shopify-section",
+  "max_blocks": 7,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_heading",
+      "label": "Show heading",
+      "default": true
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "info": "Leave blank to use the translated fallback."
+    },
+    {
+      "type": "select",
+      "id": "heading_tag",
+      "label": "Heading level",
+      "default": "h2",
+      "options": [
+        { "value": "h2", "label": "H2" },
+        { "value": "h3", "label": "H3" },
+        { "value": "p", "label": "Paragraph" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "heading_alignment",
+      "label": "Heading alignment",
+      "default": "center",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Heading padding"
+    },
+    {
+      "type": "range",
+      "id": "heading_padding_top",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "label": "Top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "heading_padding_right",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "label": "Right",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "heading_padding_bottom",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "label": "Bottom",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "heading_padding_left",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "label": "Left",
+      "default": 0
+    },
+    {
+      "type": "checkbox",
+      "id": "show_note",
+      "label": "Show note",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "note",
+      "label": "Note",
+      "info": "Leave blank to use the translated fallback."
+    },
+    {
+      "type": "select",
+      "id": "note_alignment",
+      "label": "Note alignment",
+      "default": "center",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "show_plus",
+      "label": "Show separator between rows",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "plus_character",
+      "label": "Separator",
+      "default": "+"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_plus_mobile",
+      "label": "Show separator on mobile",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full Width",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "min_height",
+      "label": "Minimum section height",
+      "default": "auto",
+      "options": [
+        { "value": "auto", "label": "Content height" },
+        { "value": "100vh", "label": "Full viewport" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "featured_position",
+      "label": "Featured tier position",
+      "info": "The first block is the featured tier.",
+      "default": "2",
+      "options": [
+        { "value": "1", "label": "Left" },
+        { "value": "2", "label": "Center" },
+        { "value": "3", "label": "Right" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "columns_tablet",
+      "label": "Columns on tablet",
+      "default": "3",
+      "options": [
+        { "value": "1", "label": "1" },
+        { "value": "2", "label": "2" },
+        { "value": "3", "label": "3" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "columns_desktop",
+      "label": "Columns on desktop",
+      "default": "3",
+      "options": [
+        { "value": "2", "label": "2" },
+        { "value": "3", "label": "3" },
+        { "value": "4", "label": "4" }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "padding_left",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "label": "Additional left padding",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_right",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "label": "Additional right padding",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "label": "Mobile top padding",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "label": "Mobile bottom padding",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "card_padding",
+      "min": 16,
+      "max": 216,
+      "step": 2,
+      "unit": "px",
+      "label": "Card padding",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "card_padding_mobile",
+      "min": 12,
+      "max": 212,
+      "step": 2,
+      "unit": "px",
+      "label": "Mobile card padding",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "card_gap",
+      "min": 8,
+      "max": 208,
+      "step": 2,
+      "unit": "px",
+      "label": "Card content spacing",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "tier_gap",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "label": "Tier spacing",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "tier_gap_mobile",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "label": "Mobile tier spacing",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "tier_gap_plus_icon",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "label": "Plus icon vertical spacing",
+      "info": "Controls the vertical gap between the plus separator and the tier rows.",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "tier_content_gap",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "label": "Spacing inside tiers",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "tier_padding_block",
+      "min": 12,
+      "max": 212,
+      "step": 2,
+      "unit": "px",
+      "label": "Tier vertical padding",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "tier_padding_inline",
+      "min": 8,
+      "max": 208,
+      "step": 2,
+      "unit": "px",
+      "label": "Tier side padding",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "tier_padding_block_mobile",
+      "min": 12,
+      "max": 212,
+      "step": 2,
+      "unit": "px",
+      "label": "Mobile tier vertical padding",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "tier_padding_inline_mobile",
+      "min": 8,
+      "max": 208,
+      "step": 2,
+      "unit": "px",
+      "label": "Mobile tier side padding",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "tier_scale",
+      "min": 50,
+      "max": 150,
+      "step": 5,
+      "unit": "%",
+      "label": "Desktop tier scale",
+      "info": "Scales each complete tier, including its content.",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "tier_scale_mobile",
+      "min": 50,
+      "max": 150,
+      "step": 5,
+      "unit": "%",
+      "label": "Mobile and tablet tier scale",
+      "info": "Scales each complete tier, including its content.",
+      "default": 100
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_theme_font",
+      "label": "Use the theme font",
+      "default": true
+    },
+    {
+      "type": "font_picker",
+      "id": "custom_font",
+      "label": "Custom section font",
+      "info": "Used when “Use the theme font” is disabled.",
+      "default": "assistant_n4"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 18,
+      "max": 118,
+      "step": 1,
+      "unit": "px",
+      "label": "Heading size",
+      "default": 26
+    },
+    {
+      "type": "range",
+      "id": "heading_size_mobile",
+      "min": 16,
+      "max": 116,
+      "step": 1,
+      "unit": "px",
+      "label": "Mobile heading size",
+      "default": 26
+    },
+    {
+      "type": "range",
+      "id": "heading_weight",
+      "min": 100,
+      "max": 900,
+      "step": 100,
+      "label": "Heading weight",
+      "default": 200
+    },
+    {
+      "type": "range",
+      "id": "body_weight",
+      "min": 100,
+      "max": 900,
+      "step": 100,
+      "label": "Tier and label weight",
+      "default": 400
+    },
+    {
+      "type": "range",
+      "id": "threshold_size",
+      "min": 20,
+      "max": 120,
+      "step": 1,
+      "unit": "px",
+      "label": "Threshold size",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "threshold_size_mobile",
+      "min": 16,
+      "max": 116,
+      "step": 1,
+      "unit": "px",
+      "label": "Mobile threshold size",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "price_size",
+      "min": 16,
+      "max": 116,
+      "step": 1,
+      "unit": "px",
+      "label": "Price size",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "price_size_mobile",
+      "min": 14,
+      "max": 114,
+      "step": 1,
+      "unit": "px",
+      "label": "Mobile price size",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "tag_size",
+      "min": 12,
+      "max": 112,
+      "step": 1,
+      "unit": "px",
+      "label": "Discount tag text size",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "tag_size_mobile",
+      "min": 11,
+      "max": 111,
+      "step": 1,
+      "unit": "px",
+      "label": "Mobile discount tag text size",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "note_size",
+      "min": 10,
+      "max": 110,
+      "step": 1,
+      "unit": "px",
+      "label": "Note size",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "note_size_mobile",
+      "min": 10,
+      "max": 110,
+      "step": 1,
+      "unit": "px",
+      "label": "Mobile note size",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "plus_size",
+      "min": 20,
+      "max": 120,
+      "step": 1,
+      "unit": "px",
+      "label": "Separator size",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "plus_size_mobile",
+      "min": 18,
+      "max": 118,
+      "step": 1,
+      "unit": "px",
+      "label": "Mobile separator size",
+      "default": 30
+    },
+    {
+      "type": "header",
+      "content": "Discount tag and icon"
+    },
+    {
+      "type": "range",
+      "id": "icon_size",
+      "min": 20,
+      "max": 120,
+      "step": 1,
+      "unit": "px",
+      "label": "Cart icon size",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "reward_gap",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Icon and tag spacing",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "tag_line_height",
+      "min": 16,
+      "max": 116,
+      "step": 1,
+      "unit": "px",
+      "label": "Tag text line height",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "tag_padding_block",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Tag vertical padding",
+      "info": "4px with a 24px line height produces a 32px tag.",
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "tag_padding_inline",
+      "min": 4,
+      "max": 104,
+      "step": 1,
+      "unit": "px",
+      "label": "Tag side padding",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "tag_text_indent",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Tag text indent",
+      "default": 12
+    },
+    {
+      "type": "checkbox",
+      "id": "show_tag_hole",
+      "label": "Show tag hole",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "tag_hole_size",
+      "min": 2,
+      "max": 102,
+      "step": 1,
+      "unit": "px",
+      "label": "Tag hole size",
+      "default": 6
+    },
+    {
+      "type": "range",
+      "id": "tag_hole_offset",
+      "min": 1,
+      "max": 101,
+      "step": 1,
+      "unit": "px",
+      "label": "Tag hole left position",
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "tag_rotation",
+      "min": -15,
+      "max": 15,
+      "step": 1,
+      "unit": "deg",
+      "label": "Tag rotation",
+      "default": -6
+    },
+    {
+      "type": "select",
+      "id": "tag_transform_origin",
+      "label": "Tag rotation origin",
+      "default": "center center",
+      "options": [
+        { "value": "center center", "label": "Center" },
+        { "value": "10% 50%", "label": "Near the hole" },
+        { "value": "left center", "label": "Left" },
+        { "value": "right center", "label": "Right" }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Colors and shape"
+    },
+    {
+      "type": "color_background",
+      "id": "section_background",
+      "label": "Section background",
+      "default": "transparent"
+    },
+    {
+      "type": "color_background",
+      "id": "card_background",
+      "label": "Card background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color_background",
+      "id": "tier_background",
+      "label": "Tier background",
+      "default": "#f6f6f6"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text and icon color",
+      "default": "#1c1f24"
+    },
+    {
+      "type": "color",
+      "id": "muted_color",
+      "label": "Muted text color",
+      "default": "#74777d"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Discount tag color",
+      "default": "#ff6700"
+    },
+    {
+      "type": "color",
+      "id": "tag_text_color",
+      "label": "Discount tag text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "tag_hole_color",
+      "label": "Tag hole color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "card_radius",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "label": "Card corner radius",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "tier_radius",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Tier corner radius",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "tag_radius",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Tag corner radius",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "card_border_width",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Card border width",
+      "default": 0
+    },
+    {
+      "type": "color",
+      "id": "card_border_color",
+      "label": "Card border color",
+      "default": "#e5e5e5"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_card_shadow",
+      "label": "Show card shadow",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "shadow_color",
+      "label": "Card shadow color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "shadow_opacity",
+      "min": 0,
+      "max": 60,
+      "step": 1,
+      "unit": "%",
+      "label": "Card shadow opacity",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "shadow_blur",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Card shadow blur",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "shadow_spread",
+      "min": -30,
+      "max": 70,
+      "step": 1,
+      "unit": "px",
+      "label": "Card shadow spread",
+      "default": -10
+    },
+    {
+      "type": "checkbox",
+      "id": "show_tag_shadow",
+      "label": "Show tag shadow",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "tag_shadow_opacity",
+      "min": 0,
+      "max": 80,
+      "step": 1,
+      "unit": "%",
+      "label": "Tag shadow opacity",
+      "default": 45
+    }
+  ],
+  "blocks": [
+    {
+      "type": "tier",
+      "name": "Discount tier",
+      "settings": [
+        {
+          "type": "text",
+          "id": "threshold_prefix",
+          "label": "Price prefix",
+          "default": "ab"
+        },
+        {
+          "type": "text",
+          "id": "threshold_price",
+          "label": "Price",
+          "default": "2.000 €"
+        },
+        {
+          "type": "text",
+          "id": "discount",
+          "label": "Discount or benefit",
+          "default": "10 %"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_icon",
+          "label": "Show cart icon",
+          "default": true
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Discount tiers",
+      "category": "Promotional",
+      "blocks": [
+        {
+          "type": "tier",
+          "settings": {
+            "threshold_prefix": "ab",
+            "threshold_price": "2.000 €",
+            "discount": "freier Versand"
+          }
+        },
+        {
+          "type": "tier",
+          "settings": {
+            "threshold_prefix": "ab",
+            "threshold_price": "3.000 €",
+            "discount": "6 %"
+          }
+        },
+        {
+          "type": "tier",
+          "settings": {
+            "threshold_prefix": "ab",
+            "threshold_price": "5.000 €",
+            "discount": "10 %"
+          }
+        },
+        {
+          "type": "tier",
+          "settings": {
+            "threshold_prefix": "ab",
+            "threshold_price": "10.000 €",
+            "discount": "20 %"
+          }
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "heading": "Save up to 20% on your cart",
+      "note": "Discounts are applied automatically in your cart.",
+      "empty": "Add discount tier blocks to configure this section."
+    },
+    "de": {
+      "heading": "Bis zu 20 % Rabatt auf deinen Warenkorb erhalten",
+      "note": "Die Rabatte werden automatisch im Warenkorb angewendet.",
+      "empty": "Füge Rabattstufen-Blöcke hinzu, um diesen Abschnitt zu konfigurieren."
+    }
+  },
+  "enabled_on": {
+    "templates": ["*"]
+  }
+}
+{% endschema %}

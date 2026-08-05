@@ -1,0 +1,273 @@
+{{ 'l4-product-details.css' | asset_url | stylesheet_tag }}
+
+<div
+  id="L4Downloads-{{ section.id }}"
+  class="l4-product-detail l4-product-detail--single"
+  style="
+    --l4-product-detail-padding-top: {{ section.settings.padding_top | default: 20 }}px;
+    --l4-product-detail-padding-bottom: {{ section.settings.padding_bottom | default: 20 }}px;
+    --l4-product-detail-padding-left: {{ section.settings.padding_left | default: 0 }}px;
+    --l4-product-detail-padding-right: {{ section.settings.padding_right | default: 0 }}px;
+    --l4-product-detail-heading-padding-top: {{ section.settings.heading_padding_top | default: 0 }}px;
+    --l4-product-detail-heading-padding-right: {{ section.settings.heading_padding_right | default: 0 }}px;
+    --l4-product-detail-heading-padding-bottom: {{ section.settings.heading_padding_bottom | default: 0 }}px;
+    --l4-product-detail-heading-padding-left: {{ section.settings.heading_padding_left | default: 0 }}px;
+    --l4-download-background: {{ section.settings.button_background | default: '#f5f5f5' }};
+    --l4-download-background-hover: {{ section.settings.button_background_hover | default: '#ff6700' }};
+    --l4-download-text-color: {{ section.settings.button_text_color | default: '#000000' }};
+    --l4-download-text-color-hover: {{ section.settings.button_text_color_hover | default: '#ffffff' }};
+    --l4-download-border-width: {{ section.settings.button_border_width | default: 0 }}px;
+    --l4-download-border-color: {{ section.settings.button_border_color | default: '#000000' }};
+  "
+>
+  <div class="custom-downloads l4-product-detail__card">
+    <h2 class="l4-product-detail__heading">
+      {{ section.settings.heading | escape }}
+    </h2>
+
+    <div class="custom-link-container">
+      {%- for block in section.blocks -%}
+        {%- liquid
+          assign download_file = product.metafields.custom[block.settings.metafield_key].value
+          assign download_url = download_file.url
+          if block.settings.link != blank
+            assign download_url = block.settings.link
+          endif
+        -%}
+
+        {%- if download_url != blank -%}
+          <a
+            href="{{ download_url | escape }}"
+            class="custom-link-button l4-product-detail__download button button--outline button--icon"
+            {{ block.shopify_attributes }}
+          >
+        {%- else -%}
+          <span
+            class="custom-link-button l4-product-detail__download button button--outline button--icon"
+            aria-disabled="true"
+            {{ block.shopify_attributes }}
+          >
+        {%- endif -%}
+          <span class="l4-product-detail__download-content">
+            <span class="button__text">{{ block.settings.label | escape }}</span>
+            <span class="button__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" focusable="false">
+                <path d="M12 3v12m0 0 5-5m-5 5-5-5M5 20h14" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+          </span>
+        {%- if download_url != blank -%}
+          </a>
+        {%- else -%}
+          </span>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Downloads",
+  "class": "l4-product-detail-section l4-product-detail-section--downloads",
+  "max_blocks": 6,
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Überschrift",
+      "default": "Downloads"
+    },
+    {
+      "type": "header",
+      "content": "Überschrift-Abstände"
+    },
+    {
+      "type": "range",
+      "id": "heading_padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Oben",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "heading_padding_right",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Rechts",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "heading_padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Unten",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "heading_padding_left",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Links",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Button-Stil"
+    },
+    {
+      "type": "color",
+      "id": "button_background",
+      "label": "Hintergrund",
+      "default": "#f5f5f5"
+    },
+    {
+      "type": "color",
+      "id": "button_background_hover",
+      "label": "Hintergrund bei Hover",
+      "default": "#ff6700"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Textfarbe",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color_hover",
+      "label": "Textfarbe bei Hover",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "button_border_width",
+      "min": 0,
+      "max": 6,
+      "step": 1,
+      "unit": "px",
+      "label": "Rahmenbreite",
+      "default": 0
+    },
+    {
+      "type": "color",
+      "id": "button_border_color",
+      "label": "Rahmenfarbe",
+      "default": "#000000"
+    },
+    {
+      "type": "header",
+      "content": "Abstände"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 160,
+      "step": 2,
+      "unit": "px",
+      "label": "Abstand oben",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 160,
+      "step": 2,
+      "unit": "px",
+      "label": "Abstand unten",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "padding_left",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Zusätzlicher Abstand links",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_right",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Zusätzlicher Abstand rechts",
+      "default": 0
+    }
+  ],
+  "blocks": [
+    {
+      "type": "download",
+      "name": "Download",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Bezeichnung",
+          "default": "Datenblatt"
+        },
+        {
+          "type": "text",
+          "id": "metafield_key",
+          "label": "Datei-Metafeld",
+          "info": "Schlüssel aus dem Namespace custom, z. B. datenblatt",
+          "default": "datenblatt"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Alternativer Link",
+          "info": "Überschreibt die Datei aus dem Metafeld, wenn gesetzt."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Downloads",
+      "blocks": [
+        {
+          "type": "download",
+          "settings": {
+            "label": "Montageanleitung",
+            "metafield_key": "montageanleitung"
+          }
+        },
+        {
+          "type": "download",
+          "settings": {
+            "label": "Datenblatt",
+            "metafield_key": "datenblatt"
+          }
+        },
+        {
+          "type": "download",
+          "settings": {
+            "label": "Technische Zeichnung",
+            "metafield_key": "technische_zeichnung"
+          }
+        }
+      ]
+    }
+  ],
+  "enabled_on": {
+    "templates": ["product"]
+  }
+}
+{% endschema %}

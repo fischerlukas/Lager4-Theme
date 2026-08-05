@@ -93,10 +93,6 @@ div.flex-buttons > #CheckOut-exemptify {
 }
 
 /* UID-Toggle */
-.uid-toggle-wrapper {
-  display: none;
-}
-
 div.sidebar__footer > #AjaxCartSubtotal > div > div.uid-toggle-wrapper {
   display: none;
 }
@@ -346,7 +342,7 @@ div.sidebar__footer > #AjaxCartSubtotal > div > div.uid-toggle-wrapper {
   font-family: inherit;
   font-size: 14px;
   overflow: hidden;
-  margin-top: -40px;
+  /* margin-top: -40px; */ /* Remove due to inconsistency */
 }
 
 .custom-attributes {
@@ -427,6 +423,7 @@ div.sidebar__footer > #AjaxCartSubtotal > div > div.uid-toggle-wrapper {
   grid-template-columns: repeat(2, 1fr);
   padding: 0 30px 30px 30px;
   gap: 20px;
+  width: 100%;
 }
 
 .custom-attribute-container {
@@ -487,6 +484,7 @@ div.sidebar__footer > #AjaxCartSubtotal > div > div.uid-toggle-wrapper {
 .custom-parts-container table {
   table-layout: fixed;
   max-width: 100%;
+  width: 100%;
 }
 
 .custom-parts-container tr {

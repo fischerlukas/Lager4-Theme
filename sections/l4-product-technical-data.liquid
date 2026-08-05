@@ -1,0 +1,239 @@
+{{ 'l4-product-details.css' | asset_url | stylesheet_tag }}
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/@phosphor-icons/web@2.0.3/src/duotone/style.css"
+>
+
+<div
+  id="L4TechnicalData-{{ section.id }}"
+  class="l4-product-detail l4-product-detail--grid"
+  style="
+    --l4-product-detail-padding-top: {{ section.settings.padding_top | default: 20 }}px;
+    --l4-product-detail-padding-bottom: {{ section.settings.padding_bottom | default: 20 }}px;
+    --l4-product-detail-padding-left: {{ section.settings.padding_left | default: 0 }}px;
+    --l4-product-detail-padding-right: {{ section.settings.padding_right | default: 0 }}px;
+    --l4-product-detail-heading-padding-top: {{ section.settings.heading_padding_top | default: 0 }}px;
+    --l4-product-detail-heading-padding-right: {{ section.settings.heading_padding_right | default: 0 }}px;
+    --l4-product-detail-heading-padding-bottom: {{ section.settings.heading_padding_bottom | default: 0 }}px;
+    --l4-product-detail-heading-padding-left: {{ section.settings.heading_padding_left | default: 0 }}px;
+  "
+>
+  <div class="custom-attributes l4-product-detail__card">
+    <h2 class="l4-product-detail__heading">
+      {{ section.settings.heading | escape }}
+    </h2>
+
+    <div class="custom-attributes-grid">
+      {%- for block in section.blocks -%}
+        {%- liquid
+          assign specification = product.metafields.custom[block.settings.metafield_key]
+          assign specification_value = specification.value
+        -%}
+
+        {%- unless section.settings.hide_empty_values and specification_value == blank -%}
+          <div class="custom-attribute-container" {{ block.shopify_attributes }}>
+            <div class="custom-icon-container">
+              <div class="custom-icon ph-duotone ph-{{ block.settings.icon | handle }}" aria-hidden="true"></div>
+            </div>
+            <div class="custom-text-container">
+              <div class="custom-text-bg">{{ block.settings.label | escape }}</div>
+              <div class="custom-text-sm">{{ specification_value }}</div>
+            </div>
+          </div>
+        {%- endunless -%}
+      {%- endfor -%}
+    </div>
+  </div>
+
+  {%- unless section.settings.show_parts_list == false -%}
+    <div class="custom-parts l4-product-detail__card">
+      <h2 class="l4-product-detail__heading">
+        {{ section.settings.parts_heading | default: 'Stückliste' | escape }}
+      </h2>
+
+      <div class="custom-parts-container">
+        {{ product.description }}
+      </div>
+    </div>
+  {%- endunless -%}
+</div>
+
+{% schema %}
+{
+  "name": "Technik + Stückliste",
+  "class": "l4-product-detail-section l4-product-detail-section--technical",
+  "max_blocks": 20,
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Überschrift",
+      "default": "Technische Daten"
+    },
+    {
+      "type": "header",
+      "content": "Überschrift-Abstände"
+    },
+    {
+      "type": "range",
+      "id": "heading_padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Oben",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "heading_padding_right",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Rechts",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "heading_padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Unten",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "heading_padding_left",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Links",
+      "default": 0
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_empty_values",
+      "label": "Leere Werte ausblenden",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Stückliste"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_parts_list",
+      "label": "Stückliste anzeigen",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "parts_heading",
+      "label": "Überschrift",
+      "default": "Stückliste"
+    },
+    {
+      "type": "header",
+      "content": "Abstände"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 160,
+      "step": 2,
+      "unit": "px",
+      "label": "Abstand oben",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 160,
+      "step": 2,
+      "unit": "px",
+      "label": "Abstand unten",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "padding_left",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Zusätzlicher Abstand links",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_right",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Zusätzlicher Abstand rechts",
+      "default": 0
+    }
+  ],
+  "blocks": [
+    {
+      "type": "specification",
+      "name": "Technische Angabe",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Bezeichnung",
+          "default": "Modell"
+        },
+        {
+          "type": "text",
+          "id": "metafield_key",
+          "label": "Metafeld-Schlüssel",
+          "info": "Schlüssel aus dem Namespace custom, z. B. modell",
+          "default": "modell"
+        },
+        {
+          "type": "text",
+          "id": "icon",
+          "label": "Phosphor Icon",
+          "info": "Icon-Name ohne ph-, z. B. cube",
+          "default": "cube"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Technik + Stückliste",
+      "blocks": [
+        {
+          "type": "specification",
+          "settings": {
+            "label": "Modell",
+            "metafield_key": "modell",
+            "icon": "cube"
+          }
+        },
+        {
+          "type": "specification",
+          "settings": {
+            "label": "Artikelnummer",
+            "metafield_key": "artikelnummer",
+            "icon": "hash"
+          }
+        }
+      ]
+    }
+  ],
+  "enabled_on": {
+    "templates": ["product"]
+  }
+}
+{% endschema %}

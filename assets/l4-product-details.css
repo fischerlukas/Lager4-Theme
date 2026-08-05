@@ -1,0 +1,206 @@
+/*
+ * The technical data and parts list are one Shopify section so the grid owns
+ * both cards directly. This avoids layout coupling between section wrappers.
+ */
+.l4-product-detail {
+  --l4-product-detail-padding-top: 20px;
+  --l4-product-detail-padding-bottom: 20px;
+  --l4-product-detail-padding-left: 0px;
+  --l4-product-detail-padding-right: 0px;
+  --l4-product-detail-card-background: #ffffff;
+  --l4-product-detail-card-border-color: transparent;
+  --l4-product-detail-card-border-width: 0px;
+  --l4-product-detail-card-gap-mobile: 24px;
+  --l4-product-detail-card-gap-desktop: 24px;
+  --l4-product-detail-card-padding-mobile: 24px;
+  --l4-product-detail-card-padding-desktop: 32px;
+  --l4-product-detail-card-radius: 50px;
+  --l4-product-detail-card-shadow: 0 0 30px -10px rgb(0 0 0 / 30%);
+  --l4-product-detail-heading-color: #1c1f24;
+  --l4-product-detail-heading-size-mobile: 26px;
+  --l4-product-detail-heading-size-desktop: 26px;
+  --l4-product-detail-heading-weight: 200;
+  --l4-product-detail-heading-line-height: 1.375;
+  --l4-product-detail-heading-alignment: center;
+  --l4-product-detail-heading-padding-top: 0px;
+  --l4-product-detail-heading-padding-right: 0px;
+  --l4-product-detail-heading-padding-bottom: 0px;
+  --l4-product-detail-heading-padding-left: 0px;
+  width: 100%;
+  box-sizing: border-box;
+  padding-top: var(--l4-product-detail-padding-top);
+  padding-right: calc(var(--gutter-container) + var(--l4-product-detail-padding-right));
+  padding-bottom: var(--l4-product-detail-padding-bottom);
+  padding-left: calc(var(--gutter-container) + var(--l4-product-detail-padding-left));
+}
+
+.l4-product-detail--grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 50px;
+  overflow: visible;
+  font-size: 14px;
+}
+
+.l4-product-detail--single {
+  display: block;
+}
+
+.l4-product-detail__card {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: var(--l4-product-detail-card-gap-mobile);
+  padding: var(--l4-product-detail-card-padding-mobile);
+  background: var(--l4-product-detail-card-background);
+  border: var(--l4-product-detail-card-border-width) solid
+    var(--l4-product-detail-card-border-color);
+  border-radius: var(--l4-product-detail-card-radius);
+  box-shadow: var(--l4-product-detail-card-shadow);
+}
+
+.l4-product-detail__heading {
+  width: 100%;
+  margin: 0;
+  padding: var(--l4-product-detail-heading-padding-top)
+    var(--l4-product-detail-heading-padding-right)
+    var(--l4-product-detail-heading-padding-bottom)
+    var(--l4-product-detail-heading-padding-left);
+  color: var(--l4-product-detail-heading-color);
+  font: inherit;
+  font-size: var(--l4-product-detail-heading-size-mobile);
+  font-weight: var(--l4-product-detail-heading-weight);
+  line-height: var(--l4-product-detail-heading-line-height);
+  letter-spacing: normal;
+  text-align: var(--l4-product-detail-heading-alignment);
+  text-transform: none;
+  text-wrap: balance;
+}
+
+.l4-product-detail__heading :is(strong, b) {
+  font-weight: 700;
+}
+
+.l4-product-detail__heading :is(em, i) {
+  font-style: italic;
+}
+
+.l4-product-detail .custom-attributes-grid,
+.l4-product-detail .custom-parts-container,
+.l4-product-detail .custom-link-container {
+  padding: 0;
+}
+
+.l4-product-detail__download.custom-link-button.button {
+  position: relative;
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  padding: 0 20px;
+  border: var(--l4-download-border-width, 0) solid
+    var(--l4-download-border-color, transparent);
+  background-color: var(--l4-download-background, #f5f5f5);
+  color: var(--l4-download-text-color, #000);
+  font-size: 16px;
+  text-decoration: none;
+  transition:
+    color 80ms linear,
+    background-color 175ms ease,
+    box-shadow 175ms ease;
+}
+
+.l4-product-detail__download-content {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+}
+
+.l4-product-detail__download.custom-link-button.button .button__text {
+  display: inline-block;
+  width: auto;
+  margin: 0;
+  text-align: center;
+  transform: none;
+  color: currentColor;
+  transition: transform 175ms ease;
+}
+
+.l4-product-detail__download.custom-link-button.button .button__icon {
+  position: static;
+  display: flex;
+  width: 0;
+  height: 20px;
+  flex: 0 0 auto;
+  align-items: center;
+  margin: 0;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateX(-5px);
+  transform-origin: center right;
+  color: currentColor;
+  pointer-events: none;
+  transition:
+    opacity 175ms linear,
+    transform 175ms ease,
+    width 175ms ease,
+    margin-left 175ms ease;
+}
+
+.l4-product-detail__download.custom-link-button.button .button__icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.l4-product-detail__download.custom-link-button.button .button__icon svg path {
+  fill: none;
+  stroke: currentColor;
+}
+
+.l4-product-detail__download.custom-link-button.button:hover {
+  background-color: var(--l4-download-background-hover, #ff6700);
+  color: var(--l4-download-text-color-hover, #fff);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .l4-product-detail__download.custom-link-button.button:hover .button__text {
+    transform: translateX(-3px);
+  }
+
+  .l4-product-detail__download.custom-link-button.button:hover .button__icon {
+    width: 20px;
+    margin-left: 10px;
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.l4-product-detail__download[aria-disabled="true"] {
+  cursor: default;
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+@media (min-width: 768px) {
+  .l4-product-detail__card {
+    gap: var(--l4-product-detail-card-gap-desktop);
+    padding: var(--l4-product-detail-card-padding-desktop);
+  }
+
+  .l4-product-detail__heading {
+    font-size: var(--l4-product-detail-heading-size-desktop);
+  }
+}
+
+@media only screen and (max-width: 1050px) {
+  .l4-product-detail--grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 40px;
+  }
+
+  .l4-product-detail .custom-attributes,
+  .l4-product-detail .custom-parts {
+    grid-column: auto;
+  }
+}
