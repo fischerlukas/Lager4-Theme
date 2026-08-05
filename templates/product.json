@@ -223,7 +223,7 @@
         "card_padding": 32,
         "card_padding_mobile": 30,
         "card_gap": 24,
-        "tier_gap": 10,
+        "tier_gap": 32,
         "tier_gap_mobile": 20,
         "tier_gap_plus_icon": 16,
         "tier_content_gap": 12,
