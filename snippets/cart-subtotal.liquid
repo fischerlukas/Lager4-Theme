@@ -125,10 +125,11 @@
 				<a id="ViewCart" href="{{ routes.cart_url }}" class="button button--regular button--solid button--move">
 					<span class="button__text">{{ 'cart.view_cart' | t }}</span>
 				</a>
+			{%- else -%}
+				<button id="CheckOut" class="button button--regular button--solid button--move" type="submit" name="checkout" form="cart">
+					<span class="button__text">{{ 'cart.checkout' | t }}</span>
+				</button>
 			{%- endunless -%}
-			<button id="CheckOut" class="button button--regular button--solid button--move" type="submit" name="checkout" form="cart">
-				<span class="button__text">{{ 'cart.checkout' | t }}</span>
-			</button>
 		</div>
 
 		{%- unless template contains 'order' -%}  

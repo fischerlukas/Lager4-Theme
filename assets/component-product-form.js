@@ -581,6 +581,8 @@ if ( typeof ProductForm !== 'function' ) {
 					}
 
 					document.getElementById('AjaxCartSubtotal').innerHTML = cartSubtotalInnerHTML;
+					if ( typeof window.updateAllVatTexts === 'function' ) window.updateAllVatTexts();
+					if ( typeof window.updateShippingCosts === 'function' ) window.updateShippingCosts();
 
 					document.querySelectorAll('[data-header-cart-count]').forEach(elm=>{
 						elm.textContent = document.querySelector('#AjaxCartForm [data-cart-count]').textContent;
