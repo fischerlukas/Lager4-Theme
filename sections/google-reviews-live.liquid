@@ -1,0 +1,202 @@
+{{ 'google-reviews-live.css' | asset_url | stylesheet_tag }}
+
+{%- comment -%}
+  Google Reviews Live
+  ----------------------------------------------------------------------------
+  Google-Bewertungen direkt über die Google Maps JavaScript API + Places API
+  (New), clientseitig geladen – kein serverseitiger Sync nötig.
+
+  Einbau in ein Shopify-Theme:
+    1. sections/google-reviews-live.liquid nach sections/ kopieren
+    2. assets/google-reviews-live.css + .js nach assets/ kopieren
+    3. locales/de.json + en.json nach locales/ kopieren
+    4. Im Theme-Editor eine Sektion "Google Reviews Live" hinzufügen und
+       API-Key + Place-ID eintragen.
+
+  Der API-Key wird clientseitig an die Maps JavaScript API übergeben und
+  sollte in der Google Cloud Console per HTTP-Referrer auf die eigene Domain
+  beschränkt werden (Maps JavaScript API + Places API aktiviert).
+{%- endcomment -%}
+
+<section
+  id="GoogleReviewsLive-{{ section.id }}"
+  class="gl4 gl4--{{ section.settings.position }}"
+  data-gl4-root
+  style="
+    --gl4-accent: {{ section.settings.color_accent }};
+    --gl4-text: {{ section.settings.color_text }};
+    --gl4-surface: {{ section.settings.color_surface }};
+    --gl4-soft: {{ section.settings.color_soft }};
+    --gl4-line: {{ section.settings.color_line }};
+    --gl4-radius-badge: {{ section.settings.radius_badge }}px;
+    --gl4-radius-panel: {{ section.settings.radius_panel }}px;
+    --gl4-offset: {{ section.settings.offset }}px;
+  "
+>
+  {%- comment -%}
+    Alle Einstellungen als JSON für das Widget – Liquid serialisiert die
+    Farbwerte als Hex-Strings, URLs als Strings, Zahlen als Zahlen.
+  {%- endcomment -%}
+  <script type="application/json" data-gl4-config>
+    {{ section.settings | json }}
+  </script>
+
+  <noscript>
+    <p style="margin:0;padding:24px;text-align:center">
+      {{ section.settings.error_label | escape }}
+    </p>
+  </noscript>
+</section>
+
+<script src="{{ 'google-reviews-live.js' | asset_url }}" defer></script>
+
+{% schema %}
+{
+  "name": "Google Reviews Live",
+  "tag": "section",
+  "class": "gl4-section",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Floating badge with Google reviews. Fetches the data client-side via the Google Maps JavaScript API and the Places API (New). API key and Place ID are configured below."
+    },
+
+    { "type": "header", "content": "Data source" },
+    {
+      "type": "text",
+      "id": "api_key",
+      "label": "Google Maps API key",
+      "info": "Enables the “Maps JavaScript API” and “Places API” in the Google Cloud Console. Restrict the key by HTTP referrer to your own domain."
+    },
+    {
+      "type": "text",
+      "id": "place_id",
+      "label": "Google Place ID",
+      "default": "ChIJj8yjy8s7dEcRNBKBYaE9aUg",
+      "info": "Place ID of the location, e.g. look it up via https://developers.google.com/maps/documentation/places/web-service/place-id"
+    },
+    {
+      "type": "select",
+      "id": "locale",
+      "label": "Data language",
+      "default": "de",
+      "options": [
+        { "value": "de", "label": "German" },
+        { "value": "en", "label": "English" },
+        { "value": "fr", "label": "French" },
+        { "value": "it", "label": "Italian" },
+        { "value": "es", "label": "Spanish" },
+        { "value": "nl", "label": "Dutch" },
+        { "value": "pl", "label": "Polish" },
+        { "value": "cs", "label": "Czech" }
+      ],
+      "info": "Language in which Google returns the review texts and time descriptions."
+    },
+    {
+      "type": "range",
+      "id": "max_reviews",
+      "label": "Number of reviews",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "default": 5,
+      "info": "The Places API returns a maximum of 5 reviews per request."
+    },
+
+    { "type": "header", "content": "Content" },
+    { "type": "text", "id": "badge_label", "label": "Badge text", "default": "Top bewertet auf Google" },
+    { "type": "text", "id": "panel_title", "label": "Title / brand name in the panel", "default": "Bewertungen" },
+    { "type": "text", "id": "business_name", "label": "Business name", "default": "Lager4", "info": "Used in the title line of variant 5 ({name})." },
+    { "type": "text", "id": "reviews_word", "label": "Word for the count", "default": "Bewertungen auf Google" },
+    { "type": "text", "id": "cta_label", "label": "Button “Write a review”", "default": "Bewertung schreiben" },
+    { "type": "text", "id": "v2_cta_label", "label": "Button variant 2 (card slider)", "default": "Bewerten" },
+    { "type": "text", "id": "v4_cta_label", "label": "Button variant 4 (orange header)", "default": "Jetzt selbst bewerten" },
+    { "type": "text", "id": "foot_label", "label": "Footer link", "default": "Alle auf Google ansehen" },
+    { "type": "url", "id": "write_url", "label": "Target for “Write a review” (optional)", "info": "Empty: automatically uses the Google form of the Place ID." },
+    { "type": "url", "id": "all_url", "label": "Target for “See all” (optional)", "info": "Empty: automatically uses the Google overview of the Place ID." },
+    { "type": "text", "id": "v2_title", "label": "Heading variant 2", "default": "Das sagen unsere Kunden" },
+    { "type": "text", "id": "v3_title", "label": "Heading variant 3", "default": "Kundenstimmen" },
+    { "type": "text", "id": "v3_meta_before", "label": "Meta text variant 3 (before the count)", "default": "basierend auf " },
+    { "type": "text", "id": "v3_meta_after", "label": "Meta text variant 3 (after the count)", "default": "Bewertungen" },
+    {
+      "type": "text",
+      "id": "v5_title",
+      "label": "Title variant 5",
+      "default": "{count} Kunden bewerten {name} mit {score} von 5",
+      "info": "Placeholders: {count} = count, {score} = rating, {name} = business name."
+    },
+    {
+      "type": "text",
+      "id": "fallback_reviews",
+      "label": "Fallback reviews (optional, JSON)",
+      "info": "Static reviews that are shown when the API is unreachable. Format: {\"rating\":5,\"count\":13,\"reviews\":[{\"name\":\"…\",\"when\":\"…\",\"rating\":5,\"text\":\"…\"}]}"
+    },
+
+    { "type": "header", "content": "Behavior" },
+    {
+      "type": "select",
+      "id": "variant",
+      "label": "Popup variant",
+      "default": "v1",
+      "options": [
+        { "value": "v1", "label": "1 · Side panel" },
+        { "value": "v2", "label": "2 · Card slider" },
+        { "value": "v3", "label": "3 · Split with star scale" },
+        { "value": "v4", "label": "4 · Orange header" },
+        { "value": "v5", "label": "5 · Editorial" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "position",
+      "label": "Position",
+      "default": "right",
+      "options": [
+        { "value": "right", "label": "Bottom right" },
+        { "value": "left", "label": "Bottom left" }
+      ]
+    },
+    { "type": "range", "id": "delay", "label": "Show with delay", "min": 0, "max": 15, "step": 1, "default": 2, "unit": "s" },
+    { "type": "checkbox", "id": "dismissible", "label": "Badge dismissible (×)", "default": true },
+    {
+      "type": "range",
+      "id": "remember_days",
+      "label": "Keep hidden for",
+      "min": 0,
+      "max": 90,
+      "step": 1,
+      "default": 30,
+      "unit": "d",
+      "info": "0 = only for the current page view."
+    },
+    { "type": "checkbox", "id": "hide_on_mobile", "label": "Hide on mobile", "default": false },
+
+    { "type": "header", "content": "Layout" },
+    { "type": "range", "id": "offset", "label": "Distance to the edge", "min": 8, "max": 48, "step": 2, "default": 24, "unit": "px" },
+
+    { "type": "header", "content": "Font" },
+    { "type": "checkbox", "id": "use_google_font", "label": "Load Nunito from Google Fonts", "default": false, "info": "Turn off when the theme already loads the font." },
+
+    { "type": "header", "content": "Colors & Shape" },
+    { "type": "color", "id": "color_accent", "label": "Accent (stars, buttons)", "default": "#ff6700" },
+    { "type": "color", "id": "color_text", "label": "Text", "default": "#000000" },
+    { "type": "color", "id": "color_surface", "label": "Surface (cards, badge)", "default": "#ffffff" },
+    { "type": "color", "id": "color_soft", "label": "Soft surface", "default": "#f9f9f9" },
+    { "type": "color", "id": "color_line", "label": "Separator lines", "default": "#dedede" },
+    { "type": "range", "id": "radius_badge", "label": "Badge border radius", "min": 0, "max": 40, "step": 2, "default": 14, "unit": "px" },
+    { "type": "range", "id": "radius_panel", "label": "Panel border radius", "min": 0, "max": 40, "step": 2, "default": 16, "unit": "px" },
+
+    { "type": "header", "content": "Accessibility" },
+    { "type": "text", "id": "loading_label", "label": "Loading text", "default": "Bewertungen werden geladen …" },
+    { "type": "text", "id": "error_label", "label": "Error text", "default": "Bewertungen konnten gerade nicht geladen werden." },
+    { "type": "text", "id": "retry_label", "label": "Try again", "default": "Erneut versuchen" },
+    { "type": "text", "id": "hint_label", "label": "Overlay hint", "default": "Klick auf den Hintergrund oder ESC schließt das Overlay" },
+    { "type": "text", "id": "close_label", "label": "Close (aria-label)", "default": "Schließen" },
+    { "type": "text", "id": "dismiss_label", "label": "Dismiss badge (aria-label)", "default": "Badge ausblenden" },
+    { "type": "text", "id": "empty_label", "label": "Text for empty reviews", "default": "Noch keine Google-Bewertungen verfügbar.", "info": "Shown when the API (e.g. demo key) does not deliver review texts." }
+  ],
+  "presets": [
+    { "name": "Google Reviews Live" }
+  ]
+}
+{% endschema %}

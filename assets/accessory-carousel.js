@@ -481,6 +481,8 @@
 
       cartForm.innerHTML = nextCartForm.innerHTML;
       cartSubtotal.innerHTML = nextCartSubtotal.innerHTML;
+      if ( typeof window.updateAllVatTexts === 'function' ) window.updateAllVatTexts();
+      if ( typeof window.updateShippingCosts === 'function' ) window.updateShippingCosts();
 
       if (typeof cartForm.ajaxifyCartItems === "function") {
         cartForm.ajaxifyCartItems();

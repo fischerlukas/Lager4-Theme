@@ -1,41 +1,45 @@
 ---
 name: lager4-theme
-description: Create and edit customizable Shopify Online Store 2.0 sections in the Lager4 theme while following its visual language, responsive layout, theme-editor, accessibility, and base-theme integration conventions. Use for Liquid, section schema, scoped CSS, JavaScript interactions, metafield content, product templates, and cart behavior in the lager4-theme repository.
+description: >-
+  Build and maintain Shopify Online Store 2.0 sections in the Lager4 theme. Use
+  for Liquid, section schemas, scoped CSS, JavaScript interactions, metafields,
+  product templates, and cart behavior while preserving responsive, accessible,
+  editor-friendly theme conventions.
 ---
 
 # Lager4 Theme Development
 
-Use this skill to create or edit Lager4 theme functionality without having to
-rediscover the stable theme foundations and design rules each time.
+Use this skill for reusable Lager4 theme conventions. Treat the repository and
+saved theme settings as authoritative for every task.
 
-Do not encode knowledge of sections previously created with this skill. Inspect
-the section involved in the current task from the repository. Keep this skill
-limited to stable theme facts and reusable construction rules.
+Do not preserve implementation details from sections created in earlier tasks.
+Inspect the current section, its assets, template instances, and related Combine
+components before making changes.
 
-## Start With the Repository
+## Repository-First Workflow
 
-1. Run `git status --short` and preserve existing staged and unstaged work.
-2. Find the target section and every template instance with `rg`.
-3. Read the target Liquid, associated CSS and JavaScript, relevant JSON
-   templates, and the base-theme component it integrates with.
-4. Determine whether the request is local to one section or intentionally
-   changes global theme behavior.
-5. Implement the complete path: markup, schema, styles, behavior, and existing
+1. Run `git status --short` and preserve all existing staged and unstaged work.
+2. Locate the target section and every template instance with `rg`.
+3. Read the relevant Liquid, CSS, JavaScript, JSON templates, snippets, and
+   base-theme components.
+4. Decide whether the requested behavior is section-scoped or intentionally
+   global.
+5. Implement the complete path: markup, schema, styles, behavior, and stored
    template settings.
-6. Validate syntax and inspect both staged and unstaged diffs.
+6. Validate changed files and inspect staged and unstaged diffs before handoff.
 
-Treat current source code and theme settings as authoritative. Recheck them
-when a task depends on a value that may have changed.
+Recheck any repository value that might have changed. Do not treat the baseline
+below as a substitute for inspecting the current source.
 
-## Stable Theme Foundation
+## Theme Foundation
 
-The repository is a Shopify Online Store 2.0 theme based on Combine 2.2.2.
-Verify the version in `config/settings_schema.json` and `layout/theme.liquid`.
+The theme is based on Combine 2.2.2. Verify the installed version in
+`config/settings_schema.json` and `layout/theme.liquid`.
 
-The current global baseline in `config/settings_data.json` is:
+The expected baseline in `config/settings_data.json` is:
 
 | Role | Value |
-|---|---|
+| --- | --- |
 | Heading and body font | `avenir_next_rounded_n4` |
 | Base heading size / line height | `30px` / `1.3` |
 | Base body size | `16px` |
@@ -50,31 +54,30 @@ The current global baseline in `config/settings_data.json` is:
 | Button border / radius | `1px` / `30px` |
 | Cart action | `overlay` |
 
-Use generated theme variables instead of repeating global values:
+Prefer generated theme variables over repeated global values:
 
 - `--theme-max-width`
 - `--gutter-container`
 - `--grid-gap-original-base`
 - `--container-vertical-space-base`
-- the font and color variables from `snippets/head-variables.liquid`
+- font and color variables from `snippets/head-variables.liquid`
 
-Container gutters are responsive in `assets/theme.css`. Constrained sections
-should use `var(--theme-max-width)` and `var(--gutter-container)`. Full-width
-mode should remove the outer constraint and gutter intentionally.
+Constrained sections should use `var(--theme-max-width)` and
+`var(--gutter-container)`. Full-width sections should remove the outer width
+constraint and gutter deliberately.
 
-Treat local colors, radii, typography, and animation values as component
-settings. Do not infer that a value used by one custom section is a global
-design token.
+Treat component colors, radii, typography, and animation values as local unless
+the repository explicitly defines them as global tokens.
 
 ## Section Architecture
 
-### Own a Unique Namespace
+### Use an Independent Namespace
 
-Give each new section its own wrapper, element classes, and custom-property
-prefix. Copy visual declarations when designs should match, but never borrow
-another section's classes or CSS variables.
+Give every section a unique root class, element namespace, and custom-property
+prefix. Copy declarations when designs should match, but do not reuse another
+section's selectors or custom properties.
 
-For a section named `l4-example`, use names such as:
+For `l4-example`, use names such as:
 
 ```text
 .l4-example
@@ -84,39 +87,38 @@ For a section named `l4-example`, use names such as:
 --l4-example-heading-padding-top
 ```
 
-Per-instance variables must be declared on the same root that contains the
-styled descendants. Reusing a class from another section can make its expected
-variables resolve to fallbacks or fail to resolve.
+Declare per-instance custom properties on the root that contains the affected
+elements. Root every selector at the section class, section ID, or a dedicated
+custom element.
 
-Multiple components may load the same asset file, but their selectors and
-variables must remain independently scoped. Prefer a dedicated asset when a
-shared file would create coupling.
+Components may share an asset only when the asset does not couple their
+selectors, variables, or behavior. Otherwise, use a dedicated asset.
 
-### Build Editor-First
+### Design for the Theme Editor
 
-Expose the main visual decisions in the section schema and bind them to
-section-specific custom properties. For a major section, normally provide:
+Expose meaningful merchant decisions, not every implementation detail. A major
+section normally includes:
 
-- content and visibility settings;
-- full-width versus constrained layout when relevant;
-- desktop top and bottom padding;
-- mobile top and bottom padding;
-- optional additional left and right padding;
-- heading padding on all four sides;
-- colors, borders, radii, and typography when merchants need control;
+- content and visibility controls;
+- constrained or full-width layout when relevant;
+- desktop and mobile vertical spacing;
+- optional additional horizontal spacing;
+- heading spacing on all four sides when required by the design;
+- relevant colors, borders, radii, and typography;
 - behavior toggles;
-- editable labels for accessibility or interaction text.
+- editable accessibility and interaction labels.
 
-Use `20px` as the normal starting default for section top and bottom padding
-and `0px` for additional side padding. Preserve intentional values already
-stored in template instances.
+Use `20px` as the normal starting default for top and bottom spacing and `0px`
+for additional side spacing. Preserve intentional values already stored in
+JSON templates.
 
-Do not make every small CSS detail editable. Expose meaningful design choices
-and keep structural implementation details in CSS.
+Use range, select, checkbox, color, URL, product, collection, and other typed
+settings whenever they constrain values more safely than free-form text.
 
 ### Bind Settings on the Section Root
 
-Use a unique section ID and output settings as local variables:
+Use a unique ID and section-scoped variables. Keep the example complete so it
+can be copied safely:
 
 ```liquid
 <section
@@ -133,15 +135,16 @@ Use a unique section ID and output settings as local variables:
     --l4-example-heading-padding-left: {{ section.settings.heading_padding_left }}px;
   "
 >
+  <!-- Section content -->
+</section>
 ```
 
-Define safe fallback values in the component CSS as well. Root all selectors at
-the unique component class, ID, or custom element to avoid leaking into
-Combine components and third-party apps.
+Define safe CSS fallbacks for every custom property. Only interpolate values
+from schema types that constrain the resulting CSS.
 
 ### Keep Schema Predictable
 
-Group schema settings in this order when the groups apply:
+Group settings in this order when applicable:
 
 1. data or product source;
 2. content;
@@ -151,19 +154,19 @@ Group schema settings in this order when the groups apply:
 6. colors and shape;
 7. accessibility labels.
 
-Use blocks for repeatable content and add `block.shopify_attributes` to the
-block's outer rendered element. Add a useful preset. Restrict a section with
-`enabled_on` only when it should not be available on other templates.
+Use blocks for repeatable content and include
+`{{ block.shopify_attributes }}` on each block's outer rendered element. Add a
+useful preset. Use `enabled_on` only when the section must be restricted to
+specific template groups.
 
-Use plain `text` for values that should not contain markup and escape them when
-rendering. Use `inline_richtext` only when formatting is intended and preserve
-its `strong`, `b`, `em`, and `i` styling.
+Use `text` for plain values and escape them when rendering. Use
+`inline_richtext` only when formatting is intended; render it as rich text
+rather than escaping its markup.
 
-## Layout Rules
+## Layout and Responsive Behavior
 
-Use CSS Grid or Flexbox for section layout. Do not use floats or coordinate
-separate Shopify section wrappers through template order, negative positioning,
-or fragile sibling selectors.
+Use CSS Grid or Flexbox. Do not coordinate separate Shopify sections through
+DOM order, negative positioning, floats, or fragile sibling selectors.
 
 For two equal cards owned by one section:
 
@@ -189,21 +192,24 @@ For two equal cards owned by one section:
 Apply constrained side spacing with the theme gutter plus the editor value:
 
 ```css
-padding-right: calc(var(--gutter-container) + var(--l4-example-padding-right));
-padding-left: calc(var(--gutter-container) + var(--l4-example-padding-left));
+padding-inline: calc(
+  var(--gutter-container) + var(--l4-example-padding-inline, 0px)
+);
 ```
 
-Keep constrained and full-width behavior explicit. Verify mobile layouts with
-long text, empty content, and the minimum supported viewport.
+If separate left and right controls are required, bind and apply them
+individually instead of using `padding-inline`.
+
+Test constrained and full-width modes with long text, empty content, and the
+minimum supported viewport.
 
 ## Visual Language
 
-Start with global theme tokens. When the requested design calls for the large
-L4 information-card treatment, use this baseline in the section's own
-namespace:
+Start with the global theme tokens. When the requested design calls for the
+large Lager4 information-card treatment, use this local baseline:
 
 | Property | Baseline |
-|---|---|
+| --- | --- |
 | Background | `#ffffff` |
 | Border | `0 solid transparent` |
 | Radius | `50px` |
@@ -217,124 +223,124 @@ namespace:
 | Heading line height | `1.375` |
 | Heading alignment | `center` |
 
-This is a reusable treatment, not a mandatory style for every card. Inspect the
-requested context before applying it.
+This treatment is optional, not a global requirement.
 
-Use a semantic heading element and a section-specific heading class. Bind top,
-right, bottom, and left heading padding separately. Do not use generic classes
-such as `custom-heading` or `custom-tab-container` for new components.
+Use semantic heading elements and section-specific heading classes. Avoid
+generic names such as `custom-heading` and `custom-tab-container`.
 
-Buttons should inherit the base theme's pill shape unless the design specifies
-otherwise. Make borders and state colors editable when they are meaningful
-merchant controls. Keep behavior-only changes from altering button height,
-width, or layout.
+Buttons should inherit the base theme's pill geometry unless the design
+requires otherwise. Keep behavior-only changes from shifting button dimensions
+or surrounding layout.
 
-For buttons whose icon appears on hover:
+For hover-revealed button icons:
 
-- center text and icon as one compact inline group;
-- hide the icon before hover without reserving a large gap;
-- move text slightly left and the icon slightly right;
-- keep the final text-to-icon gap at or below about `20px`;
-- make color feedback faster than the positional animation;
+- keep the label and icon in one compact inline group;
+- avoid reserving a large empty gap before hover;
 - restrict hover-only motion to `(hover: hover) and (pointer: fine)`;
-- provide a clear keyboard focus state and respect reduced motion.
+- provide a visible keyboard focus state;
+- disable nonessential motion under `prefers-reduced-motion: reduce`.
 
-## Data and Liquid
+## Liquid and Data
 
-Inspect a metafield's definition before comparing or formatting `.value`.
-Scalar text, list text, references, files, measurements, and money values
-require different handling.
+Inspect a metafield's definition before reading, comparing, or formatting its
+`.value`. Text, list, reference, file, measurement, and money values require
+different handling.
 
-For a Single line text (List), keep the value as a list:
+For a list of single-line text values, preserve the list type:
 
 ```liquid
-assign values = product.metafields.custom.example.value
-assign display_value = values | join: ', '
+{% liquid
+  assign values = product.metafields.custom.example.value
+  assign display_value = values | join: ', '
+%}
 
-if values contains section.settings.match_value
-  # Render the matching configuration.
-endif
+{% if values contains section.settings.match_value %}
+  <!-- Render the matching configuration. -->
+{% endif %}
 ```
 
-Do not stringify a list with `append: ''` before comparison; it produces a
-serialized representation such as `["Value"]`, which does not equal the plain
-string `Value`.
+Do not stringify a list with `append: ''` before comparison. That creates a
+serialized representation rather than a plain string value.
 
-Keep mappings and fallback behavior configurable when business data differs
-between templates. Do not invent product handles, collection handles,
-metafield keys, or fallback products. In Shopify design mode, prefer a concise
-configuration diagnostic over silently rendering unrelated content.
+Keep mappings and fallbacks configurable when business data differs between
+templates. Do not invent product handles, collection handles, metafield keys,
+or fallback products. In Shopify design mode, prefer a concise configuration
+message over unrelated fallback content.
 
-## JavaScript and Base-Theme Integration
+## JavaScript and Theme Integration
 
-Inspect the existing Combine component before implementing equivalent
-behavior. Reuse its public markup/state conventions while keeping new logic
-scoped to the section.
+Inspect the existing Combine component before implementing similar behavior.
+Reuse public markup and state conventions while keeping new logic scoped to the
+section.
 
 For product and cart interactions, inspect:
 
 - `assets/component-product-form.js`;
 - `sections/helper-cart.liquid`;
-- the cart drawer in `layout/theme.liquid`;
-- the routes exposed through `window.KROWN.settings.routes`.
+- the cart drawer integration in `layout/theme.liquid`;
+- routes exposed through `window.KROWN.settings.routes`.
 
 Use progressive enhancement and preserve a functional HTML fallback where
-practical. Prevent duplicate submissions, use `try`/`catch`/`finally`, restore
-loading state on every path, and render accessible inline errors.
+practical. Prevent duplicate submissions, handle rejected requests, restore
+loading state on every exit path, and render accessible inline errors.
 
 When matching the theme's loading pattern, reuse `button--loader`,
-`.button__text`, `.button__preloader`, and the `working` state. Do not change
-button dimensions merely to add asynchronous behavior.
+`.button__text`, `.button__preloader`, and the `working` state. Do not resize a
+button solely to support asynchronous behavior.
 
-Treat prices rendered by Liquid as presentation unless the cart or checkout
-platform enforces them. Configure actual discounts in Shopify or the relevant
-app; never imply that crossed-out or calculated storefront prices change
-checkout totals by themselves.
+Liquid-rendered prices are presentational unless Shopify or an installed app
+enforces the price at cart or checkout. Do not imply that a crossed-out or
+calculated storefront price changes the checkout total.
 
 ## Template Safety
 
-- Search all relevant JSON templates for the section type before changing
-  schema IDs or behavior.
+- Search all relevant JSON templates before changing a section type, schema ID,
+  or behavior.
 - Preserve template-specific content, block order, metafield keys, and stored
   settings.
-- Add new instance values deliberately; schema defaults cover omitted values.
+- Add new instance values only when a template needs an explicit override;
+  otherwise rely on schema defaults.
 - Do not reactivate or copy disabled legacy `custom-liquid` implementations.
-- Prefer scoped section assets over adding more global rules to
+- Prefer section-scoped assets over new global rules in
   `assets/custom-main.css`.
-- Make focused edits rather than reserializing an entire template.
+- Make focused edits instead of reserializing entire JSON templates.
 
-Shopify JSON files may start with a comment, so plain `jq` can fail. Strip the
-leading comment before parsing instead of assuming the file is invalid.
+Shopify JSON templates can contain a leading comment. Remove that comment in a
+temporary parsing step rather than treating the file as invalid or rewriting
+it wholesale.
 
 ## Validation
 
-Run checks proportional to the files changed:
+Run checks appropriate to the changed files:
 
 ```bash
 git diff --check
 git diff --cached --check
 node --check path/to/changed-file.js
-shopify theme check --path . --fail-level error --no-color
+shopify theme check --path . --no-color
 ```
 
-Parse changed JSON templates after removing Shopify's leading comment. Extract
-and parse every changed section's `{% schema %}` JSON.
+Run `node --check` only for changed JavaScript files. Use the repository's
+Theme Check configuration and review every reported finding instead of hiding
+or suppressing warnings globally.
 
-Distinguish new errors in touched files from pre-existing theme-check findings.
-Do not claim a clean full-theme result when unrelated legacy errors remain.
+Also:
 
-For visual and behavior validation, cover the states relevant to the task:
+- parse changed JSON templates after removing any Shopify leading comment;
+- extract and parse every changed section's `{% schema %}` JSON;
+- distinguish findings in touched files from unrelated pre-existing findings;
+- do not claim a clean full-theme result when legacy findings remain.
+
+Validate the states relevant to the task:
 
 - constrained and full-width layout;
-- desktop and mobile spacing, including zero and maximum values;
-- heading padding on all four sides;
-- narrow viewport and long content;
-- empty, missing, and unexpected data;
+- desktop and mobile spacing, including minimum and maximum values;
+- narrow viewports, long text, and empty content;
+- missing and unexpected data;
 - mouse, keyboard, and touch interaction;
 - focus visibility and reduced motion;
 - loading, success, and error states;
-- Shopify design mode and normal storefront mode.
+- Shopify design mode and the normal storefront.
 
-Before handing off, inspect `git diff --stat`, `git diff`, and
-`git diff --cached` so the report accurately separates the current task from
-the user's existing work.
+Before handoff, inspect `git diff --stat`, `git diff`, and `git diff --cached`.
+Report only the changes and validation results attributable to the current task.
