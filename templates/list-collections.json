@@ -42,10 +42,28 @@
             "collection": "auflagen"
           }
         },
-        "collection_DxgNqn": {
+        "collection_aNeA6H": {
           "type": "collection",
           "settings": {
-            "collection": "zubehoer"
+            "collection": "tiefenstege"
+          }
+        },
+        "collection_HmBCLy": {
+          "type": "collection",
+          "settings": {
+            "collection": "durchschubsicherungen"
+          }
+        },
+        "collection_PUb4Ma": {
+          "type": "collection",
+          "settings": {
+            "collection": "wandbefestigung-regalverbinder"
+          }
+        },
+        "collection_n3nT9E": {
+          "type": "collection",
+          "settings": {
+            "collection": "lastverteiler"
           }
         }
       },
@@ -55,7 +73,10 @@
         "collection_KdpcgV",
         "collection_Betr7j",
         "collection_X8ixgt",
-        "collection_DxgNqn"
+        "collection_aNeA6H",
+        "collection_HmBCLy",
+        "collection_PUb4Ma",
+        "collection_n3nT9E"
       ],
       "settings": {
         "layout": "grid-3 grid-lap-2 grid-tiny-1",
