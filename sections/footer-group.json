@@ -13,6 +13,7 @@
   "sections": {
     "google_reviews_live_zGA8nk": {
       "type": "google-reviews-live",
+      "disabled": true,
       "name": "Google Reviews Live",
       "settings": {
         "api_key": "AIzaSyCugl-_tQbNfCGk1u31ERGUqppUPmdhQKM",
