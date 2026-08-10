@@ -1221,31 +1221,31 @@ div.container.container--large.container--vertical-space-small.remove-empty-spac
 
 /* Primär (orange): klassischer Lager4-Schatten + Hover wie .button--solid */
 .shopify-pc__banner__btn-accept,
-#shopify-pc__prefs__header-accept,
-#shopify-pc__prefs__header-save {
+#shopify-pc__prefs__header-accept {
   background-color: #ff6700 !important;
   color: #fff !important;
   box-shadow: #32325d33 0 5px 20px -3px, #0000004d 0 8px 16px -8px !important;
 }
 
 .shopify-pc__banner__btn-accept:hover,
-#shopify-pc__prefs__header-accept:hover,
-#shopify-pc__prefs__header-save:hover {
+#shopify-pc__prefs__header-accept:hover {
   background-color: #ff6700 !important;
   color: #fff !important;
   box-shadow: #32325d4d 0 5px 25px 5px, #0000004d 0 8px 16px -8px !important;
 }
 
-/* Sekundär (Ablehnen): hellgrau mit schwarzer Schrift */
+/* Sekundär (Ablehnen, Auswahl speichern): hellgrau mit schwarzer Schrift */
 .shopify-pc__banner__btn-decline,
-#shopify-pc__prefs__header-decline {
+#shopify-pc__prefs__header-decline,
+#shopify-pc__prefs__header-save {
   background-color: #f2f2f2 !important;
   color: #000 !important;
   box-shadow: none !important;
 }
 
 .shopify-pc__banner__btn-decline:hover,
-#shopify-pc__prefs__header-decline:hover {
+#shopify-pc__prefs__header-decline:hover,
+#shopify-pc__prefs__header-save:hover {
   background-color: #e8e8e8 !important;
   color: #000 !important;
 }
@@ -1295,8 +1295,7 @@ div.container.container--large.container--vertical-space-small.remove-empty-spac
 
 /* Orange Hover/Shadow der Primär-Buttons auch bei :focus beibehalten */
 .shopify-pc__banner__dialog button.shopify-pc__banner__btn-accept:focus,
-#shopify-pc__prefs__header-accept:focus,
-#shopify-pc__prefs__header-save:focus {
+#shopify-pc__prefs__header-accept:focus {
   box-shadow: #32325d33 0 5px 20px -3px, #0000004d 0 8px 16px -8px !important;
 }
 /*
