@@ -53,11 +53,12 @@
       .replace(/'/g, '&#39;');
   }
 
-  /* 4.8 → "4,8" – deutsches Komma, ohne die Liquid-Rundungs-Falle */
+  /* 4.8 → "4,8" · 5 → "5,0" – deutsches Komma, immer eine Nachkommastelle
+     (wie in Variante 1), ohne die Liquid-Rundungs-Falle */
   function formatScore(n) {
     var v = Number(n);
     if (!isFinite(v)) return '–';
-    return String(Math.round(v * 10) / 10).replace('.', ',');
+    return (Math.round(v * 10) / 10).toFixed(1).replace('.', ',');
   }
 
   function avatarColor(name) {
@@ -321,13 +322,14 @@
             return (
               '<article class="gl4-v1__item"><div class="gl4-v1__top">' + avatarHTML(r.name) +
               '<div><div class="gl4-v1__name">' + escapeHtml(r.name) + '</div>' +
-              (r.when ? '<div class="gl4-v1__when">' + escapeHtml(r.when) + '</div>' : '') + '</div></div>' +
+              (r.when ? '<div class="gl4-v1__when">' + escapeHtml(r.when) + '</div>' : '') + '</div>' +
+              '<span class="gl4-v1__g">' + LOGO + '</span></div>' +
               '<div class="gl4-v1__stars">' + starsHTML(r.rating) + '</div>' +
               '<p class="gl4-v1__text">' + escapeHtml(r.text) + '</p></article>'
             );
           }).join('') +
         '</div>' +
-        '<div class="gl4-v1__foot">' + ctaHTML(cfg.foot_label || 'Alle auf Google ansehen', allUrl(cfg, data), 'gl4-cta--ghost') + '</div>'
+        '<div class="gl4-v1__foot"><a class="gl4-link" href="' + escapeHtml(allUrl(cfg, data)) + '" target="_blank" rel="noopener nofollow">' + escapeHtml(cfg.foot_label || 'Alle auf Google ansehen') + '</a></div>'
       );
     },
 

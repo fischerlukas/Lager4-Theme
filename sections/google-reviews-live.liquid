@@ -30,7 +30,10 @@
     --gl4-line: {{ section.settings.color_line }};
     --gl4-radius-badge: {{ section.settings.radius_badge }}px;
     --gl4-radius-panel: {{ section.settings.radius_panel }}px;
-    --gl4-offset: {{ section.settings.offset }}px;
+    --gl4-offset-x: {{ section.settings.offset_x }}px;
+    --gl4-offset-y: {{ section.settings.offset_y }}px;
+    --gl4-panel-width: {{ section.settings.panel_width }}px;
+    --gl4-weight-bold: {{ section.settings.font_weight_bold }};
   "
 >
   {%- comment -%}
@@ -172,19 +175,34 @@
     { "type": "checkbox", "id": "hide_on_mobile", "label": "Hide on mobile", "default": false },
 
     { "type": "header", "content": "Layout" },
-    { "type": "range", "id": "offset", "label": "Distance to the edge", "min": 8, "max": 48, "step": 2, "default": 24, "unit": "px" },
+    { "type": "range", "id": "offset_x", "label": "Distance from the right edge", "min": 0, "max": 120, "step": 2, "default": 24, "unit": "px" },
+    { "type": "range", "id": "offset_y", "label": "Distance from the bottom edge", "min": 0, "max": 120, "step": 2, "default": 24, "unit": "px" },
+    { "type": "range", "id": "panel_width", "label": "Panel width (desktop)", "min": 320, "max": 640, "step": 10, "default": 390, "unit": "px", "info": "Width of the side panel (variant 1) and the loading/error box on desktop. Mobile keeps the panel edge-to-edge." },
 
     { "type": "header", "content": "Font" },
     { "type": "checkbox", "id": "use_google_font", "label": "Load Nunito from Google Fonts", "default": false, "info": "Turn off when the theme already loads the font." },
+    {
+      "type": "select",
+      "id": "font_weight_bold",
+      "label": "Bold text weight",
+      "default": "500",
+      "options": [
+        { "value": "400", "label": "Regular · 400" },
+        { "value": "500", "label": "Medium · 500" },
+        { "value": "600", "label": "Semibold · 600" },
+        { "value": "700", "label": "Bold · 700" }
+      ],
+      "info": "Weight for the bold parts: reviewer names, brand name, badge label and avatars."
+    },
 
     { "type": "header", "content": "Colors & Shape" },
     { "type": "color", "id": "color_accent", "label": "Accent (stars, buttons)", "default": "#ff6700" },
     { "type": "color", "id": "color_text", "label": "Text", "default": "#000000" },
     { "type": "color", "id": "color_surface", "label": "Surface (cards, badge)", "default": "#ffffff" },
     { "type": "color", "id": "color_soft", "label": "Soft surface", "default": "#f9f9f9" },
-    { "type": "color", "id": "color_line", "label": "Separator lines", "default": "#dedede" },
-    { "type": "range", "id": "radius_badge", "label": "Badge border radius", "min": 0, "max": 40, "step": 2, "default": 14, "unit": "px" },
-    { "type": "range", "id": "radius_panel", "label": "Panel border radius", "min": 0, "max": 40, "step": 2, "default": 16, "unit": "px" },
+    { "type": "color", "id": "color_line", "label": "Separator lines", "default": "#e6e6e6", "info": "Variante 1 nutzt rgba(0,0,0,.1) ≈ #e6e6e6." },
+    { "type": "range", "id": "radius_badge", "label": "Badge border radius", "min": 0, "max": 40, "step": 2, "default": 30, "unit": "px" },
+    { "type": "range", "id": "radius_panel", "label": "Panel border radius", "min": 0, "max": 40, "step": 2, "default": 30, "unit": "px" },
 
     { "type": "header", "content": "Accessibility" },
     { "type": "text", "id": "loading_label", "label": "Loading text", "default": "Bewertungen werden geladen …" },
