@@ -1200,7 +1200,7 @@ div.container.container--large.container--vertical-space-small.remove-empty-spac
 }
 
 #shopify-pc__banner h2 {
-  font-weight: 700;
+  font-weight: 400;
 }
 
 /* Gemeinsame Button-Basis (Banner + Einstellungen-Dialog) */
@@ -1257,13 +1257,47 @@ div.container.container--large.container--vertical-space-small.remove-empty-spac
   font-family: inherit;
 }
 
-#shopify-pc__prefs__dialog h2 {
-  font-weight: 700;
+#shopify-pc__prefs__dialog h2,
+#shopify-pc__prefs__dialog h3,
+.shopify-pc__prefs__option label {
+  font-weight: 400 !important;
 }
 
 /* Aktivierte Checkboxen in Markenorange */
 .shopify-pc__prefs__option svg[data-icon-type="checked"] path {
   fill: #ff6700 !important;
+}
+
+/* Hellblauen Standard-Focus-Ring entfernen */
+.shopify-pc__banner__dialog button:focus,
+.shopify-pc__prefs__header-close:focus,
+.shopify-pc__prefs__header-actions button:focus,
+.shopify-pc__prefs__option label input:focus ~ span svg {
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+.shopify-pc__banner__dialog button.shopify-pc__banner__btn-manage-prefs:focus span,
+.shopify-pc__banner__body p a:focus {
+  outline: none !important;
+}
+
+.shopify-pc__prefs__option label input:focus ~ span {
+  background-color: transparent !important;
+}
+
+/* Dezenter Ring nur bei Tastatur-Fokus (Barrierefreiheit) */
+.shopify-pc__banner__dialog button:focus-visible,
+.shopify-pc__prefs__header-close:focus-visible,
+.shopify-pc__prefs__header-actions button:focus-visible {
+  box-shadow: 0 0 0 3px rgba(255, 103, 0, 0.35) !important;
+}
+
+/* Orange Hover/Shadow der Primär-Buttons auch bei :focus beibehalten */
+.shopify-pc__banner__dialog button.shopify-pc__banner__btn-accept:focus,
+#shopify-pc__prefs__header-accept:focus,
+#shopify-pc__prefs__header-save:focus {
+  box-shadow: #32325d33 0 5px 20px -3px, #0000004d 0 8px 16px -8px !important;
 }
 /*
 * Shopify Cookie Consent Banner End
