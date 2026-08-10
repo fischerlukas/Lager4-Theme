@@ -41,7 +41,7 @@
         "dismissible": true,
         "remember_days": 1,
         "hide_on_mobile": false,
-        "offset_x": 24,
+        "offset_x": 88,
         "offset_y": 24,
         "use_google_font": false,
         "color_accent": "#ff6700",
