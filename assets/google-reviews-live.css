@@ -1,0 +1,560 @@
+/* ============================================================================
+   Google Reviews Live – Google-Bewertungen über die Maps JavaScript API +
+   Places API, clientseitig geladen.
+
+   Design: 1:1 nach preview/variante-1.html (Lager4-Stil) übernommen.
+   Namespace: alle Selektoren und Custom Properties tragen das Präfix `gl4-`
+   und sind damit auf diese Section beschränkt – kein Leck in andere Sections.
+
+   Tokens (auf dem Root gesetzt, per Liquid aus den Section-Einstellungen
+   überschrieben):
+     --gl4-accent         Akzentfarbe (Sterne, Buttons)
+     --gl4-text           Haupttext
+     --gl4-surface        Fläche (Karten, Badge)
+     --gl4-soft           Weiche Fläche (Foot, Karten bei v2)
+     --gl4-line           Trennlinien
+     --gl4-radius-badge   Eckenradius Badge
+     --gl4-radius-panel   Eckenradius Popup
+     --gl4-offset-x       Abstand Badge zum rechten Viewport-Rand
+     --gl4-offset-y       Abstand Badge zum unteren Viewport-Rand
+   ========================================================================== */
+
+.gl4 {
+  /* Design-Tokens – Fallbacks, falls Liquid keine Werte setzt */
+  --gl4-accent: #ff6700;
+  --gl4-text: #000;
+  --gl4-gray: #8c8c8c;
+  --gl4-line: rgba(0, 0, 0, 0.1);
+  --gl4-surface: #ffffff;
+  --gl4-soft: #f9f9f9;
+  --gl4-font: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --gl4-radius-badge: 30px;
+  --gl4-radius-panel: 30px;
+  --gl4-offset-x: 24px;
+  --gl4-offset-y: 24px;
+  --gl4-panel-width: 390px;
+  --gl4-weight-bold: 500;
+  --gl4-shadow: rgba(50, 50, 93, 0.2) 0 5px 20px -3px, rgba(0, 0, 0, 0.3) 0 8px 16px -8px;
+  --gl4-shadow-soft: rgba(50, 50, 93, 0.12) 0 4px 18px -4px, rgba(0, 0, 0, 0.12) 0 6px 14px -10px;
+  /* Schattenstufen 1:1 aus preview/variante-1.html (nachgemessen an lager4.com) */
+  --gl4-shadow-btn: rgba(50, 50, 93, 0.2) 0 0 20px -2px, rgba(0, 0, 0, 0.22) 0 0 14px -3px;
+  --gl4-shadow-btn-hover: rgba(50, 50, 93, 0.3) 0 0 25px 2px, rgba(0, 0, 0, 0.22) 0 0 16px -3px;
+  --gl4-shadow-panel: rgba(0, 0, 0, 0.15) 0 0 100px 0, rgba(0, 0, 0, 0.1) 0 0 80px 0,
+    rgba(0, 0, 0, 0.28) 0 0 30px -8px;
+  --gl4-transition: 175ms linear;
+
+  font-family: var(--gl4-font);
+  font-size: 16px;
+  font-weight: 300;
+  line-height: 1.5;
+  color: var(--gl4-text);
+  -webkit-font-smoothing: antialiased;
+}
+
+.gl4 *,
+.gl4 *::before,
+.gl4 *::after { box-sizing: border-box; }
+
+.gl4 svg { display: block; }
+
+/* ------------------------------------------------------------------ Badge */
+
+.gl4-badge {
+  position: fixed;
+  right: var(--gl4-offset-x);
+  bottom: var(--gl4-offset-y);
+  z-index: 9998;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 16px 24px;
+  border: 0;
+  border-radius: var(--gl4-radius-badge);
+  background: var(--gl4-surface);
+  color: var(--gl4-text);
+  font-family: inherit;
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 1.4;
+  text-align: center;
+  cursor: pointer;
+  box-shadow: var(--gl4-shadow-btn);
+  transition: box-shadow var(--gl4-transition), transform var(--gl4-transition),
+    opacity var(--gl4-transition), bottom var(--gl4-transition);
+}
+
+.gl4--left .gl4-badge { right: auto; left: var(--gl4-offset-x); }
+
+/* Sobald der „Nach oben“-Button (.main-go-top.show, unten rechts) eingeblendet
+   wird, weicht das Badge nach oben aus, damit beide nicht kollidieren. Die
+   Erhöhung orientiert sich an der Button-Position: Gutter + Buttonhöhe + Abstand. */
+.gl4--raised:not(.gl4--left) .gl4-badge {
+  bottom: max(var(--gl4-offset-y), calc(var(--gutter-regular, 25px) + 3.125rem + 12px));
+}
+
+/* Bis JS geladen und die Daten stehen, bleibt das Badge unsichtbar. */
+.gl4-badge { opacity: 0; pointer-events: none; }
+.gl4--ready .gl4-badge { opacity: 1; pointer-events: auto; }
+.gl4--dismissed .gl4-badge { display: none; }
+
+.gl4-badge:hover { transform: translateY(-2px); box-shadow: var(--gl4-shadow-btn-hover); }
+.gl4-badge:focus-visible { outline: 0; box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.12), var(--gl4-shadow); }
+
+.gl4-badge__logo svg { width: 26px; height: 26px; }
+.gl4-badge__label { font-size: 15px; font-weight: var(--gl4-weight-bold); }
+.gl4-badge__row { display: flex; align-items: center; gap: 8px; }
+.gl4-badge__num { font-size: 19px; font-weight: var(--gl4-weight-bold); line-height: 1; }
+
+.gl4-badge__dismiss {
+  position: absolute;
+  top: -9px;
+  right: -9px;
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--gl4-surface);
+  color: var(--gl4-gray);
+  font-family: inherit;
+  font-size: 13px;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+  transition: color var(--gl4-transition);
+}
+.gl4-badge__dismiss:hover { color: var(--gl4-text); }
+.gl4-badge__dismiss:focus-visible { outline: 0; box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.12); }
+
+/* Badge beim offenen Overlay verstecken */
+.gl4--open .gl4-badge { visibility: hidden; }
+
+/* ---------------------------------------------------------------- Overlay */
+
+.gl4-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(0, 0, 0, 0.55);
+}
+.gl4-overlay.is-open { display: flex; }
+
+.gl4-overlay__inner {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.gl4-overlay__hint {
+  position: fixed;
+  left: 50%;
+  bottom: 22px;
+  transform: translateX(-50%);
+  margin: 0;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 300;
+  opacity: 0.8;
+}
+
+/* ------------------------------------------------------- Gemeinsame Bausteine */
+
+.gl4-logo { flex: none; }
+
+.gl4-stars {
+  display: inline-flex;
+  flex: none;
+  align-items: flex-start;
+  gap: 2px;
+  line-height: 0;
+}
+.gl4-star {
+  position: relative;
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  flex: none;
+}
+.gl4-star svg { width: 16px; height: 16px; display: block; fill: currentColor; }
+.gl4-star__base,
+.gl4-star__fill {
+  position: absolute;
+  inset: 0;
+  display: block;
+  overflow: hidden;
+}
+.gl4-star__base { color: rgba(0, 0, 0, 0.16); }
+.gl4-star__fill { width: 100%; color: var(--gl4-accent); }
+.gl4-star--part .gl4-star__fill { width: var(--gl4-star-fill, 100%); }
+.gl4-stars--lg .gl4-star { width: 20px; height: 20px; }
+.gl4-stars--lg .gl4-star svg { width: 20px; height: 20px; }
+.gl4-stars--white .gl4-star__base { color: rgba(255, 255, 255, 0.4); }
+.gl4-stars--white .gl4-star__fill { color: #fff; }
+.gl4-stars--dark .gl4-star__fill { color: var(--gl4-text); }
+
+.gl4-avatar {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  flex: none;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 16px;
+  font-weight: var(--gl4-weight-bold);
+  line-height: 1;
+}
+.gl4-avatar--sm { width: 32px; height: 32px; font-size: 13px; }
+
+/* CTA-Pill mit der Pfeil-Animation des Themes – Breite bleibt konstant */
+.gl4-cta {
+  position: relative;
+  display: inline-block;
+  padding: 12px 34px;
+  border: 0;
+  border-radius: 30px;
+  background: var(--gl4-accent);
+  color: #fff;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.25;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: var(--gl4-shadow-btn);
+  transition: var(--gl4-transition);
+}
+.gl4-cta:hover {
+  padding: 12px 52px 12px 16px;
+  box-shadow: var(--gl4-shadow-btn-hover);
+}
+.gl4-cta:focus-visible { outline: 0; box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.12); }
+
+.gl4-cta__text { display: inline-block; font-size: 14px; line-height: 1; }
+
+.gl4-cta__icon {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  display: block;
+  width: 22px;
+  opacity: 0;
+  transform: translate(-25px, -50%);
+  transform-origin: right center;
+  pointer-events: none;
+  transition: opacity var(--gl4-transition), transform 175ms;
+}
+.gl4-cta:hover .gl4-cta__icon { opacity: 1; transform: translate(-20px, -50%); }
+.gl4-cta__icon path { fill: #fff; }
+
+.gl4-cta--dark { background: var(--gl4-text); color: #fff; box-shadow: none; }
+.gl4-cta--dark .gl4-cta__icon path { fill: #fff; }
+.gl4-cta--dark:hover { padding: 12px 52px 12px 16px; filter: none; }
+
+.gl4-cta--ghost {
+  background: transparent;
+  color: var(--gl4-text);
+  box-shadow: inset 0 0 0 1px var(--gl4-text);
+}
+.gl4-cta--ghost .gl4-cta__icon path { fill: var(--gl4-text); }
+.gl4-cta--ghost:hover { padding: 12px 52px 12px 16px; filter: none; }
+
+/* Textlink mit der Underline-Animation des Themes */
+.gl4-link {
+  color: inherit;
+  text-decoration: none;
+  background-image: linear-gradient(currentColor, currentColor);
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  background-size: 0 1px;
+  transition: background-size var(--gl4-transition);
+}
+.gl4-link:hover { background-size: 100% 1px; }
+.gl4-link:focus-visible { outline: 0; box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.12); }
+
+.gl4-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--gl4-gray);
+  font-family: inherit;
+  font-size: 19px;
+  line-height: 1;
+  cursor: pointer;
+  transition: var(--gl4-transition);
+}
+.gl4-close:hover { background: var(--gl4-soft); color: var(--gl4-text); }
+.gl4-close:focus-visible { outline: 0; box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.12); }
+
+.gl4-scroll { overflow-y: auto; overscroll-behavior: contain; }
+.gl4-scroll::-webkit-scrollbar { width: 6px; }
+.gl4-scroll::-webkit-scrollbar-thumb { background: #d5d5d5; border-radius: 3px; }
+
+/* =============================================================== Variante 1 · Side Panel */
+
+.gl4-v1 {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: var(--gl4-panel-width);
+  max-width: 100%;
+  max-height: calc(100vh - 48px);
+  background: var(--gl4-surface);
+  box-shadow: var(--gl4-shadow-panel);
+  border-radius: var(--gl4-radius-panel);
+  overflow: hidden;
+}
+.gl4-v1__head { padding: 28px 24px 24px; text-align: center; border-bottom: 1px solid var(--gl4-line); }
+.gl4-v1__brand { display: flex; align-items: center; justify-content: center; gap: 8px; }
+.gl4-v1__brand span { font-size: 16px; font-weight: var(--gl4-weight-bold); }
+.gl4-v1__brand svg { width: 22px; height: 22px; }
+.gl4-v1__score { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 12px; }
+.gl4-v1__num { font-size: 34px; font-weight: 300; line-height: 1; }
+.gl4-v1__meta { margin: 8px 0 20px; color: var(--gl4-gray); font-size: 13px; }
+.gl4-v1__list { flex: 1; min-height: 0; padding: 0 24px; }
+.gl4-v1__item { padding: 18px 0; border-bottom: 1px solid #f0f0f0; }
+.gl4-v1__item:last-child { border-bottom: 0; }
+.gl4-v1__top { display: flex; align-items: center; gap: 10px; }
+.gl4-v1__name { font-size: 15px; font-weight: var(--gl4-weight-bold); }
+.gl4-v1__when { color: var(--gl4-gray); font-size: 12px; }
+.gl4-v1__g { margin-left: auto; flex: none; display: flex; }
+.gl4-v1__g svg { width: 16px; height: 16px; }
+.gl4-v1 .gl4-avatar { width: 38px; height: 38px; font-size: 15px; font-weight: var(--gl4-weight-bold); }
+.gl4-v1__text { margin: 8px 0 0; font-size: 14px; font-weight: 300; line-height: 1.65; }
+.gl4-v1__stars { margin-top: 10px; }
+.gl4-v1__foot { padding: 18px 24px 22px; text-align: center; border-top: 1px solid var(--gl4-line); background: var(--gl4-soft); font-size: 14px; color: #3c3c3c; }
+
+/* ============================================================== Variante 2 · Karten-Slider */
+
+.gl4-v2 {
+  position: relative;
+  width: 660px;
+  max-width: 100%;
+  background: var(--gl4-surface);
+  box-shadow: var(--gl4-shadow);
+  border-radius: var(--gl4-radius-panel);
+  padding: 30px 30px 26px;
+}
+.gl4-v2__head { display: flex; align-items: center; gap: 16px; padding-right: 40px; }
+.gl4-v2__num { font-size: 44px; font-weight: 300; line-height: 1; }
+.gl4-v2__headline { margin: 0; font-size: 22px; font-weight: 300; }
+.gl4-v2__meta { margin: 4px 0 0; color: var(--gl4-gray); font-size: 13px; }
+.gl4-v2__cta { margin-left: auto; }
+.gl4-v2__track {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 260px;
+  gap: 14px;
+  margin-top: 24px;
+  padding-bottom: 14px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+.gl4-v2__track::-webkit-scrollbar { display: none; }
+.gl4-v2__card {
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 18px;
+  background: var(--gl4-soft);
+  border: 1px solid var(--gl4-line);
+}
+.gl4-v2__card p { margin: 0; font-size: 14px; font-weight: 300; line-height: 1.6; }
+.gl4-v2__who { display: flex; align-items: center; gap: 10px; }
+.gl4-v2__name { font-size: 14px; font-weight: var(--gl4-weight-bold); }
+.gl4-v2__when { color: var(--gl4-gray); font-size: 12px; }
+.gl4-v2__source { margin-left: auto; }
+.gl4-v2__source svg { width: 16px; height: 16px; }
+.gl4-v2__dots { display: flex; justify-content: center; gap: 6px; }
+.gl4-v2__dots i { width: 6px; height: 6px; border-radius: 50%; background: var(--gl4-line); }
+.gl4-v2__dots i.is-active { background: var(--gl4-accent); width: 18px; border-radius: 3px; }
+
+/* ================================================================= Variante 3 · Split */
+
+.gl4-v3 {
+  position: relative;
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  width: 780px;
+  max-width: 100%;
+  background: var(--gl4-surface);
+  box-shadow: var(--gl4-shadow);
+  overflow: hidden;
+}
+.gl4-v3__aside { padding: 32px 26px; background: var(--gl4-soft); border-right: 1px solid var(--gl4-line); }
+.gl4-v3__aside > .gl4-logo svg { width: 26px; height: 26px; }
+.gl4-v3__num { font-size: 56px; font-weight: 300; line-height: 1; }
+.gl4-v3__meta { margin: 10px 0 0; color: var(--gl4-gray); font-size: 13px; }
+.gl4-v3__bars { margin: 22px 0 26px; display: grid; gap: 7px; }
+.gl4-v3__bar { display: grid; grid-template-columns: 12px 1fr 22px; align-items: center; gap: 8px; font-size: 12px; color: var(--gl4-gray); }
+.gl4-v3__bar span:last-child { text-align: right; }
+.gl4-v3__bar i { display: block; height: 6px; background: var(--gl4-line); border-radius: 3px; overflow: hidden; }
+.gl4-v3__bar i b { display: block; height: 100%; background: var(--gl4-accent); }
+.gl4-v3__main { padding: 26px 30px 30px; }
+.gl4-v3__title { margin: 0 0 4px; font-size: 22px; font-weight: 300; }
+.gl4-v3__list { max-height: 330px; margin-top: 14px; padding-right: 14px; }
+.gl4-v3__item { padding: 16px 0; border-bottom: 1px solid #efefef; }
+.gl4-v3__item:last-child { border-bottom: 0; }
+.gl4-v3__top { display: flex; align-items: center; gap: 10px; }
+.gl4-v3__name { font-size: 15px; font-weight: var(--gl4-weight-bold); }
+.gl4-v3__when { color: var(--gl4-gray); font-size: 12px; }
+.gl4-v3__source { margin-left: auto; }
+.gl4-v3__source svg { width: 16px; height: 16px; }
+.gl4-v3__text { margin: 8px 0 0; font-size: 14px; font-weight: 300; line-height: 1.6; }
+
+/* ========================================================== Variante 4 · Orange Header */
+
+.gl4-v4 {
+  position: relative;
+  width: 460px;
+  max-width: 100%;
+  background: var(--gl4-surface);
+  box-shadow: var(--gl4-shadow);
+  border-radius: var(--gl4-radius-panel);
+  overflow: hidden;
+}
+.gl4-v4__head { padding: 28px 26px 24px; background: var(--gl4-accent); color: #fff; text-align: center; }
+.gl4-v4__head .gl4-close { color: rgba(255, 255, 255, 0.85); }
+.gl4-v4__head .gl4-close:hover { background: rgba(255, 255, 255, 0.2); color: #fff; }
+.gl4-v4__brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px 6px 8px;
+  background: var(--gl4-surface);
+  border-radius: 30px;
+  color: var(--gl4-text);
+  font-size: 13px;
+  font-weight: var(--gl4-weight-bold);
+}
+.gl4-v4__brand svg { width: 20px; height: 20px; }
+.gl4-v4__num { margin: 14px 0 0; font-size: 44px; font-weight: 300; line-height: 1; }
+.gl4-v4__meta { margin: 8px 0 0; font-size: 13px; opacity: 0.92; }
+.gl4-v4__list { max-height: 320px; padding: 0 26px; }
+.gl4-v4__item { padding: 18px 0; border-bottom: 1px solid #efefef; }
+.gl4-v4__item:last-child { border-bottom: 0; }
+.gl4-v4__top { display: flex; align-items: center; gap: 10px; }
+.gl4-v4__name { font-size: 15px; font-weight: var(--gl4-weight-bold); }
+.gl4-v4__when { color: var(--gl4-gray); font-size: 12px; }
+.gl4-v4__source { margin-left: auto; }
+.gl4-v4__source svg { width: 16px; height: 16px; }
+.gl4-v4__text { margin: 9px 0 0; font-size: 14px; font-weight: 300; line-height: 1.6; }
+.gl4-v4__foot { padding: 18px 26px 24px; text-align: center; }
+
+/* ============================================================= Variante 5 · Editorial */
+
+.gl4-v5 {
+  position: relative;
+  width: 620px;
+  max-width: 100%;
+  background: var(--gl4-surface);
+  box-shadow: var(--gl4-shadow);
+  border-radius: var(--gl4-radius-panel);
+  padding: 44px 52px 40px;
+}
+.gl4-v5__eyebrow { display: flex; align-items: center; gap: 8px; color: var(--gl4-gray); font-size: 12px; letter-spacing: 1.4px; text-transform: uppercase; }
+.gl4-v5__eyebrow svg { width: 16px; height: 16px; }
+.gl4-v5__title { margin: 16px 0 0; font-size: 32px; font-weight: 300; line-height: 1.25; letter-spacing: -0.5px; }
+.gl4-v5__title b { font-weight: var(--gl4-weight-bold); color: var(--gl4-accent); }
+.gl4-v5__rule { margin: 26px 0 0; height: 1px; background: var(--gl4-line); }
+.gl4-v5__list { max-height: 320px; padding-right: 16px; }
+.gl4-v5__item { padding: 26px 0; border-bottom: 1px solid #f0f0f0; }
+.gl4-v5__item:last-child { border-bottom: 0; }
+.gl4-v5__quote { margin: 0; font-size: 17px; font-weight: 300; line-height: 1.65; }
+.gl4-v5__by { display: flex; align-items: center; gap: 10px; margin-top: 14px; color: var(--gl4-gray); font-size: 13px; }
+.gl4-v5__by b { color: var(--gl4-text); font-weight: var(--gl4-weight-bold); }
+.gl4-v5__foot { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 26px; padding-top: 22px; border-top: 1px solid var(--gl4-line); }
+.gl4-v5__score { font-size: 13px; color: var(--gl4-gray); }
+.gl4-v5__score b { font-size: 22px; font-weight: 400; color: var(--gl4-text); }
+
+/* ------------------------------------------------------- Lade- und Fehlerzustand */
+
+.gl4-state {
+  position: relative;
+  width: var(--gl4-panel-width);
+  max-width: 100%;
+  padding: 48px 32px;
+  background: var(--gl4-surface);
+  border-radius: var(--gl4-radius-panel);
+  box-shadow: var(--gl4-shadow);
+  text-align: center;
+  font-size: 15px;
+  line-height: 1.6;
+}
+.gl4-state__logo { display: flex; justify-content: center; }
+.gl4-state__logo svg { width: 34px; height: 34px; }
+.gl4-state__title { margin: 14px 0 0; font-size: 18px; font-weight: var(--gl4-weight-bold); }
+.gl4-state__text { margin: 8px 0 0; color: var(--gl4-gray); font-weight: 300; }
+.gl4-empty { margin: 0; padding: 32px 24px; text-align: center; color: var(--gl4-gray); font-size: 15px; }
+
+.gl4-spinner {
+  display: inline-block;
+  width: 28px;
+  height: 28px;
+  margin: 0 auto;
+  border: 3px solid var(--gl4-line);
+  border-top-color: var(--gl4-accent);
+  border-radius: 50%;
+  animation: gl4-spin 0.8s linear infinite;
+}
+@keyframes gl4-spin { to { transform: rotate(360deg); } }
+
+.gl4-retry {
+  margin-top: 16px;
+  padding: 9px 24px;
+  border: 0;
+  border-radius: 30px;
+  background: var(--gl4-text);
+  color: var(--gl4-surface);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 400;
+  cursor: pointer;
+  transition: var(--gl4-transition);
+}
+.gl4-retry:hover { background: var(--gl4-accent); }
+.gl4-retry:focus-visible { outline: 0; box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.12); }
+
+/* ----------------------------------------------------------------- Responsive */
+
+@media (max-width: 820px) {
+  .gl4-v3 { grid-template-columns: 1fr; }
+  .gl4-v3__aside { border-right: 0; border-bottom: 1px solid var(--gl4-line); }
+  .gl4-v5 { padding: 32px 26px; }
+  .gl4-overlay { padding: 16px; }
+  .gl4-overlay__hint { display: none; }
+}
+
+@media (max-width: 749px) {
+  .gl4 { --gl4-offset-x: 12px; --gl4-offset-y: 12px; }
+  .gl4-badge { padding: 12px 18px; }
+  .gl4-badge__label { font-size: 14px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gl4-badge,
+  .gl4-cta,
+  .gl4-link,
+  .gl4-close,
+  .gl4-spinner { transition: none; animation: none; }
+  .gl4-badge:hover { transform: none; }
+}

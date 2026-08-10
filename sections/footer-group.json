@@ -1,1 +1,101 @@
-{"type":"footer","name":"t:sections.refactor_words.labels.footer_group","sections":{"footer":{"type":"footer","blocks":{"menu":{"type":"menu","settings":{"title":"QUICK LINKS","menu":"footer","menu_target":false,"menu_style":true}},"menu_LkJMKL":{"type":"menu","settings":{"title":"RECHTLICHES","menu":"rechtliches","menu_target":false,"menu_style":true}}},"block_order":["menu","menu_LkJMKL"],"settings":{"layout":"grid-4 grid-portable-2 grid-lap-1","show_locale_selector":false,"show_country_selector":true,"seo_h_tag":"h2"}}},"order":["footer"]}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "type": "footer",
+  "name": "t:sections.refactor_words.labels.footer_group",
+  "sections": {
+    "google_reviews_live_zGA8nk": {
+      "type": "google-reviews-live",
+      "name": "Google Reviews Live",
+      "settings": {
+        "api_key": "AIzaSyCugl-_tQbNfCGk1u31ERGUqppUPmdhQKM",
+        "place_id": "ChIJj8yjy8s7dEcRNBKBYaE9aUg",
+        "locale": "de",
+        "max_reviews": 5,
+        "badge_label": "Top bewertet auf Google",
+        "panel_title": "Bewertungen",
+        "business_name": "Lager4",
+        "reviews_word": "Bewertungen auf Google",
+        "cta_label": "Bewertung schreiben",
+        "v2_cta_label": "Bewerten",
+        "v4_cta_label": "Jetzt selbst bewerten",
+        "foot_label": "Alle auf Google ansehen",
+        "write_url": "",
+        "all_url": "",
+        "v2_title": "Das sagen unsere Kunden",
+        "v3_title": "Kundenstimmen",
+        "v3_meta_before": "basierend auf",
+        "v3_meta_after": "Bewertungen",
+        "v5_title": "{count} Kunden bewerten {name} mit {score} von 5",
+        "fallback_reviews": "",
+        "variant": "v1",
+        "position": "right",
+        "delay": 2,
+        "dismissible": true,
+        "remember_days": 1,
+        "hide_on_mobile": false,
+        "offset_x": 24,
+        "offset_y": 24,
+        "use_google_font": false,
+        "color_accent": "#ff6700",
+        "color_text": "#000000",
+        "color_surface": "#ffffff",
+        "color_soft": "#f9f9f9",
+        "color_line": "#dedede",
+        "radius_badge": 30,
+        "radius_panel": 30,
+        "loading_label": "Bewertungen werden geladen …",
+        "error_label": "Bewertungen konnten gerade nicht geladen werden.",
+        "retry_label": "Erneut versuchen",
+        "hint_label": "Klick auf den Hintergrund oder ESC schließt das Overlay",
+        "close_label": "Schließen",
+        "dismiss_label": "Badge ausblenden",
+        "empty_label": "Noch keine Google-Bewertungen verfügbar."
+      }
+    },
+    "footer": {
+      "type": "footer",
+      "blocks": {
+        "menu": {
+          "type": "menu",
+          "settings": {
+            "title": "QUICK LINKS",
+            "menu": "footer",
+            "menu_target": false,
+            "menu_style": true
+          }
+        },
+        "menu_LkJMKL": {
+          "type": "menu",
+          "settings": {
+            "title": "RECHTLICHES",
+            "menu": "rechtliches",
+            "menu_target": false,
+            "menu_style": true
+          }
+        }
+      },
+      "block_order": [
+        "menu",
+        "menu_LkJMKL"
+      ],
+      "settings": {
+        "layout": "grid-4 grid-portable-2 grid-lap-1",
+        "show_locale_selector": false,
+        "show_country_selector": true,
+        "seo_h_tag": "h2"
+      }
+    }
+  },
+  "order": [
+    "google_reviews_live_zGA8nk",
+    "footer"
+  ]
+}
