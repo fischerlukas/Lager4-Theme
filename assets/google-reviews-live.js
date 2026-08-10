@@ -740,6 +740,33 @@
     }
   }
 
+  /* ------------------------------------------------------- Go-Top-Button
+
+     Der Theme-Button „Nach oben“ (#go-top.main-go-top) wird bei scrollY > 500
+     per Klasse `.show` eingeblendet und liegt unten rechts – genau dort, wo
+     auch das Badge sitzt. Sobald der Button sichtbar ist, bekommt jede
+     gl4-Section die Klasse `gl4--raised`; das Badge weicht dann im CSS nach
+     oben aus. Ein MutationObserver genügt, weil theme.liquid die Klasse nur
+     per add/remove umschaltet. */
+
+  function bindGoTopOffset() {
+    var goTop = document.getElementById('go-top') || document.querySelector('.main-go-top');
+    if (!goTop) return;
+
+    function update() {
+      var raised = goTop.classList.contains('show');
+      document.querySelectorAll('[data-gl4-root]').forEach(function (root) {
+        root.classList.toggle('gl4--raised', raised);
+      });
+    }
+
+    if (window.MutationObserver) {
+      var observer = new MutationObserver(update);
+      observer.observe(goTop, { attributes: true, attributeFilter: ['class'] });
+    }
+    update(); // Ausgangszustand, z. B. nach Seiten-Reload in gescrollter Position
+  }
+
   /* --------------------------------------------------------------- Bootstrap */
 
   function initAll(scope) {
@@ -747,9 +774,13 @@
   }
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', function () { initAll(); });
+    document.addEventListener('DOMContentLoaded', function () {
+      initAll();
+      bindGoTopOffset();
+    });
   } else {
     initAll();
+    bindGoTopOffset();
   }
 
   document.addEventListener('shopify:section:load', function (e) { initAll(e.target); });

@@ -81,10 +81,17 @@
   cursor: pointer;
   box-shadow: var(--gl4-shadow-btn);
   transition: box-shadow var(--gl4-transition), transform var(--gl4-transition),
-    opacity var(--gl4-transition);
+    opacity var(--gl4-transition), bottom var(--gl4-transition);
 }
 
 .gl4--left .gl4-badge { right: auto; left: var(--gl4-offset-x); }
+
+/* Sobald der „Nach oben“-Button (.main-go-top.show, unten rechts) eingeblendet
+   wird, weicht das Badge nach oben aus, damit beide nicht kollidieren. Die
+   Erhöhung orientiert sich an der Button-Position: Gutter + Buttonhöhe + Abstand. */
+.gl4--raised:not(.gl4--left) .gl4-badge {
+  bottom: max(var(--gl4-offset-y), calc(var(--gutter-regular, 25px) + 3.125rem + 12px));
+}
 
 /* Bis JS geladen und die Daten stehen, bleibt das Badge unsichtbar. */
 .gl4-badge { opacity: 0; pointer-events: none; }
