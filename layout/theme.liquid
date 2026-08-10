@@ -305,15 +305,6 @@
       <link rel="stylesheet" href="{{ 'theme-noscript.css' | asset_url }}">
     </noscript>
 
-    {%- comment -%} Shopify consent banner: style decline button as secondary (light grey / black text) {%- endcomment -%}
-    <style>
-      .shopify-pc__banner__btn-decline {
-        background-color: #f2f2f2 !important;
-        color: #000000 !important;
-        border-color: #f2f2f2 !important;
-      }
-    </style>
-
   </head>
   
   <body id="{{ page_title | handle }}" class="{% if customer %} customer-logged-in {% endif %} template-{{ template.name }} template-{{ template | replace: '.', ' ' | handle }} no-touchevents">
