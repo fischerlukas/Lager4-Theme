@@ -33,6 +33,7 @@
     --gl4-offset-x: {{ section.settings.offset_x }}px;
     --gl4-offset-y: {{ section.settings.offset_y }}px;
     --gl4-panel-width: {{ section.settings.panel_width }}px;
+    --gl4-mobile-height: {{ section.settings.mobile_height }}vh;
     --gl4-weight-bold: {{ section.settings.font_weight_bold }};
   "
 >
@@ -178,6 +179,7 @@
     { "type": "range", "id": "offset_x", "label": "Distance from the right edge", "min": 0, "max": 120, "step": 2, "default": 24, "unit": "px" },
     { "type": "range", "id": "offset_y", "label": "Distance from the bottom edge", "min": 0, "max": 120, "step": 2, "default": 24, "unit": "px" },
     { "type": "range", "id": "panel_width", "label": "Panel width (desktop)", "min": 320, "max": 640, "step": 10, "default": 390, "unit": "px", "info": "Width of the side panel (variant 1) and the loading/error box on desktop. Mobile keeps the panel edge-to-edge." },
+    { "type": "range", "id": "mobile_height", "label": "Panel height on mobile", "min": 60, "max": 100, "step": 5, "default": 75, "unit": "%", "info": "Maximum height of the popup panel relative to the screen height on mobile devices (60–100 %)." },
 
     { "type": "header", "content": "Font" },
     { "type": "checkbox", "id": "use_google_font", "label": "Load Nunito from Google Fonts", "default": false, "info": "Turn off when the theme already loads the font." },

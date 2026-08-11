@@ -98,6 +98,10 @@
 .gl4--ready .gl4-badge { opacity: 1; pointer-events: auto; }
 .gl4--dismissed .gl4-badge { display: none; }
 
+/* Cookie-Banner offen oder noch nicht bestätigt → Badge bleibt verborgen.
+   Die Klasse wird von google-reviews-live.js gesteuert (Cookie-Banner-Sync). */
+.gl4--cookie-gated .gl4-badge { opacity: 0; pointer-events: none; }
+
 .gl4-badge:hover { transform: translateY(-2px); box-shadow: var(--gl4-shadow-btn-hover); }
 .gl4-badge:focus-visible { outline: 0; box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.12), var(--gl4-shadow); }
 
@@ -548,6 +552,23 @@
   .gl4 { --gl4-offset-x: 12px; --gl4-offset-y: 12px; }
   .gl4-badge { padding: 12px 18px; }
   .gl4-badge__label { font-size: 14px; }
+
+  /* Panel-Höhe auf Mobilgeräten über die Sektionseinstellung steuerbar
+     (60–100 % der Bildschirmhöhe). Die internen Scroll-Bereiche
+     (z. B. .gl4-v1__list) scrollen weiterhin. */
+  .gl4-v1,
+  .gl4-v2,
+  .gl4-v3,
+  .gl4-v4,
+  .gl4-v5,
+  .gl4-state {
+    max-height: var(--gl4-mobile-height, 75vh);
+  }
+  .gl4-v2,
+  .gl4-v5,
+  .gl4-state {
+    overflow-y: auto;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

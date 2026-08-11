@@ -767,20 +767,137 @@
     update(); // Ausgangszustand, z. B. nach Seiten-Reload in gescrollter Position
   }
 
+  /* ------------------------------------------------------- Cookie-Banner-Sync
+
+     Das Badge bleibt verborgen, solange ein Cookie-Banner offen ist oder noch
+     nicht bestätigt wurde. Unterstützt werden zwei Banner:
+
+       1. Theme-Popup (popups.liquid, Block „cookies“):
+          <modal-box class="popup--cookies"> – Bestätigung wird von
+          component-modal.js in localStorage unter
+          `modal-<hostname>-<modal-id>` abgelegt.
+       2. Shopify-Privacy-Banner („Customer privacy“, von Shopify gerendert):
+          `.shopify-pc__banner__dialog` – sichtbar solange er offen ist,
+          bestätigt wird er über das `_tracking_consent`-Cookie.
+
+     Ein MutationObserver reagiert auf Einfügen/Entfernen und auf
+     Sichtbarkeitsänderungen, damit das Badge nie mit einem Banner kollidiert. */
+
+  var COOKIE_SELECTOR = 'modal-box.popup--cookies';
+  var PRIVACY_SELECTOR = '.shopify-pc__banner__dialog';
+
+  function cookieModals() {
+    return Array.prototype.slice.call(document.querySelectorAll(COOKIE_SELECTOR));
+  }
+
+  function cookieModalEnabled(m) {
+    try {
+      return JSON.parse(m.dataset.options || '{}').enabled !== false;
+    } catch (e) {
+      return true;
+    }
+  }
+
+  function cookieModalDismissed(m) {
+    try {
+      return !!window.localStorage.getItem('modal-' + document.location.hostname + '-' + m.id);
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function privacyBanners() {
+    return Array.prototype.slice.call(document.querySelectorAll(PRIVACY_SELECTOR));
+  }
+
+  /* Sichtbarkeit des Shopify-Privacy-Banners robust ermitteln */
+  function privacyBannerVisible(m) {
+    if (!m || !m.isConnected) return false;
+    if (m.hasAttribute('hidden')) return false;
+    var style = window.getComputedStyle(m);
+    if (style.display === 'none' || style.visibility === 'hidden' || style.opacity === '0') return false;
+    var rect = m.getBoundingClientRect();
+    if (rect.width === 0 && rect.height === 0) return false;
+    return true;
+  }
+
+  /* `_tracking_consent` wird von Shopify gesetzt, sobald der Nutzer den
+     Privacy-Banner bestätigt hat (egal ob angenommen oder abgelehnt). */
+  function consentCookieSet() {
+    return document.cookie.split(';').some(function (c) {
+      return c.trim().indexOf('_tracking_consent=') === 0;
+    });
+  }
+
+  /* true → Badge verstecken: Cookie-Banner offen oder noch nicht bestätigt */
+  function cookieBannerShouldHideBadge() {
+    /* 1) Theme-eigener Cookie-Popup */
+    var modals = cookieModals().filter(cookieModalEnabled);
+    if (modals.length) {
+      var open = modals.some(function (m) { return m.classList.contains('active'); });
+      var dismissed = modals.some(cookieModalDismissed);
+      if (open || !dismissed) return true;
+    }
+    /* 2) Shopify-Privacy-Banner */
+    var banners = privacyBanners();
+    if (banners.length) {
+      if (banners.some(privacyBannerVisible)) return true;
+      /* Banner existiert, ist aber (noch) nicht sichtbar – ohne Consent-Cookie
+         kann er jederzeit erscheinen → Badge versteckt halten. */
+      if (!consentCookieSet()) return true;
+    }
+    return false;
+  }
+
+  function syncCookieGate() {
+    var hide = cookieBannerShouldHideBadge();
+    document.querySelectorAll('[data-gl4-root]').forEach(function (root) {
+      root.classList.toggle('gl4--cookie-gated', hide);
+    });
+  }
+
+  function bindCookieBannerSync() {
+    var target = document.body || document.documentElement;
+    var schedule = null;
+    function refresh() {
+      if (schedule) return;
+      schedule = window.requestAnimationFrame
+        ? window.requestAnimationFrame(function () { schedule = null; syncCookieGate(); })
+        : window.setTimeout(function () { schedule = null; syncCookieGate(); }, 0);
+    }
+    if (!window.MutationObserver) {
+      syncCookieGate();
+      return;
+    }
+    var observer = new MutationObserver(refresh);
+    /* Einfügen/Entfernen des Privacy-Banners im Body beobachten */
+    observer.observe(target, { childList: true, subtree: true });
+    /* Sichtbarkeitsänderungen an den Bannern beobachten */
+    function watchAttributes(el) {
+      observer.observe(el, { attributes: true, attributeFilter: ['class', 'style', 'hidden'] });
+    }
+    privacyBanners().forEach(watchAttributes);
+    cookieModals().forEach(watchAttributes);
+    syncCookieGate();
+  }
+
   /* --------------------------------------------------------------- Bootstrap */
 
   function initAll(scope) {
     (scope || document).querySelectorAll('[data-gl4-root]').forEach(init);
+    syncCookieGate();
   }
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', function () {
       initAll();
       bindGoTopOffset();
+      bindCookieBannerSync();
     });
   } else {
     initAll();
     bindGoTopOffset();
+    bindCookieBannerSync();
   }
 
   document.addEventListener('shopify:section:load', function (e) { initAll(e.target); });
