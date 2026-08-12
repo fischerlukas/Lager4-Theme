@@ -40,6 +40,12 @@
     '<svg width="21" height="9" viewBox="0 0 21 9" fill="none" aria-hidden="true" focusable="false">' +
     '<path d="M20.354 4.854a.5.5 0 0 0 0-.708L17.172.964a.5.5 0 1 0-.707.708L19.293 4.5l-2.828 2.828a.5.5 0 1 0 .707.708l3.182-3.182ZM0 5h20V4H0v1Z"/></svg>';
 
+  /* Schließen-× als SVG – unabhängig von Schriftschnitt und Zeilenabstand
+     immer exakt zentriert. Farbe über `currentColor`. */
+  var CLOSE_SVG =
+    '<svg viewBox="0 0 20 20" aria-hidden="true" focusable="false">' +
+    '<path d="M5 5l10 10M15 5L5 15" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>';
+
   var AVATAR_COLORS = ['#4285F4', '#7B1FA2', '#C62828', '#00796B', '#455A64', '#E65100', '#2E7D32', '#00695C', '#AD1457', '#283593'];
 
   /* ------------------------------------------------------------ Hilfsfunktionen */
@@ -310,7 +316,7 @@
     v1: function (cfg, data) {
       var count = data.count ? data.count + ' ' : '';
       return (
-        '<button class="gl4-close" type="button" data-gl4-close aria-label="' + escapeHtml(cfg.close_label || 'Schließen') + '">×</button>' +
+        '<button class="gl4-close" type="button" data-gl4-close aria-label="' + escapeHtml(cfg.close_label || 'Schließen') + '">' + CLOSE_SVG + '</button>' +
         '<div class="gl4-v1__head">' +
           '<div class="gl4-v1__brand">' + logoHTML(22) + '<span>' + escapeHtml(cfg.panel_title || 'Bewertungen') + '</span></div>' +
           '<div class="gl4-v1__score"><span class="gl4-v1__num">' + formatScore(data.rating) + '</span>' + starsHTML(data.rating, 'gl4-stars--lg') + '</div>' +
@@ -336,7 +342,7 @@
     v2: function (cfg, data) {
       var count = data.count ? data.count + ' ' : '';
       return (
-        '<button class="gl4-close" type="button" data-gl4-close aria-label="' + escapeHtml(cfg.close_label || 'Schließen') + '">×</button>' +
+        '<button class="gl4-close" type="button" data-gl4-close aria-label="' + escapeHtml(cfg.close_label || 'Schließen') + '">' + CLOSE_SVG + '</button>' +
         '<div class="gl4-v2__head">' +
           '<span class="gl4-v2__num">' + formatScore(data.rating) + '</span>' +
           '<div><h3 class="gl4-v2__headline">' + escapeHtml(cfg.v2_title || 'Das sagen unsere Kunden') + '</h3>' +
@@ -364,7 +370,7 @@
       var bars = buildBars(cfg);
       var count = data.count ? data.count + ' ' : '';
       return (
-        '<button class="gl4-close" type="button" data-gl4-close aria-label="' + escapeHtml(cfg.close_label || 'Schließen') + '">×</button>' +
+        '<button class="gl4-close" type="button" data-gl4-close aria-label="' + escapeHtml(cfg.close_label || 'Schließen') + '">' + CLOSE_SVG + '</button>' +
         '<aside class="gl4-v3__aside">' + logoHTML(26) +
           '<div class="gl4-v3__num">' + formatScore(data.rating) + '</div>' + starsHTML(data.rating, 'gl4-stars--lg') +
           '<p class="gl4-v3__meta">' + escapeHtml((cfg.v3_meta_before || 'basierend auf ') + count + (cfg.v3_meta_after || 'Bewertungen')) + '</p>' +
@@ -391,7 +397,7 @@
     v4: function (cfg, data) {
       var count = data.count ? data.count + ' ' : '';
       return (
-        '<div class="gl4-v4__head"><button class="gl4-close" type="button" data-gl4-close aria-label="' + escapeHtml(cfg.close_label || 'Schließen') + '">×</button>' +
+        '<div class="gl4-v4__head"><button class="gl4-close" type="button" data-gl4-close aria-label="' + escapeHtml(cfg.close_label || 'Schließen') + '">' + CLOSE_SVG + '</button>' +
           '<span class="gl4-v4__brand">' + LOGO + escapeHtml(cfg.panel_title || 'Google Bewertungen') + '</span>' +
           '<div class="gl4-v4__num">' + formatScore(data.rating) + '</div>' + starsHTML(data.rating, 'gl4-stars--lg gl4-stars--white') +
           '<p class="gl4-v4__meta">' + count + escapeHtml(cfg.reviews_word || 'Bewertungen') + '</p>' +
@@ -417,7 +423,7 @@
         .replace('{score}', formatScore(data.rating))
         .replace('{name}', escapeHtml(cfg.business_name || ''));
       return (
-        '<button class="gl4-close" type="button" data-gl4-close aria-label="' + escapeHtml(cfg.close_label || 'Schließen') + '">×</button>' +
+        '<button class="gl4-close" type="button" data-gl4-close aria-label="' + escapeHtml(cfg.close_label || 'Schließen') + '">' + CLOSE_SVG + '</button>' +
         '<div class="gl4-v5__eyebrow">' + LOGO + ' ' + escapeHtml(cfg.panel_title || 'Google Bewertungen') + '</div>' +
         '<h3 class="gl4-v5__title">' + title + '</h3>' +
         '<div class="gl4-v5__rule"></div>' +
@@ -479,7 +485,7 @@
     return (
       '<button class="gl4-badge" type="button" data-gl4-toggle aria-expanded="false" aria-haspopup="dialog" aria-controls="' + cfg._id + '-overlay">' +
         (cfg.dismissible !== false
-          ? '<span class="gl4-badge__dismiss" data-gl4-dismiss role="button" tabindex="0" aria-label="' + escapeHtml(cfg.dismiss_label || 'Badge ausblenden') + '">×</span>'
+          ? '<span class="gl4-badge__dismiss" data-gl4-dismiss role="button" tabindex="0" aria-label="' + escapeHtml(cfg.dismiss_label || 'Badge ausblenden') + '">' + CLOSE_SVG + '</span>'
           : '') +
         '<span class="gl4-badge__logo">' + LOGO + '</span>' +
         (cfg.badge_label ? '<span class="gl4-badge__label">' + escapeHtml(cfg.badge_label) + '</span>' : '') +
@@ -776,12 +782,20 @@
           <modal-box class="popup--cookies"> – Bestätigung wird von
           component-modal.js in localStorage unter
           `modal-<hostname>-<modal-id>` abgelegt.
-       2. Shopify-Privacy-Banner („Customer privacy“, von Shopify gerendert):
-          `.shopify-pc__banner__dialog` – sichtbar solange er offen ist,
-          bestätigt wird er über das `_tracking_consent`-Cookie.
+       2. PopConvert / Shopify-Privacy-Banner:
+          `<section id="shopify-pc__banner" class="shopify-pc__banner__dialog">`
+          (App „Customer privacy“, cdn.s3.pop-convert.com).
+
+     WICHTIG (live verifiziert): Der PopConvert-Banner wird nach der
+     Bestätigung NICHT aus dem DOM entfernt und setzt KEIN
+     `_tracking_consent`-Cookie (weder lesbar noch in Storage-Apis). Er
+     bekommt nur `style="display: none;"` auf dem Element selbst. Deshalb
+     zählt hier allein die Sichtbarkeit: War der Banner sichtbar und ist jetzt
+     versteckt → Zustimmung gegeben → Badge auf derselben Seite freigeben.
 
      Ein MutationObserver reagiert auf Einfügen/Entfernen und auf
-     Sichtbarkeitsänderungen, damit das Badge nie mit einem Banner kollidiert. */
+     Sichtbarkeitsänderungen; zusätzlich pollt ein Sicherheitsnetz, solange
+     das Badge verborgen ist. */
 
   var COOKIE_SELECTOR = 'modal-box.popup--cookies';
   var PRIVACY_SELECTOR = '.shopify-pc__banner__dialog';
@@ -821,13 +835,10 @@
     return true;
   }
 
-  /* `_tracking_consent` wird von Shopify gesetzt, sobald der Nutzer den
-     Privacy-Banner bestätigt hat (egal ob angenommen oder abgelehnt). */
-  function consentCookieSet() {
-    return document.cookie.split(';').some(function (c) {
-      return c.trim().indexOf('_tracking_consent=') === 0;
-    });
-  }
+  /* Merker: War der Privacy-Banner auf dieser Seite schon einmal sichtbar?
+     Sobald er danach versteckt wird (Zustimmung / Schließen), wird das Badge
+     auf derselben Seite freigegeben – ohne Cookie-Abhängigkeit. */
+  var privacyBannerSeenVisible = false;
 
   /* true → Badge verstecken: Cookie-Banner offen oder noch nicht bestätigt */
   function cookieBannerShouldHideBadge() {
@@ -838,13 +849,18 @@
       var dismissed = modals.some(cookieModalDismissed);
       if (open || !dismissed) return true;
     }
-    /* 2) Shopify-Privacy-Banner */
+
+    /* 2) PopConvert / Shopify-Privacy-Banner – rein sichtbarkeitsbasiert:
+       - sichtbar                          → Badge versteckt halten
+       - war sichtbar, jetzt versteckt (bestätigt/geschlossen) → freigeben
+       - nie sichtbar & nie bestätigt      → Banner kann noch kommen → versteckt */
     var banners = privacyBanners();
     if (banners.length) {
-      if (banners.some(privacyBannerVisible)) return true;
-      /* Banner existiert, ist aber (noch) nicht sichtbar – ohne Consent-Cookie
-         kann er jederzeit erscheinen → Badge versteckt halten. */
-      if (!consentCookieSet()) return true;
+      if (banners.some(privacyBannerVisible)) {
+        privacyBannerSeenVisible = true;
+        return true;
+      }
+      if (!privacyBannerSeenVisible) return true;
     }
     return false;
   }
@@ -859,26 +875,48 @@
   function bindCookieBannerSync() {
     var target = document.body || document.documentElement;
     var schedule = null;
+    var observer = null;
+    function watchAttributes(el) {
+      if (observer) observer.observe(el, { attributes: true, attributeFilter: ['class', 'style', 'hidden'] });
+    }
     function refresh() {
       if (schedule) return;
       schedule = window.requestAnimationFrame
         ? window.requestAnimationFrame(function () { schedule = null; syncCookieGate(); })
         : window.setTimeout(function () { schedule = null; syncCookieGate(); }, 0);
+      /* Auch auf später nachgeladene Banner Attribute beobachten */
+      privacyBanners().forEach(watchAttributes);
     }
-    if (!window.MutationObserver) {
-      syncCookieGate();
-      return;
+    if (window.MutationObserver) {
+      observer = new MutationObserver(refresh);
+      /* Einfügen/Entfernen des Privacy-Banners im Body beobachten */
+      observer.observe(target, { childList: true, subtree: true });
+      /* Sichtbarkeitsänderungen an den Bannern beobachten */
+      privacyBanners().forEach(watchAttributes);
+      cookieModals().forEach(watchAttributes);
     }
-    var observer = new MutationObserver(refresh);
-    /* Einfügen/Entfernen des Privacy-Banners im Body beobachten */
-    observer.observe(target, { childList: true, subtree: true });
-    /* Sichtbarkeitsänderungen an den Bannern beobachten */
-    function watchAttributes(el) {
-      observer.observe(el, { attributes: true, attributeFilter: ['class', 'style', 'hidden'] });
-    }
-    privacyBanners().forEach(watchAttributes);
-    cookieModals().forEach(watchAttributes);
     syncCookieGate();
+
+    /* Sicherheitsnetz: Die App blendet den Banner per `display:none` aus und
+       setzt kein Cookie. Der Observer feuert dabei zwar, aber um jede Race
+       abzufangen (verzögertes Einblenden, späte Zustimmung), wird solange
+       gepollt, bis das Badge freigegeben ist. Zusätzlich wird auf die
+       Consent-Events von Shopify gehört (document + window) – schadet nicht,
+       falls eine andere App sie feuert. */
+    ['trackingConsentCollected', 'trackingConsentAccepted', 'trackingConsentRejected']
+      .forEach(function (name) {
+        document.addEventListener(name, syncCookieGate);
+        window.addEventListener(name, syncCookieGate);
+      });
+
+    function pollWhileGated() {
+      if (!cookieBannerShouldHideBadge()) {
+        syncCookieGate();
+        return;
+      }
+      window.setTimeout(pollWhileGated, 400);
+    }
+    pollWhileGated();
   }
 
   /* --------------------------------------------------------------- Bootstrap */
