@@ -132,6 +132,7 @@
 }
 .gl4-badge__dismiss:hover { color: var(--gl4-text); }
 .gl4-badge__dismiss:focus-visible { outline: 0; box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.12); }
+.gl4-badge__dismiss svg { width: 11px; height: 11px; }
 
 /* Badge beim offenen Overlay verstecken */
 .gl4--open .gl4-badge { visibility: hidden; }
@@ -306,6 +307,12 @@
 }
 .gl4-close:hover { background: var(--gl4-soft); color: var(--gl4-text); }
 .gl4-close:focus-visible { outline: 0; box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.12); }
+.gl4-close svg { width: 16px; height: 16px; }
+
+/* Close-Button vertikal an der ersten Kopfzeile des jeweiligen Panels
+   ausrichten (statt fix oben zu kleben – sonst hängt das × über dem
+   zentrierten Header-Text). */
+.gl4-v1 .gl4-close { top: 24px; }
 
 .gl4-scroll { overflow-y: auto; overscroll-behavior: contain; }
 .gl4-scroll::-webkit-scrollbar { width: 6px; }
