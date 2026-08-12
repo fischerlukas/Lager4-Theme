@@ -1189,5 +1189,119 @@ div.container.container--large.container--vertical-space-small.remove-empty-spac
 
 
 /*
+* Shopify Cookie Consent Banner Start
+*/
+#shopify-pc__banner.shopify-pc__banner__dialog {
+  border-radius: 30px 30px 0 0;
+  box-shadow: 0 0 30px -10px rgba(0, 0, 0, 0.3);
+  font-family: inherit;
+}
+
+#shopify-pc__banner h2 {
+  font-weight: 400;
+}
+
+/* Gemeinsame Button-Basis (Banner + Einstellungen-Dialog) */
+.shopify-pc__banner__btn-accept,
+.shopify-pc__banner__btn-decline,
+#shopify-pc__prefs__header-accept,
+#shopify-pc__prefs__header-decline,
+#shopify-pc__prefs__header-save {
+  border: 0 !important;
+  border-radius: 30px !important;
+  padding: 12px 32px !important;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.25;
+  transition: all 175ms linear !important;
+  cursor: pointer;
+}
+
+/* Primär (orange): klassischer Lager4-Schatten + Hover wie .button--solid */
+.shopify-pc__banner__btn-accept,
+#shopify-pc__prefs__header-accept {
+  background-color: #ff6700 !important;
+  color: #fff !important;
+  box-shadow: #32325d33 0 5px 20px -3px, #0000004d 0 8px 16px -8px !important;
+}
+
+.shopify-pc__banner__btn-accept:hover,
+#shopify-pc__prefs__header-accept:hover {
+  background-color: #ff6700 !important;
+  color: #fff !important;
+  box-shadow: #32325d4d 0 5px 25px 5px, #0000004d 0 8px 16px -8px !important;
+}
+
+/* Sekundär (Ablehnen, Auswahl speichern): hellgrau mit schwarzer Schrift */
+.shopify-pc__banner__btn-decline,
+#shopify-pc__prefs__header-decline,
+#shopify-pc__prefs__header-save {
+  background-color: #f2f2f2 !important;
+  color: #000 !important;
+  box-shadow: none !important;
+}
+
+.shopify-pc__banner__btn-decline:hover,
+#shopify-pc__prefs__header-decline:hover,
+#shopify-pc__prefs__header-save:hover {
+  background-color: #e8e8e8 !important;
+  color: #000 !important;
+}
+
+/* Einstellungen-Dialog: Radius/Schatten wie Seiten-Cards */
+#shopify-pc__prefs__dialog {
+  border-radius: 30px !important;
+  box-shadow: 0 0 30px -10px rgba(0, 0, 0, 0.3) !important;
+  font-family: inherit;
+}
+
+#shopify-pc__prefs__dialog h2,
+#shopify-pc__prefs__dialog h3,
+.shopify-pc__prefs__option label {
+  font-weight: 400 !important;
+}
+
+/* Aktivierte Checkboxen in Markenorange */
+.shopify-pc__prefs__option svg[data-icon-type="checked"] path {
+  fill: #ff6700 !important;
+}
+
+/* Hellblauen Standard-Focus-Ring entfernen */
+.shopify-pc__banner__dialog button:focus,
+.shopify-pc__prefs__header-close:focus,
+.shopify-pc__prefs__header-actions button:focus,
+.shopify-pc__prefs__option label input:focus ~ span svg {
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+.shopify-pc__banner__dialog button.shopify-pc__banner__btn-manage-prefs:focus span,
+.shopify-pc__banner__body p a:focus {
+  outline: none !important;
+}
+
+.shopify-pc__prefs__option label input:focus ~ span {
+  background-color: transparent !important;
+}
+
+/* Kein Focus-Ring, auch nicht bei :focus-visible (Safari fokussiert den
+   Close-Button beim Öffnen automatisch und zeigt sonst immer einen Ring) */
+.shopify-pc__banner__dialog button:focus-visible,
+.shopify-pc__prefs__header-close:focus-visible,
+.shopify-pc__prefs__header-actions button:focus-visible {
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+/* Orange Hover/Shadow der Primär-Buttons auch bei :focus beibehalten */
+.shopify-pc__banner__dialog button.shopify-pc__banner__btn-accept:focus,
+#shopify-pc__prefs__header-accept:focus {
+  box-shadow: #32325d33 0 5px 20px -3px, #0000004d 0 8px 16px -8px !important;
+}
+/*
+* Shopify Cookie Consent Banner End
+*/
+
+/*
 * Custom CSS End
 */
