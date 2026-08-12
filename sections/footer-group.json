@@ -13,7 +13,6 @@
   "sections": {
     "google_reviews_live_zGA8nk": {
       "type": "google-reviews-live",
-      "disabled": true,
       "name": "Google Reviews Live",
       "settings": {
         "api_key": "AIzaSyCugl-_tQbNfCGk1u31ERGUqppUPmdhQKM",
@@ -45,6 +44,7 @@
         "offset_x": 24,
         "offset_y": 24,
         "panel_width": 600,
+        "mobile_height": 75,
         "use_google_font": false,
         "font_weight_bold": "500",
         "color_accent": "#ff6700",
