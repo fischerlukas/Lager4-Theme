@@ -1286,11 +1286,13 @@ div.container.container--large.container--vertical-space-small.remove-empty-spac
   background-color: transparent !important;
 }
 
-/* Dezenter Ring nur bei Tastatur-Fokus (Barrierefreiheit) */
+/* Kein Focus-Ring, auch nicht bei :focus-visible (Safari fokussiert den
+   Close-Button beim Öffnen automatisch und zeigt sonst immer einen Ring) */
 .shopify-pc__banner__dialog button:focus-visible,
 .shopify-pc__prefs__header-close:focus-visible,
 .shopify-pc__prefs__header-actions button:focus-visible {
-  box-shadow: 0 0 0 3px rgba(255, 103, 0, 0.35) !important;
+  box-shadow: none !important;
+  outline: none !important;
 }
 
 /* Orange Hover/Shadow der Primär-Buttons auch bei :focus beibehalten */
