@@ -1,0 +1,275 @@
+l4-collection-carousel {
+  --l4-collection-carousel-edge: 40px;
+  --l4-collection-carousel-gap: 40px;
+  --l4-collection-carousel-current-columns: var(--l4-collection-carousel-desktop-columns, 2);
+
+  position: relative;
+  display: block;
+  width: 100%;
+}
+
+l4-collection-carousel *,
+l4-collection-carousel *::before,
+l4-collection-carousel *::after {
+  box-sizing: border-box;
+}
+
+.l4-collection-carousel__track {
+  position: relative;
+  overflow: hidden;
+  overflow: clip;
+  overflow-clip-margin: 30px;
+  outline: none;
+  cursor: grab;
+  overscroll-behavior-inline: contain;
+  touch-action: pan-y;
+}
+
+l4-collection-carousel[data-dragging] .l4-collection-carousel__track {
+  cursor: grabbing;
+}
+
+.l4-collection-carousel__track:focus-visible {
+  outline: 2px solid var(--color-text-main);
+  outline-offset: 4px;
+}
+
+.l4-collection-carousel__items {
+  display: flex;
+  transition: transform 550ms cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+
+l4-collection-carousel[data-dragging] .l4-collection-carousel__items {
+  user-select: none;
+  transition: none;
+}
+
+.l4-collection-carousel__page {
+  display: flex;
+  flex-shrink: 0;
+  justify-content: center;
+  gap: var(--l4-collection-carousel-gap);
+  padding: 30px var(--l4-collection-carousel-edge);
+}
+
+.l4-collection-carousel__card {
+  width: calc(
+    (100% - (var(--l4-collection-carousel-visible-columns) - 1) * var(--l4-collection-carousel-gap)) /
+      var(--l4-collection-carousel-visible-columns)
+  );
+  min-width: 0;
+  flex: 0 0 auto;
+}
+
+.l4-collection-carousel__card > .js-collection-item {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 30px;
+  background: #ffffff;
+  box-shadow: 0 0 30px -10px rgb(0 0 0 / 30%);
+  transition: box-shadow 300ms ease;
+}
+
+.l4-collection-carousel__card > .js-collection-item > a {
+  display: block;
+  height: 100%;
+  color: inherit;
+  text-decoration: none;
+}
+
+.l4-collection-carousel__card .js-collection-item > a > .gutter-top--regular {
+  padding-bottom: var(--gutter-regular);
+}
+
+.l4-collection-carousel__navigation {
+  display: flex;
+  height: 2.5rem;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0.625rem;
+  margin-bottom: -0.75rem;
+  color: var(--color-text-main);
+}
+
+.l4-collection-carousel__navigation[hidden] {
+  display: none;
+}
+
+l4-collection-carousel:not([data-hydrated]) .l4-collection-carousel__navigation {
+  display: none;
+}
+
+.l4-collection-carousel__nav-button,
+.l4-collection-carousel__dot {
+  min-width: 0;
+  min-height: 0;
+  margin: 0;
+  border: 0;
+  font: inherit;
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+.l4-collection-carousel__nav-button {
+  position: relative;
+  display: flex;
+  width: 2.5rem;
+  height: 2.5rem;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border-radius: 100%;
+  background: transparent;
+  color: currentColor;
+  cursor: pointer;
+  opacity: 0.8;
+  transition: opacity 175ms linear;
+}
+
+.l4-collection-carousel__nav-button svg {
+  display: block;
+  flex-shrink: 0;
+  pointer-events: none;
+}
+
+html[dir="rtl"] .l4-collection-carousel__nav-button svg {
+  transform: rotate(180deg);
+}
+
+.l4-collection-carousel__nav-button--previous::after,
+.l4-collection-carousel__nav-button--next::before {
+  display: inline-block;
+  width: 0;
+  height: 1px;
+  flex-shrink: 0;
+  background: currentColor;
+  content: "";
+  transition: width 175ms ease;
+}
+
+.l4-collection-carousel__nav-button--previous::after {
+  margin-inline-start: -0.3125rem;
+}
+
+.l4-collection-carousel__nav-button--next::before {
+  margin-inline-end: -0.3125rem;
+}
+
+.l4-collection-carousel__nav-button:disabled {
+  cursor: auto;
+  opacity: 0.3;
+}
+
+.l4-collection-carousel__nav-button:focus-visible,
+.l4-collection-carousel__dot:focus-visible {
+  outline: 2px solid var(--color-text-main);
+  outline-offset: 2px;
+}
+
+.l4-collection-carousel__dots {
+  display: flex;
+  width: min(50vw, 25rem);
+  height: auto;
+  margin-top: 0.125rem;
+  padding: 0;
+  border-radius: 0.625rem;
+  line-height: normal;
+}
+
+.l4-collection-carousel__dot {
+  display: inline-block;
+  width: auto;
+  height: 0.375rem;
+  flex: 1 1 0;
+  padding: 0;
+  border-radius: 0;
+  appearance: none;
+  background: var(--color-text-main);
+  cursor: pointer;
+  line-height: normal;
+}
+
+.l4-collection-carousel__dot:first-child {
+  border-radius: 0.625rem 0 0 0.625rem;
+}
+
+.l4-collection-carousel__dot:last-child {
+  border-radius: 0 0.625rem 0.625rem 0;
+}
+
+.l4-collection-carousel__dot.is-active:first-child {
+  border-radius: 0.625rem;
+}
+
+.l4-collection-carousel__dot.is-active:not(:first-child) {
+  border-radius: 0 0.625rem 0.625rem 0;
+}
+
+.l4-collection-carousel__dot.is-active ~ .l4-collection-carousel__dot {
+  background: var(--color-secondary-background-main);
+}
+
+l4-collection-carousel:not([data-hydrated]) .l4-collection-carousel__items {
+  display: grid;
+  grid-template-columns: repeat(
+    var(--l4-collection-carousel-current-columns),
+    minmax(0, 1fr)
+  );
+  gap: var(--l4-collection-carousel-gap);
+  padding: 30px var(--l4-collection-carousel-edge);
+}
+
+l4-collection-carousel:not([data-hydrated]) .l4-collection-carousel__card {
+  width: auto;
+}
+
+@media screen and (max-width: 1023px) {
+  l4-collection-carousel {
+    --l4-collection-carousel-current-columns: var(--l4-collection-carousel-portable-columns, 3);
+  }
+}
+
+@media screen and (max-width: 767px) {
+  l4-collection-carousel {
+    --l4-collection-carousel-current-columns: var(--l4-collection-carousel-lap-columns, 1);
+    width: calc(100% + var(--gutter-container) * 2);
+    margin-inline: calc(-1 * var(--gutter-container));
+  }
+}
+
+@media screen and (max-width: 474px) {
+  l4-collection-carousel {
+    --l4-collection-carousel-current-columns: var(--l4-collection-carousel-palm-columns, 1);
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .l4-collection-carousel__card > .js-collection-item:hover {
+    box-shadow: 0 0 30px 0 rgb(0 0 0 / 30%);
+  }
+
+  .l4-collection-carousel__card .js-collection-item > a:hover .lazy-image--animation img {
+    top: unset !important;
+    clip-path: unset !important;
+  }
+
+  .l4-collection-carousel__nav-button:not(:disabled):hover {
+    opacity: 1;
+  }
+
+  .l4-collection-carousel__nav-button--previous:not(:disabled):hover::after,
+  .l4-collection-carousel__nav-button--next:not(:disabled):hover::before {
+    width: 18px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .l4-collection-carousel__items,
+  .l4-collection-carousel__card > .js-collection-item,
+  .l4-collection-carousel__nav-button--previous::after,
+  .l4-collection-carousel__nav-button--next::before {
+    transition-duration: 1ms;
+  }
+}
