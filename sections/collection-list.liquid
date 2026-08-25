@@ -1,65 +1,144 @@
+{%- if section.settings.style == 'slider' -%}
+  {{ 'l4-collection-carousel.css' | asset_url | stylesheet_tag }}
+  <script src="{{ 'l4-collection-carousel.js' | asset_url }}" defer="defer"></script>
+{%- endif -%}
+
+{%- liquid
+  assign layout = section.settings.layout
+  assign layout_classes = layout | split: ' '
+  assign desktop_columns = layout_classes.first | remove: 'grid-' | plus: 0
+  assign portable_columns = desktop_columns
+  assign lap_columns = portable_columns
+  assign palm_columns = lap_columns
+
+  for layout_class in layout_classes
+    if layout_class contains 'grid-portable-'
+      assign portable_columns = layout_class | remove: 'grid-portable-' | plus: 0
+      assign lap_columns = portable_columns
+      assign palm_columns = portable_columns
+    elsif layout_class contains 'grid-lap-'
+      assign lap_columns = layout_class | remove: 'grid-lap-' | plus: 0
+      assign palm_columns = lap_columns
+    elsif layout_class contains 'grid-palm-'
+      assign palm_columns = layout_class | remove: 'grid-palm-' | plus: 0
+    endif
+  endfor
+
+  if layout contains 'grid-palm-2'
+    assign sizes = '(max-width: 467px) calc((100vw - 40px) / 2)'
+  endif
+
+  if layout contains 'grid-lap-3'
+    assign sizes = sizes | append: ', (max-width: 767px) calc((100vw - 60px) / 3)'
+  elsif layout contains 'grid-lap-1'
+    assign sizes = sizes | append: ', (max-width: 767px) calc(100vw - 40px)'
+  endif
+
+  if layout contains 'grid-6'
+    capture desk_sizes
+      echo ', (max-width: 1023px) calc((100vw - 80px) / 3), (max-width: '
+      echo settings.theme_max_width
+      echo 'px) calc((100vw - 160px) / 6), '
+      echo settings.theme_max_width | divided_by: 6
+      echo 'px'
+    endcapture
+  elsif layout contains 'grid-4'
+    capture desk_sizes
+      echo ', (max-width: '
+      echo settings.theme_max_width
+      echo 'px) calc((100vw - 100px) / 4), '
+      echo settings.theme_max_width | divided_by: 4
+      echo 'px'
+    endcapture
+  elsif layout contains 'grid-3'
+    capture desk_sizes
+      echo ', (max-width: '
+      echo settings.theme_max_width
+      echo 'px) calc((100vw - 100px) / 3), '
+      echo settings.theme_max_width | divided_by: 3
+      echo 'px'
+    endcapture
+  elsif layout contains 'grid-2'
+    capture desk_sizes
+      echo ', (max-width: '
+      echo settings.theme_max_width
+      echo 'px) calc((100vw - 100px) / 2), '
+      echo settings.theme_max_width | divided_by: 2
+      echo 'px'
+    endcapture
+  endif
+
+  assign sizes = sizes | append: desk_sizes | prepend: 'sizes="' | append: '"'
+-%}
+
 <div class="container--large container--vertical-space{% if section.settings.gutter_decrease %}-small{% endif %} remove-empty-space">
 
   {%- render 'section-heading', heading: section.settings.heading, subheading: section.settings.subheading, button: section.settings.show_view_all, button_label: 'collections.view_all_collections', link: routes.collections_url, heading_size: section.settings.section_heading_size, section_layout: section.settings.section_heading_layout, button_label_is_translation: true, seo_h_tag: section.settings.seo_h_tag -%}
 
   {%- if section.settings.style == 'slider' -%}
-    <css-slider data-options='{
-        "selector": ".js-collection-item",
-        "groupCells": true,
-        "navigationDOM": "<span class=\"css-slider-button css-slider-prev\" style=\"display:none\"><svg fill=\"none\" height=\"11\" viewBox=\"0 0 6 11\" width=\"6\" xmlns=\"http://www.w3.org/2000/svg\"><path clip-rule=\"evenodd\" d=\"m4.32845 10.0708-4.18198-4.18194c-.195261-.19526-.195261-.51185 0-.70711l4.18198-4.181979c.19527-.195262.51185-.195262.70711 0 .19526.195259.19526.511849 0 .707109l-3.32843 3.32842s-.70713.4647-.00002 1l3.32845 3.32843c.19526.19526.19526.51185 0 .70707-.19526.1953-.51185.1953-.70711 0z\" fill=\"#000\" fill-rule=\"evenodd\"/></svg></span><span class=\"css-slider-button css-slider-next\" style=\"display:none\"><svg fill=\"none\" height=\"11\" viewBox=\"0 0 6 11\" width=\"6\" xmlns=\"http://www.w3.org/2000/svg\"><path clip-rule=\"evenodd\" d=\"m.853555.999962 4.181985 4.181978c.19526.19526.19526.51185 0 .70711l-4.181983 4.18195c-.195263.1953-.511845.1953-.707108 0-.1952631-.19523-.1952632-.51181 0-.70708l3.328431-3.32842s.70713-.4647.00002-1l-3.328453-3.32843c-.1952626-.19526-.1952627-.51185 0-.707108.195263-.195262.511845-.195262.707108 0z\" fill=\"#000\" fill-rule=\"evenodd\"/></svg></span>",
-        "thumbnailsDOM": "<div class=\"css-slider-dot-navigation\" style=\"display:none;--size:{{ section.blocks.size }}\"></div>"
-      }'
-      class="css-slider css-slider--bottom-navigation"
+    <l4-collection-carousel
+      class="l4-collection-carousel"
+      data-desktop-columns="{{ desktop_columns }}"
+      data-portable-columns="{{ portable_columns }}"
+      data-lap-columns="{{ lap_columns }}"
+      data-palm-columns="{{ palm_columns }}"
+      data-page-label="{{ 'general.meta.page' | t: page: '[page]' | escape }}"
+      style="
+        --l4-collection-carousel-desktop-columns: {{ desktop_columns }};
+        --l4-collection-carousel-portable-columns: {{ portable_columns }};
+        --l4-collection-carousel-lap-columns: {{ lap_columns }};
+        --l4-collection-carousel-palm-columns: {{ palm_columns }};
+      "
     >
-  {%- endif -%}
+      <div
+        class="l4-collection-carousel__track"
+        data-l4-collection-track
+        role="region"
+        aria-roledescription="carousel"
+        aria-label="{{ section.settings.heading | default: 'Collections' | escape }}"
+        tabindex="0"
+      >
+        <div class="l4-collection-carousel__items" data-l4-collection-items>
+          {%- for block in section.blocks -%}
+            <div class="l4-collection-carousel__card" data-l4-collection-item>
+              {%- render 'collection-item', collection: collections[block.settings.collection], index: forloop.index, image: block.settings.image, sizes: sizes, image_aspect_ratio: section.settings.image_aspect_ratio, image_border_radius: section.settings.image_border_radius, shopify_attributes: block.shopify_attributes -%}
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
 
-    <div class="grid {% if section.settings.style == 'slider' %} grid--slider {% else %} grid--layout {% endif %} {{ section.settings.layout }}">
+      <div class="l4-collection-carousel__navigation" data-l4-collection-navigation>
+        <button
+          type="button"
+          class="l4-collection-carousel__nav-button l4-collection-carousel__nav-button--previous"
+          data-l4-collection-previous
+          aria-label="{{ 'general.accessibility_labels.previous' | t | escape }}"
+        >
+          <svg fill="none" height="11" viewBox="0 0 6 11" width="6" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path clip-rule="evenodd" d="m4.32845 10.0708-4.18198-4.18194c-.195261-.19526-.195261-.51185 0-.70711l4.18198-4.181979c.19527-.195262.51185-.195262.70711 0 .19526.195259.19526.511849 0 .707109l-3.32843 3.32842s-.70713.4647-.00002 1l3.32845 3.32843c.19526.19526.19526.51185 0 .70707-.19526.1953-.51185.1953-.70711 0z" fill="currentColor" fill-rule="evenodd"/>
+          </svg>
+        </button>
 
-      {%- liquid
+        <div class="l4-collection-carousel__dots" data-l4-collection-dots></div>
 
-        assign layout = section.settings.layout
-
-				if layout contains 'grid-palm-2'
-          assign sizes = '(max-width: 467px) calc((100vw - 40px) / 2)'
-        endif
-
-        if layout contains 'grid-lap-3'
-          assign sizes = sizes | append: ', (max-width: 767px) calc((100vw - 60px) / 3)'
-        elsif layout contains 'grid-lap-1'
-          assign sizes =  sizes | append: ', (max-width: 767px) calc(100vw - 40px)'
-        endif
-
-      -%}
-
-      {%- if layout contains 'grid-6' -%}
-        {%- capture desk_sizes -%}
-          , (max-width: 1023px) calc((100vw - 80px) / 3), (max-width: {{ settings.theme_max_width }}px) calc((100vw - 160px) / 6), {{ settings.theme_max_width | divided_by: 6 }}px
-        {%- endcapture -%}
-      {%- elsif layout contains 'grid-4' -%}
-        {%- capture desk_sizes -%}
-          , (max-width: {{ settings.theme_max_width }}px) calc((100vw - 100px) / 4), {{ settings.theme_max_width | divided_by: 4 }}px
-        {%- endcapture -%}
-      {%- elsif layout contains 'grid-3' -%}
-        {%- capture desk_sizes -%}
-          , (max-width: {{ settings.theme_max_width }}px) calc((100vw - 100px) / 3), {{ settings.theme_max_width | divided_by: 3 }}px
-        {%- endcapture -%}
-      {%- elsif layout contains 'grid-2' -%}
-        {%- capture desk_sizes -%}
-          , (max-width: {{ settings.theme_max_width }}px) calc((100vw - 100px) / 2), {{ settings.theme_max_width | divided_by: 2 }}px
-        {%- endcapture -%}
-      {%- endif -%}
-
-      {%- liquid
-        assign sizes = sizes | append: desk_sizes | prepend: 'sizes="' | append: '"'
-        for block in section.blocks
-          render 'collection-item', collection: collections[block.settings.collection], index: forloop.index, image: block.settings.image, sizes: sizes, image_aspect_ratio: section.settings.image_aspect_ratio, image_border_radius: section.settings.image_border_radius, shopify_attributes: block.shopify_attributes
-        endfor
-      -%}
-
+        <button
+          type="button"
+          class="l4-collection-carousel__nav-button l4-collection-carousel__nav-button--next"
+          data-l4-collection-next
+          aria-label="{{ 'general.accessibility_labels.next' | t | escape }}"
+        >
+          <svg fill="none" height="11" viewBox="0 0 6 11" width="6" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path clip-rule="evenodd" d="m.853555.999962 4.181985 4.181978c.19526.19526.19526.51185 0 .70711l-4.181983 4.18195c-.195263.1953-.511845.1953-.707108 0-.1952631-.19523-.1952632-.51181 0-.70708l3.328431-3.32842s.70713-.4647.00002-1l-3.328453-3.32843c-.1952626-.19526-.1952627-.51185 0-.707108.195263-.195262.511845-.195262.707108 0z" fill="currentColor" fill-rule="evenodd"/>
+          </svg>
+        </button>
+      </div>
+    </l4-collection-carousel>
+  {%- else -%}
+    <div class="grid grid--layout {{ section.settings.layout }}">
+      {%- for block in section.blocks -%}
+        {%- render 'collection-item', collection: collections[block.settings.collection], index: forloop.index, image: block.settings.image, sizes: sizes, image_aspect_ratio: section.settings.image_aspect_ratio, image_border_radius: section.settings.image_border_radius, shopify_attributes: block.shopify_attributes -%}
+      {%- endfor -%}
     </div>
-
-  {%- if section.settings.style == 'slider' -%}
-    </css-slider>
   {%- endif -%}
 
   {%- render 'section-footer', button: section.settings.show_view_all, button_label: 'collections.view_all_collections', link: routes.collections_url, button_label_is_translation: true -%}
