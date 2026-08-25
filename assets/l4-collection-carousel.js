@@ -306,7 +306,6 @@
       this.pointerStartTime = performance.now();
       this.pointerDeltaX = 0;
       this.isDragging = false;
-      this.track.setPointerCapture(event.pointerId);
     }
 
     handlePointerMove(event) {
@@ -332,6 +331,7 @@
 
         this.isDragging = true;
         this.setAttribute("data-dragging", "");
+        this.track.setPointerCapture(event.pointerId);
       }
 
       event.preventDefault();
