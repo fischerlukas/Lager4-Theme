@@ -1,6 +1,7 @@
 (() => {
   const ELEMENT_NAME = "l4-collection-carousel";
   const DRAG_START_THRESHOLD = 6;
+  const TOUCH_TAP_THRESHOLD = 12;
   const SWIPE_THRESHOLD = 40;
 
   class L4CollectionCarousel extends HTMLElement {
@@ -14,6 +15,7 @@
       this.pointerStartX = 0;
       this.pointerStartY = 0;
       this.pointerStartTime = 0;
+      this.pointerStartLink = null;
       this.pointerDeltaX = 0;
       this.isDragging = false;
       this.suppressClick = false;
@@ -304,6 +306,7 @@
       this.pointerStartX = event.clientX;
       this.pointerStartY = event.clientY;
       this.pointerStartTime = performance.now();
+      this.pointerStartLink = event.target.closest("a[href]");
       this.pointerDeltaX = 0;
       this.isDragging = false;
     }
@@ -331,7 +334,10 @@
 
         this.isDragging = true;
         this.setAttribute("data-dragging", "");
-        this.track.setPointerCapture(event.pointerId);
+
+        if (event.pointerType === "mouse") {
+          this.track.setPointerCapture(event.pointerId);
+        }
       }
 
       event.preventDefault();
@@ -350,7 +356,20 @@
 
     handlePointerUp(event) {
       if (event.pointerId === this.pointerId) {
+        const tappedLink =
+          event.pointerType === "touch" &&
+          this.pointerStartLink instanceof HTMLAnchorElement &&
+          Math.abs(event.clientX - this.pointerStartX) < TOUCH_TAP_THRESHOLD &&
+          Math.abs(event.clientY - this.pointerStartY) < TOUCH_TAP_THRESHOLD
+            ? this.pointerStartLink
+            : null;
+
         this.finishPointerInteraction(false);
+
+        if (tappedLink) {
+          event.preventDefault();
+          window.location.assign(tappedLink.href);
+        }
       }
     }
 
@@ -376,6 +395,7 @@
       }
 
       this.pointerId = null;
+      this.pointerStartLink = null;
       this.pointerDeltaX = 0;
       this.isDragging = false;
       this.removeAttribute("data-dragging");
