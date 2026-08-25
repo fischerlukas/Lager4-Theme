@@ -76,6 +76,7 @@ l4-collection-carousel[data-dragging] .l4-collection-carousel__items {
   display: block;
   height: 100%;
   color: inherit;
+  cursor: pointer;
   text-decoration: none;
 }
 
