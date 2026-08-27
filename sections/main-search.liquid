@@ -229,7 +229,7 @@
 
           {%- liquid
             if paginate.pages > 1
-              render 'pagination', paginate: paginate
+              render 'pagination', paginate: paginate, pagination_class: 'pagination--centered'
             endif
           -%}
 
