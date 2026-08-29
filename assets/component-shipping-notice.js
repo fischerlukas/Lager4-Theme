@@ -1,3 +1,25 @@
+function updateCartShippingCostVisibility() {
+
+	const cartContainers = [
+		document.querySelector('#site-cart-sidebar'),
+		document.querySelector('.cart-section')
+	].filter((container) => container);
+
+	cartContainers.forEach((container) => {
+		const shippingNotices = container.querySelectorAll('shipping-notice');
+		if ( ! shippingNotices.length ) return;
+
+		const freeShippingEligible = Array.from(shippingNotices).some((notice) => {
+			return notice.dataset.freeShippingEligible === 'true';
+		});
+
+		container.querySelectorAll('[data-cart-shipping-cost]').forEach((element) => {
+			element.hidden = freeShippingEligible;
+		});
+	});
+
+}
+
 if ( typeof ShippingNotice !== 'function' ) {
 
   class ShippingNotice extends HTMLElement {
@@ -12,18 +34,22 @@ if ( typeof ShippingNotice !== 'function' ) {
       const freeShippingThreshold = Math.round(Number(this.getAttribute('data-free-shipping')) * (Shopify.currency.rate ? Number(Shopify.currency.rate) : 1));
       const cartTotal = Number(this.getAttribute('data-cart-total'));
       const freeShippingRemaining = cartTotal - freeShippingThreshold;
-			
+      const freeShippingEligible = freeShippingRemaining >= 0;
+      this.dataset.freeShippingEligible = freeShippingEligible ? 'true' : 'false';
+
       let cartSliderWidth = 0;
-      if ( freeShippingRemaining < 0 ) {
+      if ( !freeShippingEligible ) {
         this.querySelector('[data-js-free-shipping-text]').innerHTML = window.KROWN.settings.locales.shipping_notice_remaining_to_free.replace('{{ remaining_amount }}', this._formatMoney(Math.abs(freeShippingRemaining), KROWN.settings.shop_money_format));
         cartSliderWidth = 100 - (Math.abs(freeShippingRemaining) * 100 / freeShippingThreshold);
       } else {
         this.querySelector('[data-js-free-shipping-text]').innerHTML = window.KROWN.settings.locales.shipping_notice_eligible_for_free;
         cartSliderWidth = 100;
       }
-			if ( this.querySelector('[data-js-free-shipping-slider]') ) {
-				this.querySelector('[data-js-free-shipping-slider]').style.width = `${cartSliderWidth}%`;
-			}
+      if ( this.querySelector('[data-js-free-shipping-slider]') ) {
+        this.querySelector('[data-js-free-shipping-slider]').style.width = `${cartSliderWidth}%`;
+      }
+
+      updateCartShippingCostVisibility();
 
     }
     
@@ -89,3 +115,6 @@ if ( typeof ShippingNotice !== 'function' ) {
   }
 
 }
+
+window.updateCartShippingCostVisibility = updateCartShippingCostVisibility;
+updateCartShippingCostVisibility();

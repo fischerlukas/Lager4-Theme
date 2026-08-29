@@ -18,6 +18,9 @@
 .cart-section--empty #AjaxCartSubtotal {
   display: none;
 }
+.cart-section--hide-shipping-cost [data-cart-shipping-cost] {
+  display: none;
+}
 .cart-section aside {
   position: relative;
 }

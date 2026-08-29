@@ -7,7 +7,7 @@
 
   <h1 class="title heading-size--page-title">{{ 'cart.title' | t }}</h1>
 
-  <div class="cart-section {% if cart.items.size == 0 %} cart-section--empty {% endif %}">
+  <div class="cart-section {% if cart.items.size == 0 %} cart-section--empty {% endif %}{% if section.settings.show_shipping_cost == false %} cart-section--hide-shipping-cost{% endif %}">
     <div>
 
       {%- for block in section.blocks -%}
@@ -104,6 +104,15 @@
     },
     {
       "type": "@app"
+    }
+  ],
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_shipping_cost",
+      "label": "Show the shipping cost note",
+      "info": "When enabled, shows the ‘zzgl. … Versandkosten’ text until free shipping is reached. Disable to always hide it.",
+      "default": true
     }
   ]
 }
