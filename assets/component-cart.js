@@ -96,6 +96,7 @@ if ( typeof CartForm !== 'function' ) {
 					document.getElementById('AjaxCartSubtotal').innerHTML = cartSubtotalInnerHTML;
 					if ( typeof window.updateAllVatTexts === 'function' ) window.updateAllVatTexts();
 					if ( typeof window.updateShippingCosts === 'function' ) window.updateShippingCosts();
+					if ( typeof window.updateCartShippingCostVisibility === 'function' ) window.updateCartShippingCostVisibility();
 							
 					const event = new Event('cart-updated');
 					this.dispatchEvent(event);
@@ -171,6 +172,7 @@ if ( ! window.refreshCart ) {
 			document.getElementById('AjaxCartSubtotal').innerHTML = cartSubtotalInnerHTML;
 			if ( typeof window.updateAllVatTexts === 'function' ) window.updateAllVatTexts();
 			if ( typeof window.updateShippingCosts === 'function' ) window.updateShippingCosts();
+			if ( typeof window.updateCartShippingCostVisibility === 'function' ) window.updateCartShippingCostVisibility();
 			if ( document.querySelector('[data-js-site-cart-sidebar]') ) {
 				document.querySelector('[data-js-site-cart-sidebar]').show();
 			}

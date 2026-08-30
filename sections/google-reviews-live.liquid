@@ -1,4 +1,21 @@
-{{ 'google-reviews-live.css' | asset_url | stylesheet_tag }}
+{%- liquid
+  assign gl4_current_template = template | downcase
+  assign gl4_current_template_name = template.name | downcase
+  assign gl4_hide_widget = false
+  assign gl4_hidden_pages = section.settings.hide_on_pages | default: '' | split: ','
+
+  for gl4_hidden_page in gl4_hidden_pages
+    assign gl4_hidden_page = gl4_hidden_page | strip | downcase
+    if gl4_hidden_page != blank
+      if gl4_hidden_page == gl4_current_template or gl4_hidden_page == gl4_current_template_name
+        assign gl4_hide_widget = true
+      endif
+    endif
+  endfor
+-%}
+
+{%- unless gl4_hide_widget -%}
+  {{ 'google-reviews-live.css' | asset_url | stylesheet_tag }}
 
 {%- comment -%}
   Google Reviews Live
@@ -52,7 +69,8 @@
   </noscript>
 </section>
 
-<script src="{{ 'google-reviews-live.js' | asset_url }}" defer></script>
+  <script src="{{ 'google-reviews-live.js' | asset_url }}" defer></script>
+{%- endunless -%}
 
 {% schema %}
 {
@@ -174,6 +192,13 @@
       "info": "0 = only for the current page view."
     },
     { "type": "checkbox", "id": "hide_on_mobile", "label": "Hide on mobile", "default": false },
+    {
+      "type": "text",
+      "id": "hide_on_pages",
+      "label": "Hide widget on templates",
+      "default": "cart",
+      "info": "Comma-separated Shopify template names, e.g. cart, product, collection. Leave blank to show the widget everywhere."
+    },
 
     { "type": "header", "content": "Layout" },
     { "type": "range", "id": "offset_x", "label": "Distance from the right edge", "min": 0, "max": 120, "step": 2, "default": 24, "unit": "px" },

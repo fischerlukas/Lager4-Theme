@@ -2,7 +2,7 @@
 
 {%- if paginate.pages > 1 -%}
   <nav role="navigation">
-    <ul class="pagination">
+    <ul class="pagination{% if pagination_class != blank %} {{ pagination_class }}{% endif %}">
       {%- if paginate.previous -%}
         <li class="prev">
           <a href="{{ paginate.previous.url }}">

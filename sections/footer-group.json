@@ -41,6 +41,7 @@
         "dismissible": true,
         "remember_days": 1,
         "hide_on_mobile": false,
+        "hide_on_pages": "cart",
         "offset_x": 24,
         "offset_y": 24,
         "panel_width": 600,

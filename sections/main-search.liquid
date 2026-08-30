@@ -1,12 +1,15 @@
 {{ 'component-blog-item.css' | asset_url | stylesheet_tag }}
+{{ 'section-main-collection-product-grid.css' | asset_url | stylesheet_tag }}
 
 {%- render 'breadcrumb' container: 'large', vertical_space: 'vertical-space-xsmall', style: 'breadcrumb-main--margin' -%}
 
 <div class="container container--large container--vertical-space-small main-page gutter-bottom--page" data-js-inert>
 
-  <h1 class="title heading-size--page-title">{{ 'search.page.title' | t }}</h1>
+  <div>
+    <h1 class="title heading-size--page-title">{{ 'search.page.title' | t }}</h1>
+  </div>
 
-  <div class="search-page-form gutter-top--small">
+  <div class="search-page-form gutter-top--small margin-bottom--regular">
 
 		{%- liquid
 	    if search.performed and search.results_count > 0
@@ -26,7 +29,7 @@
     
 	</div>
 
-  <div class="gutter-top--large">
+  <div class="search-stats">
     
     {%- if search.performed and search.results_count == 0 and search.filters == empty -%}
       <div class="margin-bottom--large">{{ 'search.page.no_results' | t: terms: search.terms }}</div>
@@ -43,17 +46,14 @@
           assign products_results = search.results | where: 'object_type', 'product'
         -%}
 
-        <div class="margin-bottom--large">
+        <div>
           {{ 'search.page.results' | t: count: search.results_count, terms: search.terms }}
           {%- unless section.settings.enable_filtering or section.settings.enable_sorting -%}
             <div class="text-color--opacity">{{ 'search.page.results_count' | t: offset: offset, page_size: page_size, count: paginate.items }}</div>
           {%- endunless -%}
         </div>
-
         {%- if products_results.size > 0 or search.results.size == 0 and search.filters != empty -%}
-
           <div class="margin-bottom--regular">
-            <h2 class="heading-size--xsmall">{{ 'search.form.product_results_title' | t }} ({{ products_results.size }})</h2>
             {%- liquid
               if section.settings.enable_filtering or section.settings.enable_sorting
                 render 'facets-horizontal', results: search, enable_filtering: section.settings.enable_filtering, enable_sorting: section.settings.enable_sorting, offset: offset, page_size: page_size
@@ -69,12 +69,17 @@
 
           <div {% if products_results.size == 0 and search.filters == empty %} style="display:none" {% endif %}>
 
-            <div id="main-collection-product-grid" data-id="{{ section.id }}" class="collection grid grid--layout grid-4 grid-portable-3 grid-lap-2 grid-tiny-1">
+            <div id="main-collection-product-grid" data-id="{{ section.id }}" class="collection grid grid--layout grid-1 grid-portable-1 grid-lap-1 grid-tiny-1">
 
                 {%- liquid
                   if products_results.size > 0
                     for product in products_results
-                      render 'product-item', product: product, section_blocks: section.blocks, index: forloop.index, layout: "grid-4", show_badges: settings.show_badges, section_id: section.id
+                      if forloop.index < 3
+                        assign preload = true
+                      else
+                        assign preload = false
+                      endif
+                      render 'product-item', product: product, section_blocks: section.blocks, index: forloop.index, layout: 'grid-4', preload: preload, show_badges: settings.show_badges, section_id: section.id
                     endfor
                   endif
                 -%}
@@ -94,8 +99,6 @@
               </div>
               
             </div>
-
-          </div>
 
           {%- assign article_search_results_found = 0 -%}
           {%- if search.types contains 'article' -%}
@@ -226,7 +229,7 @@
 
           {%- liquid
             if paginate.pages > 1
-              render 'pagination', paginate: paginate
+              render 'pagination', paginate: paginate, pagination_class: 'pagination--centered'
             endif
           -%}
 
@@ -261,7 +264,7 @@
 {% schema %}
 {
   "name": "t:sections.main-search.name",
-  "class": "main-search no-inert",
+  "class": "main-search mount-quick-buy mount-css-slider no-inert",
   "blocks": [
     {
       "type": "price",

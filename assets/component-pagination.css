@@ -29,6 +29,9 @@
   padding-top: var(--gutter-large);
   text-align: left;
 }
+.pagination.pagination--centered {
+  text-align: center;
+}
 @media screen and (max-width: 767px) {
   .pagination {
     text-align: center;
